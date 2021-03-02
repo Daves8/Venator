@@ -1,2 +1,2 @@
-# DiplomaOKKT
-Диплом ОККТ
+# Diplom
+Diplom OKKT ODEKU
