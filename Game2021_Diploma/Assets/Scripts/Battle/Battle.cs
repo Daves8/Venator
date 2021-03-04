@@ -54,6 +54,9 @@ public class Battle : MonoBehaviour
 
         _knifeOn.SetActive(false);
         _knifeOff.SetActive(true);
+
+        _knifeCollider.enabled = false;
+        _swordCollider.enabled = false;
     }
 
     // Update is called once per frame

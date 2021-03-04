@@ -10,6 +10,8 @@ public class Enemy : MonoBehaviour
     private bool _agressive = false;
 
     private int _numberAttack;
+    private bool _canHit = true;
+    private bool _dead = false;
 
     private void Start()
     {
@@ -20,19 +22,23 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        if (_dead) { return; }
         if (_agressive)
         {
             Attack();
         }
-        
+
         if (_agressive && Vector3.Distance(transform.position, GameObject.FindGameObjectWithTag("Player").transform.position) >= 20f)
         {
             _agressive = false;
+            StopCoroutine("RotateToCamera"); // ЗАНИМАТЬСЯ ПАТРУЛИРОВАНИЕМ
         }
 
         if (_hp <= 0)
         {
             Invoke("Delete", 300.0f);
+            _dead = true;
+            StopCoroutine("RotateToCamera");
 
             if (Random.Range(0, 2) == 0)
             {
@@ -48,8 +54,13 @@ public class Enemy : MonoBehaviour
 
     private void Attack()
     {
-        if (Vector3.Distance(transform.position, GameObject.FindGameObjectWithTag("Player").transform.position) >= 2f)
+        if (Vector3.Distance(transform.position, GameObject.FindGameObjectWithTag("Player").transform.position) <= 1.5f && _canHit)
         {
+            StartCoroutine("RotateToCamera");
+
+            _canHit = false;
+            float nextHit = Random.Range(8, 21) / 10.0f;
+            Invoke("HitTrue", nextHit);
             _numberAttack = Random.Range(1, 4); // 1-3
             switch (_numberAttack)
             {
@@ -65,6 +76,26 @@ public class Enemy : MonoBehaviour
                 default:
                     break;
             }
+        }
+        else if (Vector3.Distance(transform.position, GameObject.FindGameObjectWithTag("Player").transform.position) < 20f)
+        {
+            // ИДТИ К ИГРОКУ
+        }
+    }
+
+    private void HitTrue()
+    {
+        _canHit = true;
+    }
+
+    IEnumerator RotateToCamera()
+    {
+        while (true)
+        {
+            Vector3 direction = (GameObject.FindGameObjectWithTag("Player").transform.position - transform.position).normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+            transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, Time.deltaTime * 3f);
+            yield return null;
         }
     }
 

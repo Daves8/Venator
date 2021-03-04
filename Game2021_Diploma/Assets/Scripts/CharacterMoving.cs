@@ -5,6 +5,7 @@ using UnityEngine;
 public class CharacterMoving : MonoBehaviour
 {
     internal static bool IsReadyToMove = true;
+    internal static bool IsReadyToRun = true;
     //internal static bool Fishing = false;
 
     [SerializeField] private Animator _animator;
@@ -30,6 +31,7 @@ public class CharacterMoving : MonoBehaviour
 
     private void Awake()
     {
+        //Application.targetFrameRate = 300;
         Cursor.lockState = CursorLockMode.Locked;
 
         _speedRun = _speed * 4;
@@ -105,7 +107,7 @@ public class CharacterMoving : MonoBehaviour
     }
     private void AnimationsStandings()
     {
-        if (Input.GetButton("Change Speeds"))
+        if (Input.GetButton("Change Speeds") && IsReadyToRun)
         {
             _speed = _speedRun;
             _animator.SetBool("WalkingToRun", true);

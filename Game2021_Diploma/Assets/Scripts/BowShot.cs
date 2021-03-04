@@ -74,6 +74,7 @@ public class BowShot : MonoBehaviour
                 _cameraBowCinemachine.m_YAxis = _freeLookCinemachine.m_YAxis; // даем Y новой камеры значения старой
                 _aim.SetActive(true);
             }
+            CharacterMoving.IsReadyToRun = false;
             print("Держим"); //
         }
         else if (Input.GetButtonUp("Fire1") && WeaponEnum._selectedWeapon == Weapon.Bow && _canShoot)
@@ -81,6 +82,7 @@ public class BowShot : MonoBehaviour
             _animator.SetTrigger("ShootBow");
             _beginBow = false;
             _canShoot = false;
+            CharacterMoving.IsReadyToRun = true;
             print("Отпустили"); //
         }
         else if (Input.GetButtonUp("Fire1") && WeaponEnum._selectedWeapon == Weapon.Bow && !_canShoot)
@@ -103,28 +105,6 @@ public class BowShot : MonoBehaviour
         {
             _rigBow.weight = 0;
         }
-
-        // ГДЕ-ТО КОСТЬ НЕ СБРОСИЛАСЬ В 0 -- сделано
-
-        //if (Input.GetButton("Fire2") && WeaponEnum._selectedWeapon == Weapon.Bow)
-        //{
-        //    BowBattle();
-        //}
-        //else if (_beginBow)
-        //{
-        //    _beginBow = false;
-        //    _bowAnimation.Play("MECANIM");
-        //    _animator.SetTrigger("ExitBow");
-        //    StopCoroutine("RotateToCamera");
-        //    _rigBow.weight = 0;
-
-
-        //    //_cameraBow.SetActive(false);
-        //    //_freeLook.SetActive(true);
-        //    //_freeLookCinemachine.m_Orbits = new Cinemachine.CinemachineFreeLook.Orbit[] { new Cinemachine.CinemachineFreeLook.Orbit(4f, 2f), new Cinemachine.CinemachineFreeLook.Orbit(2f, 4f), new Cinemachine.CinemachineFreeLook.Orbit(0f, 2f) };
-        //}
-
-        //Debug.DrawRay(_mainCamera.transform.position + transform.forward * 4, _mainCamera.transform.position + transform.forward * 10, Color.red); // Луч идет как (раньше) стрела, неправильно
         Debug.DrawRay(_mainCamera.transform.position, _mainCamera.transform.forward * 40, Color.red); // Луч идёт как надо, правильно
     }
 
@@ -186,8 +166,6 @@ public class BowShot : MonoBehaviour
     {
         while (true)
         {
-            //float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, _cameraTransform.eulerAngles.y, ref _turnSmoothVelocity, _turnSmoothTime);
-            //transform.rotation = Quaternion.Euler(0f, angle, 0f);
             Vector3 direction = (_target.position - transform.position).normalized;
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
             transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, Time.deltaTime * 10f);
