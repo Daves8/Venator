@@ -7,7 +7,7 @@ public class Arrow : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        Invoke("Delete", 300.0f);
     }
 
     // Update is called once per frame
@@ -18,12 +18,12 @@ public class Arrow : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        print("Стрела попала в " + other.gameObject.name);
-        if (other.gameObject.tag == "Enemy")
-        {
-            other.gameObject.GetComponent<Enemy>()._hp -= 200;
-            Invoke("Delete", 300.0f);
-        }
+        //print("Стрела попала в " + other.gameObject.name);
+        //if (other.gameObject.tag == "Enemy")
+        //{
+        //    other.gameObject.GetComponent<Enemy>()._hp -= 100;
+        //    Invoke("Delete", 300.0f);
+        //}
         //GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
     }
 

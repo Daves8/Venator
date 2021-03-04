@@ -70,8 +70,8 @@ public class Fishing : MonoBehaviour
     {
         StopCoroutine("GetFishGame");
 
-
-        if (_count * Random.Range(70, 85) / 100.0f >= 5) // 5 под вопросом, коэффициент нужно изменить
+        float formula = _count * Random.Range(70, 85) / 100.0f;
+        if (formula >= 5) // 5 под вопросом, коэффициент нужно изменить
         {
             _text.GetComponent<Text>().text = "Вы поймали рыбу!"; // Вы поймали рыбу!
             _animator.SetTrigger("FishingEnd");
@@ -89,7 +89,7 @@ public class Fishing : MonoBehaviour
         _readyToFishing = false;
         _fishing = false;
 
-        print("Count: " + _count + ". Формула: " + _count * Random.Range(70, 85) / 100.0f);
+        print("Count: " + _count + ". Формула: " + formula);
     }
 
     private void HideText()

@@ -130,13 +130,9 @@ public class BowShot : MonoBehaviour
 
     private void Shoot()
     {
-        //transform.rotation = _cameraTransform.rotation;
-        //transform.position = _cameraTransform.position + transform.forward * _size;
-
-        GameObject newArrow = Instantiate(_arrowPrefab, _mainCamera.transform.position + _mainCamera.transform.forward * 2, _mainCamera.transform.rotation); //_arrowInHand.transform.position, _arrowInHand.transform.rotation);
+        GameObject newArrow = Instantiate(_arrowPrefab, _mainCamera.transform.position + _mainCamera.transform.forward * 2, _mainCamera.transform.rotation);
         newArrow.transform.LookAt(_target);
         newArrow.GetComponent<Rigidbody>().velocity = newArrow.transform.forward * 100;
-        //newArrow.transform.rotation = _arrowPrefab.transform.rotation;  //.x += 90;// x = 90
 
 
         _rigBow.weight = 0;
