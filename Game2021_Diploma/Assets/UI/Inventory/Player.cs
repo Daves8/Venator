@@ -22,7 +22,6 @@ public class Player : MonoBehaviour
     public Transform offhandHandTransform;
 
     public BoneCombiner boneCombiner;
-    
 
     private void Start()
     {
@@ -52,7 +51,6 @@ public class Player : MonoBehaviour
             return;
         switch (_slot.parent.inventory.type)
         {
-           
             case InterfaceType.Inventory:
                 break;
             case InterfaceType.Equipment:
@@ -90,7 +88,6 @@ public class Player : MonoBehaviour
                             break;
                     }
                 }
-
                 break;
             case InterfaceType.Chest:
                 break;
@@ -100,67 +97,65 @@ public class Player : MonoBehaviour
     }
 
     public void OnAddItem(InventorySlot _slot)
-    {
-        
+    {        
         if (_slot.ItemObject == null)
         {
-            Debug.Log("СПППП");
+            //Debug.Log("СПППП");
             return;
-        }else{
-            Debug.Log(_slot.parent.inventory.type);
-        switch (_slot.parent.inventory.type)
+        }else
         {
-            case InterfaceType.Inventory:
-                break;
-            case InterfaceType.Equipment:
-                print(
-                    $"Placed {_slot.ItemObject}  on {_slot.parent.inventory.type}, Allowed Items: {string.Join(", ", _slot.AllowedItems)}");
+            Debug.Log(_slot.parent.inventory.type);
+            switch (_slot.parent.inventory.type)
+            {
+                case InterfaceType.Inventory:
+                    break;
+                case InterfaceType.Equipment:
+                    print(
+                        $"Placed {_slot.ItemObject}  on {_slot.parent.inventory.type}, Allowed Items: {string.Join(", ", _slot.AllowedItems)}");
 
-                for (int i = 0; i < _slot.item.buffs.Length; i++)
+                    for (int i = 0; i < _slot.item.buffs.Length; i++)
+                    {
+                        for (int j = 0; j < attributes.Length; j++)
+                        {
+                            if (attributes[j].type == _slot.item.buffs[i].attribute)
+                                attributes[j].value.AddModifier(_slot.item.buffs[i]);
+                        }
+                    }
+                    Debug.Log(_slot.ItemObject.equipmentSetId);
+                        Debug.Log("тут чет есть");
+                        switch (_slot.AllowedItems[0])
+                        {
+                            case ItemType.Helmet://
+                                    ChangeClothes.Change(_slot.ItemObject.equipmentSetId);                                                                                  
+                                break;
+                            case ItemType.Weapon:                        
+                                sword = Instantiate(_slot.ItemObject.characterDisplay, weaponTransform).transform;
+                                break;
+                            case ItemType.Shield:                        
+                                switch (_slot.ItemObject.type)
+                                {
+                                    case ItemType.Weapon:
+                                        offhand = Instantiate(_slot.ItemObject.characterDisplay, offhandHandTransform)
+                                            .transform;
+                                        break;
+                                    case ItemType.Shield:
+                                        offhand = Instantiate(_slot.ItemObject.characterDisplay, offhandWristTransform)
+                                            .transform;
+                                        break;
+                                }
+                                break;
+                        } 
+                    break;
+                case InterfaceType.Chest:
+                    break;
+                default:
                 {
-                    for (int j = 0; j < attributes.Length; j++)
-                    {
-                        if (attributes[j].type == _slot.item.buffs[i].attribute)
-                            attributes[j].value.AddModifier(_slot.item.buffs[i]);
-                    }
+                    Debug.Log("DOnt work");
+                    break;
                 }
-                Debug.Log(_slot.ItemObject.equipmentSetId);
-                    Debug.Log("тут чет есть");
-                    switch (_slot.AllowedItems[0])
-                    {
-                        case ItemType.Helmet://
-                                ChangeClothes.Change(_slot.ItemObject.equipmentSetId);                                                                                  
-                            break;
-                        case ItemType.Weapon:                        
-                            sword = Instantiate(_slot.ItemObject.characterDisplay, weaponTransform).transform;
-                            break;
-                        case ItemType.Shield:                        
-                            switch (_slot.ItemObject.type)
-                            {
-                                case ItemType.Weapon:
-                                    offhand = Instantiate(_slot.ItemObject.characterDisplay, offhandHandTransform)
-                                        .transform;
-                                    break;
-                                case ItemType.Shield:
-                                    offhand = Instantiate(_slot.ItemObject.characterDisplay, offhandWristTransform)
-                                        .transform;
-                                    break;
-                            }
-                            break;
-                    }
-                
-
-
-                break;
-            case InterfaceType.Chest:
-                break;
-            default:
-            Debug.Log("DOnt work");
-                break;
-        }
+            }
         }
     }
-
 
     public void OnTriggerEnter(Collider other)
     {
@@ -194,7 +189,6 @@ public class Player : MonoBehaviour
     {
         Debug.Log(string.Concat(attribute.type, " was updated! Value is now ", attribute.value.ModifiedValue));
     }
-
 
     private void OnApplicationQuit()
     {
