@@ -1,13 +1,22 @@
-﻿using System.Runtime.ExceptionServices;
+﻿using System.Data.Common;
+using System.Runtime.ExceptionServices;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
     public InventoryObject inventory;
     public InventoryObject equipment;
+    public bool test = false;
+
+    public Transform playerPosition;
+    public Animator transition;
+//PLayerData
+    public string level;    
+//PLayerData
 
     public Attribute[] attributes;
 
@@ -17,22 +26,37 @@ public class Player : MonoBehaviour
     private Transform offhand;
     private Transform sword;
 
+    private CharacterController _controller;
     public Transform weaponTransform;
     public Transform offhandWristTransform;
     public Transform offhandHandTransform;
 
     public BoneCombiner boneCombiner;
+    private ItemButton itemButton;
+    private ScrollView scrollView;    
+    
 
-    private void Start()
+    private void Awake()
     {
-        try
+        _controller = GetComponent<CharacterController>();
+        scrollView = new ScrollView();
+        
+        string loadPath = DataHolder.savePath;
+        Debug.Log("Current loadPath: " + loadPath);
+        MakeContinuePath(loadPath);
+        if(SceneManager.GetActiveScene().name == "Inventory")
         {
-            //boneCombiner = new BoneCombiner(gameObject);
+            
+            LoadPlayer(loadPath);
+            
         }
-        catch(Exception e)
-        {
-            Debug.Log(e);
-        }
+        
+    }
+    private void Start()
+    {   
+        
+        
+        
         for (int i = 0; i < attributes.Length; i++)
         {
             attributes[i].SetParent(this);
@@ -43,6 +67,97 @@ public class Player : MonoBehaviour
             equipment.GetSlots[i].OnBeforeUpdate += OnRemoveItem;
             equipment.GetSlots[i].OnAfterUpdate += OnAddItem;
         }
+        if(true)//есть файл х()   
+        {
+            //загружаемся с помощью файла х
+        }else
+        {
+            //создаем файл с параметрами новой игры
+        }
+    }
+
+    public void StartBlackScreen()
+    {
+        transition.SetTrigger("Start");
+    }
+
+    public void EndBlackScreen()
+    {
+        transition.SetTrigger("End");
+    }
+
+    public void MakeLoadPath(ItemButton saveButton)
+    {
+        DataHolder.savePath = saveButton.savePath;
+    }
+
+    public void MakeNewGamePath()
+    {
+        DataHolder.savePath = Application.persistentDataPath + "/Saves/"+ "NewGame" +".bin";
+        SaveSystem.SavePlayer();
+    }
+
+    public void MakeContinuePath(string path)
+    {
+        Debug.Log("MAKECONTINUEPATH");
+        if(path == null)
+        {
+            MakeNewGamePath();
+            Debug.Log(":DDDDDDD"+DataHolder.savePath);
+        }else
+        {
+            PlayerPrefs.SetString("ContinueGamePath", path);
+            Debug.Log(":((((((((PATH"+ path);
+            Debug.Log(":((((((((DATAHOLDER.PATH"+ DataHolder.savePath);
+        }
+    }
+
+    public void LoadContinuePath()
+    {//if new game -> грузим иначе 
+        try
+        {
+            DataHolder.savePath = PlayerPrefs.GetString("ContinueGamePath");
+        }catch(Exception e)
+        {
+            Debug.Log(e);
+            DataHolder.savePath = Application.persistentDataPath + "/Saves/"+ "NewGame" +".bin";
+        }
+    }
+
+    public void SavePlayer()
+    {
+        SaveSystem.SavePlayer(this);
+
+        //
+        MakeContinuePath(DataHolder.savePath);
+    }
+
+    public void LoadPlayer(string savePath)
+    {
+    
+        //Перезаписываем файл х текущими значениями сцены
+        //загружаем сцену
+        Debug.Log(test);
+        test = true;
+        //Invoke("StartBlackScreen", 0.5f);
+        PlayerData data = SaveSystem.LoadPlayer(savePath);
+
+        level = data.level;
+
+        Vector3 position;
+        position.x = data.position[0];
+        position.y = data.position[1];
+        position.z = data.position[2];
+
+        _controller.enabled = false;
+        //playerPosition.position = new Vector3(0,200,0);
+        playerPosition.position = position;
+        _controller.enabled = true;
+        
+        Debug.Log(playerPosition.position);
+        //Invoke("EndBlackScreen", 1f);
+        Debug.Log(position);
+        
     }
 
     public void OnRemoveItem(InventorySlot _slot)
@@ -172,6 +287,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        //Debug.Log(playerPosition.position);
         if (Input.GetKeyDown(KeyCode.Space))
         {
             inventory.Save();

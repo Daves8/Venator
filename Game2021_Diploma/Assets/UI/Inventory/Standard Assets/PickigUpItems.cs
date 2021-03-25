@@ -40,9 +40,9 @@ public class PickigUpItems : MonoBehaviour
         {
             var groundItem = hit.collider.gameObject.GetComponent<GroundItem>();
             Pointer.position = hit.point;
-            Debug.Log($"Distance to hit: {distanceTohit},Z{hit.point.z}X{hit.point.x}Y{hit.point.y}");
+            //Debug.Log($"Distance to hit: {distanceTohit},Z{hit.point.z}X{hit.point.x}Y{hit.point.y}");
             if(groundItem)
-            Debug.Log("навел на предмет");
+            //Debug.Log("навел на предмет");
             if(groundItem && Input.GetKeyDown(KeyCode.E) && distanceTohit <= _rayCastMaxDistance)
             {                
                 Item _item = new Item(groundItem.item);

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 public class LevelLoader : MonoBehaviour
 {    
@@ -17,6 +18,7 @@ public class LevelLoader : MonoBehaviour
     {
         transition.SetTrigger("End");
         if(SceneManager.GetActiveScene().name == "MainMenu")Cursor.lockState = CursorLockMode.None;
+        
     }
 
     public void PlayScene(string sceneName)
@@ -35,7 +37,7 @@ public class LevelLoader : MonoBehaviour
         {
             float progress = Mathf.Clamp01(operation.progress / .9f);
 
-            Debug.Log(progress);
+            //Debug.Log(progress);
             slider.value = progress;
             yield return null;
         }
