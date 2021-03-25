@@ -29,7 +29,7 @@ public class CharacterMoving : MonoBehaviour
 
     static public bool rotateCharacter = true;
 
-    private void Awake()
+    private void Start()
     {
         //Application.targetFrameRate = 300;
         Cursor.lockState = CursorLockMode.Locked;
