@@ -16,7 +16,10 @@ public class ShowHideUI : MonoBehaviour
     [SerializeField]
     private GameObject _characterInventory;//Canvas
     [SerializeField]
+    
     private GameObject _PauseMenu;//Canvas
+    [SerializeField]
+    private GameObject _MainMenu;//Canvas
 
     public event EventHandler OnIPressed;
     public event EventHandler OnEscapePressed;

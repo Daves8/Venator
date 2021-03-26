@@ -41,22 +41,20 @@ public class Player : MonoBehaviour
         _controller = GetComponent<CharacterController>();
         scrollView = new ScrollView();
         
-        string loadPath = DataHolder.savePath;
-        Debug.Log("Current loadPath: " + loadPath);
-        MakeContinuePath(loadPath);
+        
+        
+        
         if(SceneManager.GetActiveScene().name == "Inventory")
         {
-            
+            string loadPath = DataHolder.savePath;
+            Debug.Log("Current loadPath: " + loadPath);
             LoadPlayer(loadPath);
             
         }
         
     }
     private void Start()
-    {   
-        
-        
-        
+    {    
         for (int i = 0; i < attributes.Length; i++)
         {
             attributes[i].SetParent(this);
@@ -66,14 +64,7 @@ public class Player : MonoBehaviour
         {
             equipment.GetSlots[i].OnBeforeUpdate += OnRemoveItem;
             equipment.GetSlots[i].OnAfterUpdate += OnAddItem;
-        }
-        if(true)//есть файл х()   
-        {
-            //загружаемся с помощью файла х
-        }else
-        {
-            //создаем файл с параметрами новой игры
-        }
+        }   
     }
 
     public void StartBlackScreen()
@@ -97,39 +88,9 @@ public class Player : MonoBehaviour
         SaveSystem.SavePlayer();
     }
 
-    public void MakeContinuePath(string path)
-    {
-        Debug.Log("MAKECONTINUEPATH");
-        if(path == null)
-        {
-            MakeNewGamePath();
-            Debug.Log(":DDDDDDD"+DataHolder.savePath);
-        }else
-        {
-            PlayerPrefs.SetString("ContinueGamePath", path);
-            Debug.Log(":((((((((PATH"+ path);
-            Debug.Log(":((((((((DATAHOLDER.PATH"+ DataHolder.savePath);
-        }
-    }
-
-    public void LoadContinuePath()
-    {//if new game -> грузим иначе 
-        try
-        {
-            DataHolder.savePath = PlayerPrefs.GetString("ContinueGamePath");
-        }catch(Exception e)
-        {
-            Debug.Log(e);
-            DataHolder.savePath = Application.persistentDataPath + "/Saves/"+ "NewGame" +".bin";
-        }
-    }
-
     public void SavePlayer()
     {
         SaveSystem.SavePlayer(this);
-
-        //
-        MakeContinuePath(DataHolder.savePath);
     }
 
     public void LoadPlayer(string savePath)

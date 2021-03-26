@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System.Net;
+using System.Xml.Linq;
 using System.Runtime.Serialization;
 using System.Security.AccessControl;
 using System.Runtime.ExceptionServices;
@@ -20,7 +21,7 @@ public class ScrollView : MonoBehaviour
     private RectTransform scrollContentRectTransform;
     private Vector3 scaleChange;
     private ItemButton itemButton;
-    private ArrayList buttons;
+    private static ArrayList buttons;
     
 
     void Awake()
@@ -28,7 +29,7 @@ public class ScrollView : MonoBehaviour
         btnTransform = loadButton.GetComponent<Transform>();
         scrollContentTransform = scrollContent.GetComponent<Transform>();
         scrollContentRectTransform = scrollContent.GetComponent<RectTransform>();
-        buttons = CreateButtons();
+        buttons = new ArrayList();
     }
     void Start()
     {        
@@ -57,7 +58,8 @@ public class ScrollView : MonoBehaviour
         bool IsDirectoryContainFiles = ScrollView.isDirectoryContainFiles();
         Dictionary<string, string> saves = new Dictionary<string, string>();
         
-        try{
+        try
+        {
             if (IsDirectoryContainFiles)
             {
                 DirectoryInfo d = new DirectoryInfo(Application.persistentDataPath + "/Saves/");
@@ -65,6 +67,8 @@ public class ScrollView : MonoBehaviour
 
                 foreach(FileInfo file in Files )
                 {
+                    Debug.Log("ПЕРЕД     "+ file.Name);
+                    if(file.Name == "NewGame.bin") continue;
                     saves.Add(file.Name ,Application.persistentDataPath + "/Saves/" + file.Name);
                 }
                 
@@ -79,15 +83,23 @@ public class ScrollView : MonoBehaviour
         return saves;
     }
 
-    public ArrayList CreateButtons()//вызываем 1 раз в начале
+    public void CreateButtons()//вызываем 1 раз в начале
     {   
         
         
         int y = 20;
         int contentHeight = 0;
         Dictionary<string, string> saves = ScrollView.GetSaves();//Создаем словарь с информацией о сохранениях
-        ArrayList buttons = new ArrayList();
         
+        try
+        {
+        foreach(GameObject item in buttons)
+            {
+            Destroy(item);
+            }
+        }
+        catch(Exception e){}
+        loadButton.SetActive(true);
         foreach (KeyValuePair<string, string> keyValue in saves)
         {  
             y-=20;
@@ -112,7 +124,8 @@ public class ScrollView : MonoBehaviour
             Debug.Log("КЛЮЧ: " + keyValue.Key + " ЗНАЧЕНИЕ: " + keyValue.Value);
                
         }
-        return buttons; 
+        loadButton.SetActive(false);
+        
     }
 
     public void DeleteSave(ItemButton saveButton)
@@ -123,6 +136,6 @@ public class ScrollView : MonoBehaviour
         {
             Destroy(item);
         }
-        buttons = CreateButtons();
+        CreateButtons();
     }
 }
