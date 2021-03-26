@@ -44,10 +44,10 @@ public class Player : MonoBehaviour
         
         
         
-        if(SceneManager.GetActiveScene().name == "Inventory")
+        if(SceneManager.GetActiveScene().name == "Village")
         {
             string loadPath = DataHolder.savePath;
-            Debug.Log("Current loadPath: " + loadPath);
+            Debug.Log("Сейчас мы загружаем уровень: " + loadPath);
             LoadPlayer(loadPath);
             
         }

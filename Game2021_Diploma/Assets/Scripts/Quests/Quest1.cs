@@ -36,7 +36,7 @@ public class Quest1 : MonoBehaviour
         subtitles.text = "";
         prompt.text = "";
 
-        subquest = Subquest.subquest1;
+        subquest = Subquest.none;
 
         groupCamera.enabled = false;
         targetGroup.m_Targets = new Cinemachine.CinemachineTargetGroup.Target[] { new Cinemachine.CinemachineTargetGroup.Target { target = player.transform, weight = 1f, radius = 0f }, new Cinemachine.CinemachineTargetGroup.Target { target = brother.transform, weight = 1f, radius = 0f } };
