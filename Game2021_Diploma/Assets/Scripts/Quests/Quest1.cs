@@ -30,8 +30,9 @@ public class Quest1 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        brother.transform.position = startPosition;
-        player.transform.position = startPosition + new Vector3(-1f, 0, -1f);
+        //brother.transform.position = startPosition;
+        player.transform.position = startPosition;
+        player.transform.rotation = Quaternion.Euler(0f, -175f, 0f);
 
         subtitles.text = "";
         prompt.text = "";
