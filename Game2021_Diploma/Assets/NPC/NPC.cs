@@ -32,7 +32,7 @@ public class NPC : MonoBehaviour
     {
         if (_agent.velocity.normalized.magnitude >= 0.1f)
         {
-            StopCoroutine("AnimIdle");
+            //StopCoroutine("AnimIdle");
             _animator.SetBool("Walk", true);
         }
         else
