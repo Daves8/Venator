@@ -13,6 +13,7 @@ public class AudioEffects : MonoBehaviour
 
     public void Step()
     {
+        step.volume = 0.5f;
         step.pitch = Random.Range(0.9f, 1.1f);
         step.PlayOneShot(steps[Random.Range(0, steps.Length)]);
     }

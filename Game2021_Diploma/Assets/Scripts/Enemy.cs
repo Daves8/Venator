@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private Animator _animator;
+    private Animator _animator;
 
     public float _hp;
     private bool _agressive = false;
@@ -21,10 +21,10 @@ public class Enemy : MonoBehaviour
 
     private bool _hit = false;
 
-    private bool _playerIsBattle;
-
     private void Start()
     {
+        _animator = GetComponent<Animator>();
+
         _allEnemy = GameObject.FindGameObjectsWithTag("Enemy");
 
         _player = GameObject.FindGameObjectWithTag("Player");
@@ -32,21 +32,26 @@ public class Enemy : MonoBehaviour
 
         _hp = Random.Range(100, 200);
         print("У " + gameObject.name + " хп: " + _hp);
-
-        _playerIsBattle = _player.GetComponent<Battle>().IsBattle;
     }
 
     // Update is called once per frame
     private void Update()
     {
-        if (_dead) { return; }
+        if (_dead)
+        {
+            _player.GetComponent<Battle>().IsBattle = false;
+            _agent.enabled = false;
+            return;
+        }
+
         if (_agressive)
         {
+            
             Attack();
         }
         else
         {
-            _playerIsBattle = false;
+            _player.GetComponent<Battle>().IsBattle = false;
         }
 
         if (_agressive && Vector3.Distance(transform.position, _player.transform.position) >= 20f)
@@ -102,9 +107,9 @@ public class Enemy : MonoBehaviour
 
     private void Attack()
     {
-        if(Vector3.Distance(transform.position, _player.transform.position) <= 20f)
+        if (Vector3.Distance(transform.position, _player.transform.position) <= 20f)
         {
-            _playerIsBattle = true;
+            _player.GetComponent<Battle>().IsBattle = true;
         }
         if (Vector3.Distance(transform.position, _player.transform.position) <= 1.5f && _canHit)
         {
@@ -218,13 +223,18 @@ public class Enemy : MonoBehaviour
         }
         else if (other.gameObject.tag == "Arrow")
         {
+            foreach (GameObject item in _allEnemy)
+            {
+                //item.GetComponent<Enemy>().FirstAggressive();
+            }
+            
             if (!_agressive && !_hit)
             {
                 FirstAggressive();
             }
             _hit = true;
 
-            _hp -= Random.Range(80, 120);
+            _hp -= Random.Range(300, 350);
             print("Стрела попала. Осталось хп: " + _hp);
         }
     }
