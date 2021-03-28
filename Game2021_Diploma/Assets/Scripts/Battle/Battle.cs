@@ -44,6 +44,8 @@ public class Battle : MonoBehaviour
 
     static public bool AllowBattle = true;
 
+    public bool IsBattle;
+
     private void Awake()
     {
         _swordOn.SetActive(false);

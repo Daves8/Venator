@@ -21,6 +21,8 @@ public class Enemy : MonoBehaviour
 
     private bool _hit = false;
 
+    private bool _playerIsBattle;
+
     private void Start()
     {
         _allEnemy = GameObject.FindGameObjectsWithTag("Enemy");
@@ -30,6 +32,8 @@ public class Enemy : MonoBehaviour
 
         _hp = Random.Range(100, 200);
         print("У " + gameObject.name + " хп: " + _hp);
+
+        _playerIsBattle = _player.GetComponent<Battle>().IsBattle;
     }
 
     // Update is called once per frame
@@ -39,6 +43,10 @@ public class Enemy : MonoBehaviour
         if (_agressive)
         {
             Attack();
+        }
+        else
+        {
+            _playerIsBattle = false;
         }
 
         if (_agressive && Vector3.Distance(transform.position, _player.transform.position) >= 20f)
@@ -94,6 +102,10 @@ public class Enemy : MonoBehaviour
 
     private void Attack()
     {
+        if(Vector3.Distance(transform.position, _player.transform.position) <= 20f)
+        {
+            _playerIsBattle = true;
+        }
         if (Vector3.Distance(transform.position, _player.transform.position) <= 1.5f && _canHit)
         {
             StartCoroutine("RotateToCamera");
