@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Xml.Serialization;
+using System.IO;
 
 public class Quest1 : MonoBehaviour
 {
@@ -15,6 +17,9 @@ public class Quest1 : MonoBehaviour
     public Cinemachine.CinemachineVirtualCamera groupCamera;
     public Cinemachine.CinemachineTargetGroup targetGroup;
     public Subquest subquest;
+
+    private QuestsManagement _questManag;
+    private Dialogue1 _dialogue1;
 
     public enum Subquest
     {
@@ -37,10 +42,13 @@ public class Quest1 : MonoBehaviour
         subtitles.text = "";
         prompt.text = "";
 
-        subquest = Subquest.none;
+        subquest = Subquest.subquest1;
 
         groupCamera.enabled = false;
         targetGroup.m_Targets = new Cinemachine.CinemachineTargetGroup.Target[] { new Cinemachine.CinemachineTargetGroup.Target { target = player.transform, weight = 1f, radius = 0f }, new Cinemachine.CinemachineTargetGroup.Target { target = brother.transform, weight = 1f, radius = 0f } };
+
+        _questManag = GetComponent<QuestsManagement>();
+        _dialogue1 = Dialogue1.Load(_questManag.dialogues);
     }
 
     // Update is called once per frame
@@ -80,7 +88,8 @@ public class Quest1 : MonoBehaviour
     private void SubQ1() // Начало. Первый диалог с братом.
     {
         target.text = "Поговорить с братом.";
-        groupCamera.enabled = true;
+        target.text = _dialogue1.text;
+        //groupCamera.enabled = true;
         subtitles.text = "Начало. Восход Солнца. Камера медленно передвигается по коючевым локациям игры. Камера идет в небо, " +
             "появляется название игры. Идеи: При самом начале игры последней локацией над которой будет пролетать камера будет " +
             "речка с ГГ и его младшим братом.При нажатии кнопки \"Новая Игра\" игра начинается без загрузки с этого же места: рыбалка.";
@@ -119,5 +128,20 @@ public class Quest1 : MonoBehaviour
     {
         target.text = "Пойти в деревню.";
         //subquest = Subquest.none;
+    }
+}
+
+[XmlRoot("quest1")]
+public class Dialogue1
+{
+    [XmlElement("exampleText")]
+    public string text;
+
+    public static Dialogue1 Load(TextAsset _xml)
+    {
+        XmlSerializer serializer = new XmlSerializer(typeof(Dialogue1));
+        StringReader reader = new StringReader(_xml.text);
+        Dialogue1 dial = serializer.Deserialize(reader) as Dialogue1;
+        return dial;
     }
 }

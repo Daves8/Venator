@@ -6,16 +6,12 @@ public class BackgroundMusic : MonoBehaviour
 {
     private AudioSource _backgroundMusic;
     public AudioClip[] musics;
-
-    private bool _isBattle;
-    private PlayingMusic _playingMusic;
+    public PlayingMusic _playingMusic;
 
     private GameObject _player;
+    private Battle _battlePlayer;
 
-    bool first = false;
-    bool second = false;
-
-    enum PlayingMusic
+    public enum PlayingMusic
     {
         nothing = -1,
         village = 0,
@@ -25,42 +21,29 @@ public class BackgroundMusic : MonoBehaviour
     void Start()
     {
         _backgroundMusic = GetComponent<AudioSource>();
-        _isBattle = GameObject.FindGameObjectWithTag("Player").GetComponent<Battle>().IsBattle;
-
         _player = GameObject.FindGameObjectWithTag("Player");
+        _battlePlayer = _player.GetComponent<Battle>();
     }
 
     private void Update()
     {
-        _isBattle = _player.GetComponent<Battle>().IsBattle;
-
-        if (_isBattle)
+        if (_battlePlayer.IsBattle)
         {
             _playingMusic = PlayingMusic.battle;
-            Debug.Log("БИТВЫА");
         }
         else
         {
             _playingMusic = PlayingMusic.village;
         }
-
-
-        if (first != _isBattle)
-        {
-            second = true;
-        }
-        else
-        {
-            second = false;
-        }
         
-
-
-        if (second)
+        try
         {
-            try { _backgroundMusic.clip = musics[(int)_playingMusic]; _backgroundMusic.Play(); } catch { }
+            if (_backgroundMusic.clip != musics[(int)_playingMusic] || !_backgroundMusic.isPlaying)
+            {
+                _backgroundMusic.clip = musics[(int)_playingMusic];
+                _backgroundMusic.Play();
+            }
         }
-
-        first = _isBattle;
+        catch { }
     }
 }
