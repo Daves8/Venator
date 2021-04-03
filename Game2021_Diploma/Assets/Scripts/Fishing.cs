@@ -12,7 +12,7 @@ public class Fishing : MonoBehaviour
 
     private bool _readyToFishing = false;
     private bool _startFishing = false;
-    private bool _fishing = false;
+    public bool NowFishing = false;
 
     private bool _nextDo = false;
 
@@ -25,7 +25,7 @@ public class Fishing : MonoBehaviour
             CharacterMoving.IsReadyToMove = false;
             Battle.AllowBattle = false;
             //_readyToFishing = false;
-            _fishing = true;
+            NowFishing = true;
 
             _animator.SetTrigger("StartFishing");
             // поворот player в сторону реки (поворот по оси Y)
@@ -87,7 +87,7 @@ public class Fishing : MonoBehaviour
         CharacterMoving.IsReadyToMove = true;
         Battle.AllowBattle = true;
         _readyToFishing = false;
-        _fishing = false;
+        NowFishing = false;
 
         print("Count: " + _count + ". Формула: " + formula);
     }
