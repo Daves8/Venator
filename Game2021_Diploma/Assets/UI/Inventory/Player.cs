@@ -41,9 +41,6 @@ public class Player : MonoBehaviour
         _controller = GetComponent<CharacterController>();
         scrollView = new ScrollView();
         
-        
-        
-        
         if(SceneManager.GetActiveScene().name == "Village")
         {
             string loadPath = DataHolder.savePath;
@@ -53,6 +50,7 @@ public class Player : MonoBehaviour
         }
         
     }
+
     private void Start()
     {    
         for (int i = 0; i < attributes.Length; i++)
@@ -75,6 +73,15 @@ public class Player : MonoBehaviour
     public void EndBlackScreen()
     {
         transition.SetTrigger("End");
+    }
+
+    public int SearchInInventary(int id)
+    {
+        int count = 0;
+        // поиск по всему инвентарю циклом
+        count  = inventory.FindItemOnInventory(id);
+        //
+        return count;
     }
 
     public void MakeLoadPath(ItemButton saveButton)

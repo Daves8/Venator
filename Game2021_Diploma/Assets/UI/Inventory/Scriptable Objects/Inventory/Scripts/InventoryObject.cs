@@ -63,6 +63,18 @@ public class InventoryObject : ScriptableObject
         }
         return null;
     }
+    public int FindItemOnInventory(int id)
+    {
+        int count = 0;
+        for (int i = 0; i < GetSlots.Length; i++)
+        {
+            if(GetSlots[i].item.Id == id)
+            {
+                count +=1;
+            }
+        }
+        return count;
+    }
     public InventorySlot SetEmptySlot(Item _item, int _amount)
     {
         for (int i = 0; i < GetSlots.Length; i++)
