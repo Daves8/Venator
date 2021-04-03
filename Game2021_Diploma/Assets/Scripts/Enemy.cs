@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private Animator _animator;
+    private Animator _animator;
 
     public float _hp;
     private bool _agressive = false;
@@ -21,11 +21,16 @@ public class Enemy : MonoBehaviour
 
     private bool _hit = false;
 
+    private Battle _battlePlayer;
+
     private void Start()
     {
+        _animator = GetComponent<Animator>();
+
         _allEnemy = GameObject.FindGameObjectsWithTag("Enemy");
 
         _player = GameObject.FindGameObjectWithTag("Player");
+        _battlePlayer = _player.GetComponent<Battle>();
         _agent = GetComponent<NavMeshAgent>();
 
         _hp = Random.Range(100, 200);
@@ -35,10 +40,21 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (_dead) { return; }
+        if (_dead)
+        {
+            _battlePlayer.IsBattle = false;
+            _agent.enabled = false;
+            return;
+        }
+
         if (_agressive)
         {
+            
             Attack();
+        }
+        else
+        {
+            _battlePlayer.IsBattle = false;
         }
 
         if (_agressive && Vector3.Distance(transform.position, _player.transform.position) >= 20f)
@@ -94,6 +110,10 @@ public class Enemy : MonoBehaviour
 
     private void Attack()
     {
+        if (Vector3.Distance(transform.position, _player.transform.position) <= 20f)
+        {
+            _battlePlayer.IsBattle = true;
+        }
         if (Vector3.Distance(transform.position, _player.transform.position) <= 1.5f && _canHit)
         {
             StartCoroutine("RotateToCamera");
@@ -205,14 +225,14 @@ public class Enemy : MonoBehaviour
             print(other.gameObject.name + " попал! Осталось хп: " + _hp);
         }
         else if (other.gameObject.tag == "Arrow")
-        {
+        {            
             if (!_agressive && !_hit)
             {
                 FirstAggressive();
             }
             _hit = true;
 
-            _hp -= Random.Range(80, 120);
+            _hp -= Random.Range(30, 350);
             print("Стрела попала. Осталось хп: " + _hp);
         }
     }
