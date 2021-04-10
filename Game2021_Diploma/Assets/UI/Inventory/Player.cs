@@ -44,7 +44,7 @@ public class Player : MonoBehaviour
         if(SceneManager.GetActiveScene().name == "Village")
         {
             string loadPath = DataHolder.savePath;
-            Debug.Log("Сейчас мы загружаем уровень: " + loadPath);
+            //Debug.Log("Сейчас мы загружаем уровень: " + loadPath);--
             LoadPlayer(loadPath);
             
         }
@@ -105,7 +105,7 @@ public class Player : MonoBehaviour
     
         //Перезаписываем файл х текущими значениями сцены
         //загружаем сцену
-        Debug.Log(test);
+        //Debug.Log(test);--
         test = true;
         //Invoke("StartBlackScreen", 0.5f);
         PlayerData data = SaveSystem.LoadPlayer(savePath);

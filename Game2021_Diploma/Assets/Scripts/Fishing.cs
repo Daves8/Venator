@@ -10,6 +10,9 @@ public class Fishing : MonoBehaviour
     [SerializeField] private GameObject _player;
     [SerializeField] private GameObject _text;
 
+    public InventoryObject inventory;
+    public ItemObject fish;
+
     private bool _readyToFishing = false;
     private bool _startFishing = false;
     public bool NowFishing = false;
@@ -71,9 +74,12 @@ public class Fishing : MonoBehaviour
         StopCoroutine("GetFishGame");
 
         float formula = _count * Random.Range(70, 85) / 100.0f;
-        if (formula >= 5) // 5 под вопросом, коэффициент нужно изменить
+        if (formula >= 2) // 5 под вопросом, коэффициент нужно изменить
         {
             _text.GetComponent<Text>().text = "Вы поймали рыбу!"; // Вы поймали рыбу!
+            Item item = new Item(fish);
+            inventory.AddItem(item, 1);
+
             _animator.SetTrigger("FishingEnd");
         }
         else
@@ -89,7 +95,7 @@ public class Fishing : MonoBehaviour
         _readyToFishing = false;
         NowFishing = false;
 
-        print("Count: " + _count + ". Формула: " + formula);
+        //print("Count: " + _count + ". Формула: " + formula);
     }
 
     private void HideText()

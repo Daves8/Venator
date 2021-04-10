@@ -34,7 +34,7 @@ public class Enemy : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
 
         _hp = Random.Range(100, 200);
-        print("У " + gameObject.name + " хп: " + _hp);
+        //print("У " + gameObject.name + " хп: " + _hp);
     }
 
     // Update is called once per frame

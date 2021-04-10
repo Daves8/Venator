@@ -67,7 +67,7 @@ public class ShowHideUI : MonoBehaviour
 
     private void ShowHidePauseMenu(object sender, EventArgs e)
     {
-        UnityEngine.Debug.Log("Escape Pressed!");
+        //UnityEngine.Debug.Log("Escape Pressed!");--
         _showHidePauseMenu= !_showHidePauseMenu;
 
         if(_showHidePauseMenu == true)

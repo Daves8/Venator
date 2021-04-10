@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class NPC : MonoBehaviour
 {
+    public string name;
+
     private Animator _animator;
     private NavMeshAgent _agent;
 
@@ -30,6 +32,12 @@ public class NPC : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(gameObject.name=="Father" || gameObject.name == "Mother" || gameObject.name == "Brother")
+        {
+            return;
+        }
+        
+
         if (_agent.velocity.normalized.magnitude >= 0.1f)
         {
             //StopCoroutine("AnimIdle");
