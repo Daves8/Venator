@@ -26,7 +26,7 @@ public class Fishing : MonoBehaviour
         if (_readyToFishing && Input.GetButtonDown("Action"))
         {
             CharacterMoving.IsReadyToMove = false;
-            Battle.AllowBattle = false;
+            _player.GetComponent<Battle>().AllowBattle = false;
             //_readyToFishing = false;
             NowFishing = true;
 
@@ -91,7 +91,7 @@ public class Fishing : MonoBehaviour
 
         // Закончили рыбалку
         CharacterMoving.IsReadyToMove = true;
-        Battle.AllowBattle = true;
+        _player.GetComponent<Battle>().AllowBattle = true;
         _readyToFishing = false;
         NowFishing = false;
 

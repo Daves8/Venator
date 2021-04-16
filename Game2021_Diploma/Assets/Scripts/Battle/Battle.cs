@@ -42,7 +42,7 @@ public class Battle : MonoBehaviour
     private string _changeWeaponAnim;
     private bool _previousWeapon = false;
 
-    static public bool AllowBattle = true;
+    public bool AllowBattle = true;
 
     public bool IsBattle;
 
@@ -69,6 +69,7 @@ public class Battle : MonoBehaviour
             KnifeOff();
             SwordOff();
             BowOff();
+            WeaponEnum._selectedWeapon = Weapon.None;
             return;
         }
 

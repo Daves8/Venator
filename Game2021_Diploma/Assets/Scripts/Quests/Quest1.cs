@@ -14,6 +14,8 @@ public class Quest1 : MonoBehaviour
     public GameObject father;
     public GameObject mother;
     public GameObject home;
+    public GameObject cart;
+    public GameObject hunter1;
     public Vector3 startPosition;
     public Text subtitles;
     public Text prompt;
@@ -41,6 +43,8 @@ public class Quest1 : MonoBehaviour
 
     private GameObject _targetDialogue;
     private NavMeshAgent _brNavMesh;
+
+    private TargetPoint _targetPoint;
 
     public enum Subquest
     {
@@ -74,6 +78,7 @@ public class Quest1 : MonoBehaviour
         prompt.text = "";
 
         subquest = Subquest.subquest1;
+        //_questManag.quest = QuestsManagement.Quest.quest1;
 
         groupCamera.enabled = false;
         targetGroup.m_Targets = new Cinemachine.CinemachineTargetGroup.Target[] { new Cinemachine.CinemachineTargetGroup.Target { target = GameObject.FindGameObjectWithTag("HeadPlayer").transform, weight = 1f, radius = 0f }, new Cinemachine.CinemachineTargetGroup.Target { target = brother.transform.GetChild(0).transform, weight = 1f, radius = 0f } };
@@ -81,6 +86,8 @@ public class Quest1 : MonoBehaviour
 
         _targetDialogue = brother;
         _brNavMesh = brother.GetComponent<NavMeshAgent>();
+
+        _targetPoint = GetComponent<TargetPoint>();
 
         _questManag = GetComponent<QuestsManagement>();
         _dialogue1 = Dialogue1.Load(_questManag.dialogues);
@@ -166,22 +173,33 @@ public class Quest1 : MonoBehaviour
             yield return null;
         }
     }
-    IEnumerator ShowSubtitles(string[] nodes, bool nextQuest = true)
+    IEnumerator ShowSubtitles(Node nodes, bool nextQuest = true)
     {
         _startCoroutineSS = true;
         target.text = "";
+        _targetPoint.target = null;
         CharacterMoving.IsReadyToMove = false;
-        player.GetComponent<Animator>().SetBool("Speak", true);
+        player.GetComponent<Battle>().AllowBattle = false;
         StartCoroutine(RotateToTarget());
-        foreach (string text in nodes)
+        foreach (Subtitles subt in nodes.npcText)
         {
-            subtitles.text = text;
+            if (subt.name == "Я")
+            {
+                player.GetComponent<Animator>().SetBool("Speak", true);
+            }
+            else
+            {
+                player.GetComponent<Animator>().SetBool("Speak", false);
+            }
+            subtitles.text = subt.name + ": ";
+            subtitles.text += subt.text;
             yield return new WaitForSeconds(3f);
         }
         subtitles.text = "";
         _startCoroutineSS = false;
         groupCamera.enabled = false;
         CharacterMoving.IsReadyToMove = true;
+        player.GetComponent<Battle>().AllowBattle = true;
         player.GetComponent<Animator>().SetBool("Speak", false);
         if (nextQuest)
         {
@@ -195,7 +213,7 @@ public class Quest1 : MonoBehaviour
         {
             target.text = "Поговорить с братом.";
             groupCamera.enabled = true;
-            StartCoroutine(ShowSubtitles(_dialogue1.nodes[0].text));
+            StartCoroutine(ShowSubtitles(_dialogue1.nodes[0]));
         }
     }
     private void SubQ2() // Диалог окончен. Задача: выбрать из инвентаря удочку и начать рыбачить.
@@ -262,7 +280,7 @@ public class Quest1 : MonoBehaviour
             CharacterMoving.IsReadyToMove = false;
             groupCamera.enabled = true;
             localCoroutQ5 = true;
-            StartCoroutine(ShowSubtitles(_dialogue1.nodes[1].text, false));
+            StartCoroutine(ShowSubtitles(_dialogue1.nodes[1], false));
         }
 
     }
@@ -286,12 +304,23 @@ public class Quest1 : MonoBehaviour
         if (Vector3.Distance(player.transform.position, brother.transform.position) <= 1f && _resultQuest >= 2 && !_startCoroutineSS)
         {
             groupCamera.enabled = true;
-            StartCoroutine(ShowSubtitles(_dialogue1.nodes[_resultQuest + 2].text));
+            StartCoroutine(ShowSubtitles(_dialogue1.nodes[_resultQuest + 2]));
         }
     }
     private void SubQ7() // Рыбалка окончена. Задача: идти с братом в деревню.
     {
-        target.text = "Идти за братом";
+        if (Vector3.Distance(player.transform.position, father.transform.position) < 10f)
+        {
+            target.text = "Подойти к отцу";
+
+            _targetPoint.PointToTarget(father.transform);
+        }
+        else
+        {
+            target.text = "Идти за братом";
+
+            _targetPoint.PointToTarget(brother.transform);
+        }
         _brNavMesh.SetDestination(home.transform.position);
 
         if (Vector3.Distance(player.transform.position, father.transform.position) < 1.5f)
@@ -307,12 +336,13 @@ public class Quest1 : MonoBehaviour
             localCoroutQ8 = false;
             groupCamera.enabled = true;
             _targetDialogue = father;
-            StartCoroutine(ShowSubtitles(_dialogue1.nodes[6].text));
+            StartCoroutine(ShowSubtitles(_dialogue1.nodes[6]));
         }
     }
     private void SubQ9()
     {
         target.text = "Зайти в дом и поговорить с матерью";
+        _targetPoint.PointToTarget(mother.transform);
         if(Vector3.Distance(player.transform.position, mother.transform.position) < 1.5f)
         {
             //subquest = Subquest.subquest10;
@@ -326,21 +356,45 @@ public class Quest1 : MonoBehaviour
             locCorQ10 = false;
             ChangeCompanion(mother);
             groupCamera.enabled = true;
-            StartCoroutine(ShowSubtitles(_dialogue1.nodes[6 + _resultQuest].text));
+            StartCoroutine(ShowSubtitles(_dialogue1.nodes[6 + _resultQuest]));
         }
     }
     private void SubQ11()
     {
-
+        target.text = "Подойти к точке сбора";
+        _targetPoint.PointToTarget(cart.transform);
+        if (Vector3.Distance(player.transform.position, cart.transform.position) < 2f)
+        {
+            subquest = (Subquest)(int)++subquest;
+        }
     }
     private void SubQ12()
     {
-
+        if (!_startCoroutineSS)
+        {
+            ChangeCompanion(hunter1);
+            groupCamera.enabled = true;
+            StartCoroutine(ShowSubtitles(_dialogue1.nodes[10]));
+            // ПОЛОЖИТЬ В ИНВЕНТАРЬ ИГРОКА ЛУК СО СТРЕЛАМИ
+        }
     }
     private void SubQ13()
     {
+        target.text = "Отправится на телеге в лес";
+        _targetPoint.PointToTarget(cart.transform);
 
+        if (true) // если игрок подошел к телеге, смотрит на нее и нажал на Е
+        {
+            // старт корутины (затухание экрана и перемещение игрока в точку)
+            Invoke("NextQuest", 5f); // ПОМЕНЯТЬ ВРЕМЯ
+        }
     }
+
+    private void NextQuest()
+    {
+        _questManag.quest = QuestsManagement.Quest.quest2;
+    }
+
     private void SubQ14()
     {
 
@@ -358,7 +412,7 @@ public class Quest1 : MonoBehaviour
 
     private void But1()
     {
-        StartCoroutine(ShowSubtitles(_dialogue1.nodes[2].text));
+        StartCoroutine(ShowSubtitles(_dialogue1.nodes[2]));
         _resultQuest = 1;
         localCoroutQ5 = false;
         button1.gameObject.SetActive(false);
@@ -367,7 +421,7 @@ public class Quest1 : MonoBehaviour
     }
     private void But2()
     {
-        StartCoroutine(ShowSubtitles(_dialogue1.nodes[3].text, false));
+        StartCoroutine(ShowSubtitles(_dialogue1.nodes[3], false));
         _resultQuest = 2;
         localCoroutQ5 = false;
         button1.gameObject.SetActive(false);
@@ -398,6 +452,15 @@ public class Dialogue1
 [System.Serializable]
 public class Node
 {
+    [XmlElement("subtitles")]
+    public Subtitles[] npcText;
+}
+
+[System.Serializable]
+public class Subtitles
+{
+    [XmlAttribute("name")]
+    public string name;
     [XmlElement("text")]
-    public string[] text;
+    public string text;
 }

@@ -31,6 +31,8 @@ public class BowShot : MonoBehaviour
     private bool _bow = false;
     private bool _beginBow = false;
 
+    private Battle _battle;
+
     void Start()
     {
         _rigBow.weight = 0;
@@ -40,11 +42,12 @@ public class BowShot : MonoBehaviour
         _cameraBow.SetActive(false);
 
         _aim.SetActive(false);
+        _battle = GetComponent<Battle>();
     }
 
     void Update()
     {
-        if (!Battle.AllowBattle)
+        if (!_battle.AllowBattle)
         {
             _rigBow.weight = 0;
             _arrowInHand.SetActive(false);
