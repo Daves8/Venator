@@ -90,7 +90,7 @@ public class Quest1 : MonoBehaviour
         _targetPoint = GetComponent<TargetPoint>();
 
         _questManag = GetComponent<QuestsManagement>();
-        _dialogue1 = Dialogue1.Load(_questManag.dialogues);
+        _dialogue1 = Dialogue1.Load(_questManag.dialoguesQ1);
         button1 = _questManag.button1.GetComponent<Button>();
         button2 = _questManag.button2.GetComponent<Button>();
         button3 = _questManag.button3.GetComponent<Button>();
@@ -449,18 +449,18 @@ public class Dialogue1
     }
 }
 
-[System.Serializable]
-public class Node
-{
-    [XmlElement("subtitles")]
-    public Subtitles[] npcText;
-}
+//[System.Serializable]
+//public class Node
+//{
+//    [XmlElement("subtitles")]
+//    public Subtitles[] npcText;
+//}
 
-[System.Serializable]
-public class Subtitles
-{
-    [XmlAttribute("name")]
-    public string name;
-    [XmlElement("text")]
-    public string text;
-}
+//[System.Serializable]
+//public class Subtitles
+//{
+//    [XmlAttribute("name")]
+//    public string name;
+//    [XmlElement("text")]
+//    public string text;
+//}

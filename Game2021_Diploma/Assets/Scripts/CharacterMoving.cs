@@ -33,6 +33,7 @@ public class CharacterMoving : MonoBehaviour
     {
         //Application.targetFrameRate = 300;
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
         _speedRun = _speed * 4;
         _speedWalk = _speed;

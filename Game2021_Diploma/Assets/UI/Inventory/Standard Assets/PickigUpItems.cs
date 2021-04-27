@@ -30,7 +30,7 @@ public class PickigUpItems : MonoBehaviour
         Physics.Raycast(ray, out hit, _rayCastMaxDistance, _playerLayerMask);
         
 
-        Debug.DrawRay(transform.position , transform.forward * _rayCastMaxDistance , Color.blue);
+        Debug.DrawRay(transform.position , transform.forward * _rayCastMaxDistance , UnityEngine.Color.blue);
         
         float distanceTohit = Vector3.Distance(Pointer.position , transform.position);
         

@@ -129,7 +129,7 @@ public class BowShot : MonoBehaviour
         _aim.SetActive(false);
     }
 
-    private void BowBattle()
+    private void BowBattle() // НЕ актуально
     {
         if (!_beginBow)
         {
