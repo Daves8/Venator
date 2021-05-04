@@ -235,6 +235,7 @@ public class Battle : MonoBehaviour
             WeaponEnum._selectedWeapon = Weapon.Bow;
         }
     }
+    #region Смена оружия
     private void KnifeOff()
     {
         _knifeOn.SetActive(false);
@@ -265,6 +266,7 @@ public class Battle : MonoBehaviour
         _bowOff.SetActive(false);
         _bowOn.SetActive(true);
     }
+    #endregion 
     public IEnumerator RotateToCamera()
     {
         while (true)

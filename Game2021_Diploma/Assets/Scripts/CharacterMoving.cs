@@ -45,6 +45,12 @@ public class CharacterMoving : MonoBehaviour
         CharacterMove();
         // падение
         CharacterFalling();
+
+        // ПРЫЖОК ---------------------------------------------------------------------
+        if (Input.GetButtonDown("Jump") && !_isCrouch && IsReadyToMove && IsReadyToRun)
+        {
+            _animator.SetTrigger("Jump");
+        }
     }
 
     private void CharacterMove()
