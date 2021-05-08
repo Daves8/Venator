@@ -9,7 +9,7 @@ public class BackgroundMusic : MonoBehaviour
     public PlayingMusic _playingMusic;
 
     private GameObject _player;
-    private Battle _battlePlayer;
+    private PlayerCharacteristics _playerCharacteristics;
 
     public enum PlayingMusic
     {
@@ -22,12 +22,12 @@ public class BackgroundMusic : MonoBehaviour
     {
         _backgroundMusic = GetComponent<AudioSource>();
         _player = GameObject.FindGameObjectWithTag("Player");
-        _battlePlayer = _player.GetComponent<Battle>();
+        _playerCharacteristics = _player.GetComponent<PlayerCharacteristics>();
     }
 
     private void Update()
     {
-        if (_battlePlayer.IsBattle)
+        if (_playerCharacteristics.isBattle)
         {
             _playingMusic = PlayingMusic.battle;
         }
