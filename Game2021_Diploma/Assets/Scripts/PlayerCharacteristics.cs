@@ -8,11 +8,11 @@ public class PlayerCharacteristics : MonoBehaviour
 
     public int hp;
     public bool isBattle;
-    public SortedSet<GameObject> allEnemies;
+    public List<GameObject> allEnemies;
 
     void Start()
     {
-        allEnemies = new SortedSet<GameObject>();
+        allEnemies = new List<GameObject>();
     }
 
     void Update()
