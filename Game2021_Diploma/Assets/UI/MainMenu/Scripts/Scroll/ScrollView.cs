@@ -31,12 +31,6 @@ public class ScrollView : MonoBehaviour
         scrollContentRectTransform = scrollContent.GetComponent<RectTransform>();
         buttons = new ArrayList();
     }
-    void Start()
-    {        
-        
-        
-        
-    }
 
     public static bool isDirectoryContainFiles() 
     {
@@ -60,7 +54,7 @@ public class ScrollView : MonoBehaviour
         
         try
         {
-            if (IsDirectoryContainFiles)
+            /*if (IsDirectoryContainFiles)
             {
                 DirectoryInfo d = new DirectoryInfo(Application.persistentDataPath + "/Saves/");
                 FileInfo[] Files = d.GetFiles("*.bin");
@@ -73,7 +67,46 @@ public class ScrollView : MonoBehaviour
                 }
                 
                 return saves;
-            }   
+            }
+            */
+            
+            
+            if (IsDirectoryContainFiles)
+            {   
+                DirectoryInfo d = new DirectoryInfo(Application.persistentDataPath + "/Saves/");
+                FileInfo[] Files = d.GetFiles("*.bin");
+                int fileCount = Directory.GetFiles(Application.persistentDataPath + "/Saves/").Length;
+                foreach(FileInfo file in Files )
+                {
+                    if(file.Name == "NewGame.bin")
+                    fileCount -= 1;
+                    
+                }
+                
+                string[,] savesArray = new string[fileCount,2];
+                
+                int rows = 0;
+
+                foreach(FileInfo file in Files )
+                {
+                    Debug.Log("ПЕРЕД     "+ file.Name);
+                    if(file.Name == "NewGame.bin") continue;                    
+                    savesArray[rows,0] = file.Name;
+                    savesArray[rows,1] = Application.persistentDataPath + "/Saves/" + file.Name;
+                    rows++;  
+                }
+
+                
+                Debug.Log("File count " + fileCount);
+                for (int i = fileCount - 1; i >= 0; i--)
+                {
+                    Debug.Log("111 - " + savesArray[i,0] + "| 222 - "+ savesArray[i,1]);
+                    saves.Add(savesArray[i,0],savesArray[i,1]);
+                    
+                }
+                
+                return saves;
+            }     
         }
         catch(Exception e)
         {
