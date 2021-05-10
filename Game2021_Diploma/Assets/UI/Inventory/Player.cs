@@ -41,10 +41,10 @@ public class Player : MonoBehaviour
         _controller = GetComponent<CharacterController>();
         scrollView = new ScrollView();
         
-        if(SceneManager.GetActiveScene().name == "Village")
+        if(SceneManager.GetActiveScene().name == "Inventory")
         {
             string loadPath = DataHolder.savePath;
-            //Debug.Log("Сейчас мы загружаем уровень: " + loadPath);--
+            Debug.Log("Сейчас мы загружаем уровень: " + loadPath);
             LoadPlayer(loadPath);
             
         }
