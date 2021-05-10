@@ -29,15 +29,15 @@ public class PlayerCharacteristics : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Sword")
+        if (other.gameObject.tag == "SwordEn")
         {
             hp -= Random.Range(30, 70);
         }
-        else if (other.gameObject.tag == "Knife")
+        else if (other.gameObject.tag == "KnifeEn")
         {
             hp -= Random.Range(10, 30);
         }
-        else if (other.gameObject.tag == "Arrow")
+        else if (other.gameObject.tag == "ArrowEn")
         {
             hp -= Random.Range(30, 350);
         }
