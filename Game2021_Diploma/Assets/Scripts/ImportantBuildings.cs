@@ -14,4 +14,11 @@ public class ImportantBuildings : MonoBehaviour
     public GameObject RightGate;
     public GameObject RightUpGate;
     public GameObject LeftUpGate;
+
+    public GameObject[] allImportantBuildings;
+
+    private void Start()
+    {
+        allImportantBuildings = new GameObject[] { Shop1, Shop2, Shop3, Shop4, Shop5, EntranceToTavern, Garden, RightGate, RightUpGate, LeftUpGate };
+    }
 }

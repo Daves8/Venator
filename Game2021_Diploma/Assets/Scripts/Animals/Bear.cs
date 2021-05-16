@@ -13,29 +13,55 @@ public class Bear : MonoBehaviour
     private GameObject _player;
     private GameObject[] _hunters;
 
+    private bool _die = false;
+    private bool _agressive = false;
     private bool _startCoroutine = false;
 
-    // Start is called before the first frame update
     void Start()
     {
-        //_bearAnim = GetComponent<Animator>();
-        //_bearAgent = GetComponent<NavMeshAgent>();
-        //_player = GameObject.FindGameObjectWithTag("Player");
-        //_hunters = GameObject.FindGameObjectsWithTag("Hunter");
+        _bearAnim = GetComponent<Animator>();
+        _bearAgent = GetComponent<NavMeshAgent>();
+        _player = GameObject.FindGameObjectWithTag("Player");
+        _hunters = GameObject.FindGameObjectsWithTag("Hunter");
+
+        hp = 500;
+        StartCoroutine(Healing());
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (!_startCoroutine)
-        {
-            _startCoroutine = true;
-            // start coroutine()
-        }
+        if (_die) { return; }
+
+
+
+        if (_agressive) { Attack(); }
+        else { Walking(); }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        
+
+    }
+
+    private void Attack()
+    {
+
+    }
+
+    private void Walking()
+    {
+
+    }
+
+    IEnumerator Healing()
+    {
+        while (!_die)
+        {
+            if (hp < 500)
+            {
+                hp += 20;
+            }
+            yield return new WaitForSeconds(10f);
+        }
     }
 }

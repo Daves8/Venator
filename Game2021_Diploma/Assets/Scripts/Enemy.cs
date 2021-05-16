@@ -14,7 +14,7 @@ public class Enemy : MonoBehaviour
     private bool _agressive = false;
     private bool _agrPast = false;
     private bool _attack = false;
-    private bool _death = false;
+    public bool _death = false;
 
     private bool _coroutStart;
 
@@ -59,7 +59,7 @@ public class Enemy : MonoBehaviour
             _attack = false;
             _agent.enabled = false;
             _animator.SetInteger("Death", Random.Range(0, 2));
-            Invoke("Death", 2.0f);
+            Invoke("Death", 3.0f);
             Invoke("Delete", 300.0f);
             return;
         }
@@ -217,7 +217,7 @@ public class Enemy : MonoBehaviour
         _animator.enabled = false;
         _playerCharacteristics.allEnemies.Remove(gameObject);
 
-        gameObject.GetComponent<CapsuleCollider>().enabled = false;
+        //gameObject.GetComponent<CapsuleCollider>().enabled = false;
         foreach (Rigidbody rigidbody in ragdolls)
         {
             rigidbody.isKinematic = false;
