@@ -78,7 +78,7 @@ public class BowShot : MonoBehaviour
                 _aim.SetActive(true);
             }
             CharacterMoving.IsReadyToRun = false;
-            print("Держим"); //
+            //print("Держим"); //
         }
         else if (Input.GetButtonUp("Fire1") && WeaponEnum._selectedWeapon == Weapon.Bow && _canShoot)
         {
@@ -86,7 +86,7 @@ public class BowShot : MonoBehaviour
             _beginBow = false;
             _canShoot = false;
             CharacterMoving.IsReadyToRun = true;
-            print("Отпустили"); //
+            //print("Отпустили"); //
         }
         else if (Input.GetButtonUp("Fire1") && WeaponEnum._selectedWeapon == Weapon.Bow && !_canShoot)
         {
@@ -95,7 +95,7 @@ public class BowShot : MonoBehaviour
             _animator.SetTrigger("ExitBow");
             _beginBow = false;
             _canShoot = false;
-            print("Не держим"); //
+            //print("Не держим"); //
 
             CharacterMoving.rotateCharacter = true;
             _cameraBow.SetActive(false);

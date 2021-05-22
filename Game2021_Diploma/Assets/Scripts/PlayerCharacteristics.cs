@@ -8,11 +8,21 @@ public class PlayerCharacteristics : MonoBehaviour
 
     public int hp;
     public bool isBattle;
+    public bool crouch;
     public List<GameObject> allEnemies;
+
+    public GameObject sword;
+    public GameObject[] allSwords; // 0 - базовый меч, 1 - продвинутый меч и т.д.
+
+    public GameObject knife;
+    public GameObject[] allKnifes; // 0 - базовый нож, 1 - продвинутый нож и т.д.
+
+    private CharacterMoving _chMove;
 
     void Start()
     {
         allEnemies = new List<GameObject>();
+        _chMove = GetComponent<CharacterMoving>();
     }
 
     void Update()
@@ -25,6 +35,7 @@ public class PlayerCharacteristics : MonoBehaviour
         {
             isBattle = false;
         }
+        crouch = _chMove._isCrouch;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -39,7 +50,7 @@ public class PlayerCharacteristics : MonoBehaviour
         }
         else if (other.gameObject.tag == "ArrowEn")
         {
-            hp -= Random.Range(30, 350);
+            hp -= Random.Range(30, 100);
         }
     }
 }

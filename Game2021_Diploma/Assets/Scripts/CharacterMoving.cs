@@ -25,7 +25,7 @@ public class CharacterMoving : MonoBehaviour
     private float _speedWalk;
     private float _speedRun;
 
-    private bool _isCrouch = false;
+    public bool _isCrouch = false;
 
     static public bool rotateCharacter = true;
 

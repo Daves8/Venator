@@ -178,7 +178,19 @@ public class Enemy : MonoBehaviour
             yield return null;
         }
     }
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision other) // для стрел
+    {
+        if (!_death)
+        {
+            if (other.gameObject.tag == "Arrow")
+            {
+                Add(gameObject);
+                _agressive = true;
+                _hp -= Random.Range(30, 100);
+            }
+        }
+    }
+    private void OnTriggerEnter(Collider other) // для оружия ближнего боя
     {
         if (!_death)
         {
@@ -187,21 +199,12 @@ public class Enemy : MonoBehaviour
                 _agressive = true;
                 Add(gameObject);
                 _hp -= Random.Range(30, 70);
-                //print(other.gameObject.name + " попал! Осталось хп: " + _hp);
             }
             else if (other.gameObject.tag == "Knife")
             {
                 _agressive = true;
                 Add(gameObject);
                 _hp -= Random.Range(10, 30);
-                //print(other.gameObject.name + " попал! Осталось хп: " + _hp);
-            }
-            else if (other.gameObject.tag == "Arrow")
-            {
-                Add(gameObject);
-                _agressive = true;
-                _hp -= Random.Range(30, 100);
-                //print("Стрела попала. Осталось хп: " + _hp);
             }
         }
     }

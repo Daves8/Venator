@@ -10,21 +10,14 @@ public class Arrow : MonoBehaviour
         Invoke("Delete", 300.0f);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnCollisionEnter(Collision collision)
     {
-        Debug.DrawRay(transform.position, transform.forward * 20, Color.blue);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        //print("Стрела попала в " + other.gameObject.name);
-        //if (other.gameObject.tag == "Enemy")
-        //{
-        //    other.gameObject.GetComponent<Enemy>()._hp -= 100;
-        //    Invoke("Delete", 300.0f);
-        //}
-        //GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        print("Стрела попала в " + collision.gameObject.name);
+        if (collision.gameObject.tag != "Player" && collision.gameObject.tag != "Arrow")
+        {   
+            //GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+            //transform.SetParent(collision.transform);
+        }
     }
 
     private void Delete()
