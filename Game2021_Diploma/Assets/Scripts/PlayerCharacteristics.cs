@@ -8,6 +8,7 @@ public class PlayerCharacteristics : MonoBehaviour
 
     public int hp;
     public bool isBattle;
+    public bool isBattleAnimal;
     public bool crouch;
     public List<GameObject> allEnemies;
 
