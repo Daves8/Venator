@@ -12,7 +12,7 @@ public class PlayerData
     //public InventoryObject inventory;
     //public InventoryObject equipment;
 
-    public PlayerData(Player player)
+    public PlayerData(Player player)//if continue
     {
         level = "LoadedLevel";//Можно удалить (PlayerData.cs, Player.cs)
 
@@ -27,7 +27,7 @@ public class PlayerData
         //квесты
     }
 
-    public PlayerData()
+    public PlayerData()//if newgame
     {
         level = "NewGame";
 
