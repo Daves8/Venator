@@ -49,6 +49,7 @@ public class Bear : MonoBehaviour
         {
             _die = true;
             _agressive = false;
+            _playerCharact.isBattleAnimal = false;
             _bearAgent.enabled = false;
             _bearAnim.SetTrigger("Die");
             Invoke("Delete", 300.0f);
@@ -66,8 +67,8 @@ public class Bear : MonoBehaviour
             _bearAgent.speed = _speedWalk;
         }
 
-        if (_agressive) { _bearAgent.speed = _speedRun; }
-        else { _bearAgent.speed = _speedWalk; }
+        if (_agressive) { _bearAgent.speed = _speedRun; _playerCharact.isBattleAnimal = true; }
+        else { _bearAgent.speed = _speedWalk; _playerCharact.isBattleAnimal = false; }
 
         if (_bearAgent.velocity.magnitude > 0f)
         {
@@ -101,9 +102,10 @@ public class Bear : MonoBehaviour
     }
     private bool NearHunters()
     {
+        float distance = Random.Range(9f, 11f);
         for (int i = 0; i < _hunters.Length; i++)
         {
-            if (Vector3.Distance(transform.position, _hunters[i].transform.position) < 10f)
+            if (Vector3.Distance(transform.position, _hunters[i].transform.position) < distance)
             {
                 return true;
             }
@@ -112,11 +114,12 @@ public class Bear : MonoBehaviour
     }
     private float SafetyDistance()
     {
+        float distance = Random.Range(9f, 11f);
         if (_playerCharact.crouch)
         {
-            return 10f;
+            return distance;
         }
-        return 20f;
+        return distance * 2f;
     }
     private void Attack()
     {
@@ -200,7 +203,7 @@ public class Bear : MonoBehaviour
         {
             if (collision.gameObject.tag == "Arrow")
             {
-                _agressive = true;
+                Agressive();
                 hp -= Random.Range(30, 100);
             }
         }
@@ -212,24 +215,37 @@ public class Bear : MonoBehaviour
             // охотник
             if (other.gameObject.tag == "SwordEn")
             {
+                Agressive();
                 hp -= Random.Range(30, 70);
             }
             else if (other.gameObject.tag == "KnifeEn")
             {
+                Agressive();
                 hp -= Random.Range(10, 30);
             }
 
             // игрок
             if (other.gameObject.tag == "Sword")
             {
-                _agressive = true;
+                Agressive();
                 hp -= Random.Range(30, 70); // 100-150 меч 2-го уровня
             }
             else if (other.gameObject.tag == "Knife")
             {
-                _agressive = true;
+                Agressive();
                 hp -= Random.Range(10, 30);
             }
+        }
+    }
+    private void Agressive()
+    {
+        if (NearHunters())
+        {
+            _agressive = true;
+        }
+        else
+        {
+            RunAway();
         }
     }
 
