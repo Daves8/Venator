@@ -10,7 +10,7 @@ public class PlayerData
     public string level;
     public float[] position;
 
-    public PlayerData(Player player)
+    public PlayerData(Player player)//if continue
     {
         level = "LoadedLevel";//Можно удалить (PlayerData.cs, Player.cs)
 
@@ -21,7 +21,7 @@ public class PlayerData
         
     }
 
-    public PlayerData()
+    public PlayerData()//if newgame
     {
         level = "NewGame";
 
