@@ -43,11 +43,11 @@ public class Enemy : MonoBehaviour
         _buildsForPatrol = new GameObject[] { _importantBuildings.EntranceToTavern, _importantBuildings.Garden, _importantBuildings.RightGate, _importantBuildings.RightUpGate, _importantBuildings.LeftUpGate };
         _nextBuild = (BuildEn)Random.Range(0, _buildsForPatrol.Length);
 
-        ragdolls.AddRange(GetComponentsInChildren<Rigidbody>());
-        foreach (Rigidbody rigidbody in ragdolls)
-        {
-            rigidbody.isKinematic = true;
-        }
+        //ragdolls.AddRange(GetComponentsInChildren<Rigidbody>());
+        //foreach (Rigidbody rigidbody in ragdolls)
+        //{
+        //    rigidbody.isKinematic = true;
+        //}
     }
 
     private void Update()

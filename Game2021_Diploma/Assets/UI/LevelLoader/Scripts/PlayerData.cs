@@ -9,6 +9,8 @@ public class PlayerData
 {
     public string level;
     public float[] position;
+    //public InventoryObject inventory;
+    //public InventoryObject equipment;
 
     public PlayerData(Player player)
     {
@@ -18,7 +20,11 @@ public class PlayerData
         position[0] = player.transform.position.x;
         position[1] = player.transform.position.y;
         position[2] = player.transform.position.z;
-        
+
+        //инвентарь
+        //inventory = player.GetComponent<Player>().inventory;
+        //equipment = player.GetComponent<Player>().equipment;
+        //квесты
     }
 
     public PlayerData()
@@ -30,6 +36,7 @@ public class PlayerData
         position[1] = 0;
         position[2] = 0;
         
+        // квесты
+        // инвернтарь
     }
-
 }

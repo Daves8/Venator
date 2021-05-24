@@ -14,6 +14,8 @@ public class ShowHideUI : MonoBehaviour
     [SerializeField]
     private GameObject _characterCamera;
     [SerializeField]
+    private GameObject _characterCamera2;
+    [SerializeField]
     private GameObject _characterInventory;//Canvas
     [SerializeField]
     
@@ -54,7 +56,10 @@ public class ShowHideUI : MonoBehaviour
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             _characterInventory.GetComponent<Canvas>().enabled = true;
-            _characterCamera.SetActive(false);            
+            _characterCamera.GetComponent<Cinemachine.CinemachineFreeLook>().m_XAxis.m_InputAxisName = "";
+            _characterCamera.GetComponent<Cinemachine.CinemachineFreeLook>().m_YAxis.m_InputAxisName = "";
+            //_characterCamera.SetActive(false);
+            //_characterCamera2.SetActive(false);
             _character.GetComponent<CharacterMoving>().enabled = false;            
         }
         else
@@ -62,7 +67,10 @@ public class ShowHideUI : MonoBehaviour
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             _characterInventory.GetComponent<Canvas>().enabled = false;
-            _characterCamera.SetActive(true);           
+            _characterCamera.GetComponent<Cinemachine.CinemachineFreeLook>().m_XAxis.m_InputAxisName = "Mouse X";
+            _characterCamera.GetComponent<Cinemachine.CinemachineFreeLook>().m_YAxis.m_InputAxisName = "Mouse Y";
+            //_characterCamera.SetActive(true);
+            //_characterCamera2.SetActive(true);
             _character.GetComponent<CharacterMoving>().enabled = true;            
         }
     }

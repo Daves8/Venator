@@ -41,7 +41,7 @@ public class Player : MonoBehaviour
         _controller = GetComponent<CharacterController>();
         scrollView = new ScrollView();
         
-        if(SceneManager.GetActiveScene().name == "Inventory")
+        if(SceneManager.GetActiveScene().name == "Village")
         {
             string loadPath = DataHolder.savePath;
             Debug.Log("Сейчас мы загружаем уровень: " + loadPath);
@@ -110,7 +110,7 @@ public class Player : MonoBehaviour
         //Invoke("StartBlackScreen", 0.5f);
         PlayerData data = SaveSystem.LoadPlayer(savePath);
 
-        level = data.level;
+        //level = data.level;
 
         Vector3 position;
         position.x = data.position[0];
@@ -121,10 +121,14 @@ public class Player : MonoBehaviour
         //playerPosition.position = new Vector3(0,200,0);
         playerPosition.position = position;
         _controller.enabled = true;
-        
-        Debug.Log(playerPosition.position);
+
+        // инвентарь
+        //inventory = data.inventory;
+        //equipment = data.equipment;
+
+       
         //Invoke("EndBlackScreen", 1f);
-        Debug.Log(position);
+        
         
     }
 

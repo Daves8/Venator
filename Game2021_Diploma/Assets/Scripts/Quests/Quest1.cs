@@ -16,13 +16,13 @@ public class Quest1 : MonoBehaviour
     public GameObject home;
     public GameObject cart;
     public GameObject hunter1;
-    public Vector3 startPosition;
+    public Vector3 startPosition;//
     public Text subtitles;
     public Text prompt;
     public Text target;
     public Cinemachine.CinemachineVirtualCamera groupCamera;
     public Cinemachine.CinemachineTargetGroup targetGroup;
-    public Subquest subquest;
+    public Subquest subquest;//
 
     private Fishing _riverFishing;
     private QuestsManagement _questManag;
@@ -32,13 +32,13 @@ public class Quest1 : MonoBehaviour
     private Button button2;
     private Button button3;
 
-    private bool _startCoroutineSS = false;
-    bool localCoroutQ5 = false;
-    bool localCoroutQ8 = true;
-    bool locCorQ10 = true;
+    private bool _startCoroutineSS = false;//
+    bool localCoroutQ5 = false;//
+    bool localCoroutQ8 = true;//
+    bool locCorQ10 = true;//
 
     private int _idFish = 8;
-    private int _resultQuest;
+    private int _resultQuest;//
     private Player _scriptPlayer;
 
     private GameObject _targetDialogue;
