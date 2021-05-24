@@ -123,13 +123,26 @@ public class Player : MonoBehaviour
         _controller.enabled = true;
 
         // инвентарь
-        //inventory = data.inventory;
-        //equipment = data.equipment;
+        inventory.Container = data.inventory;
+        equipment.Container = data.equipment;
+        
+        //Inventory newContainer1 = data.inventory;
+        //InventorySlot[] GetSlots1 = newContainer1.Slots;
+        //for (int i = 0; i < GetSlots1.Length; i++)
+        //{
+        //    GetSlots1[i].UpdateSlot(newContainer1.Slots[i].item, newContainer1.Slots[i].amount);
+        //}
+        
+        //Inventory newContainer2 = data.inventory;
+        //InventorySlot[] GetSlots2 = newContainer2.Slots;
+        //for (int i = 0; i < GetSlots2.Length; i++)
+        //{
+        //    GetSlots2[i].UpdateSlot(newContainer2.Slots[i].item, newContainer2.Slots[i].amount);
+        //}
 
-       
         //Invoke("EndBlackScreen", 1f);
-        
-        
+
+
     }
 
     public void OnRemoveItem(InventorySlot _slot)
@@ -259,18 +272,18 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        //Debug.Log(playerPosition.position);
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            inventory.Save();
-            equipment.Save();
-        }
+        ////Debug.Log(playerPosition.position);
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    inventory.Save();
+        //    equipment.Save();
+        //}
 
-        if (Input.GetKeyDown(KeyCode.KeypadEnter))
-        {
-            inventory.Load();
-            equipment.Load();
-        }
+        //if (Input.GetKeyDown(KeyCode.KeypadEnter))
+        //{
+        //    inventory.Load();
+        //    equipment.Load();
+        //}
     }
 
     public void AttributeModified(Attribute attribute)

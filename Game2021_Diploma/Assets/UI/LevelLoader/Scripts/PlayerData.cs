@@ -11,6 +11,8 @@ public class PlayerData
     public float[] position;
     //public InventoryObject inventory;
     //public InventoryObject equipment;
+    public Inventory inventory;
+    public Inventory equipment;
 
     public PlayerData(Player player)//if continue
     {
@@ -22,8 +24,8 @@ public class PlayerData
         position[2] = player.transform.position.z;
 
         //инвентарь
-        //inventory = player.GetComponent<Player>().inventory;
-        //equipment = player.GetComponent<Player>().equipment;
+        inventory = player.GetComponent<Player>().inventory.Container;
+        equipment = player.GetComponent<Player>().equipment.Container;
         //квесты
     }
 

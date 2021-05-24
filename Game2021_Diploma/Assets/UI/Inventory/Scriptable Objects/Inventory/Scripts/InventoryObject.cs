@@ -14,6 +14,7 @@ public enum InterfaceType
 }
 
 [CreateAssetMenu(fileName = "New Inventory", menuName = "Inventory System/Inventory")]
+[System.Serializable]
 public class InventoryObject : ScriptableObject
 {
     [SerializeField]
