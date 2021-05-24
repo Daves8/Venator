@@ -18,7 +18,11 @@ public class LevelLoader : MonoBehaviour
     public void Start()
     {
         transition.SetTrigger("End");
-        if(SceneManager.GetActiveScene().name == "MainMenu")Cursor.lockState = CursorLockMode.None;
+        if (SceneManager.GetActiveScene().name == "MainMenu")
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        } 
         
     }
 

@@ -49,8 +49,9 @@ public class ShowHideUI : MonoBehaviour
         UnityEngine.Debug.Log("I Pressed!");
         _showHideInventory = !_showHideInventory;   
 
-        if(_showHideInventory == true)
+        if(_showHideInventory)
         {
+            Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             _characterInventory.GetComponent<Canvas>().enabled = true;
             _characterCamera.SetActive(false);            
@@ -58,6 +59,7 @@ public class ShowHideUI : MonoBehaviour
         }
         else
         {
+            Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             _characterInventory.GetComponent<Canvas>().enabled = false;
             _characterCamera.SetActive(true);           
@@ -72,12 +74,14 @@ public class ShowHideUI : MonoBehaviour
 
         if(_showHidePauseMenu == true)
         {
+            Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             _PauseMenu.GetComponent<Canvas>().enabled = true;
             Time.timeScale = 0;         
         }
         else
         {
+            Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             _PauseMenu.GetComponent<Canvas>().enabled = false;
             Time.timeScale = 1;            
