@@ -14,7 +14,7 @@ public class Bear : MonoBehaviour
     private GameObject _player;
     private GameObject[] _hunters;
 
-    public AudioClip ratAudio;
+    public AudioClip[] roarBear;
     private AudioSource _audioSource;
 
     private bool _die = false;
@@ -41,6 +41,8 @@ public class Bear : MonoBehaviour
         _places = GameObject.FindGameObjectsWithTag("PlacesForBear");
         _places[_places.Length - 1] = GameObject.FindGameObjectWithTag("Den");
 
+        _audioSource = GetComponent<AudioSource>();
+
         hp = 750;
         StartCoroutine(Healing());
     }
@@ -58,6 +60,14 @@ public class Bear : MonoBehaviour
             Invoke("Delete", 300.0f);
             return;
         }
+
+        if (!_audioSource.isPlaying)
+        {
+            _audioSource.pitch = Random.Range(0.9f, 1.1f);
+            _audioSource.clip = roarBear[Random.Range(0, roarBear.Length)];
+            _audioSource.Play();
+        }
+
 
         if (Vector3.Distance(transform.position, _player.transform.position) < SafetyDistance() || NearHunters())
         {
@@ -240,15 +250,18 @@ public class Bear : MonoBehaviour
             }
         }
     }
-    private void Agressive()
+    public void Agressive()
     {
-        if (NearHunters())
+        if (!_die)
         {
-            _agressive = true;
-        }
-        else
-        {
-            RunAway();
+            if (NearHunters())
+            {
+                _agressive = true;
+            }
+            else
+            {
+                RunAway();
+            }
         }
     }
 

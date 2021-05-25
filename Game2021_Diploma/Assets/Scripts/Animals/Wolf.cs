@@ -20,6 +20,9 @@ public class Wolf : MonoBehaviour
     private float _speedWalk = 2.0f;
     private float _speedRun = 5.0f;
 
+    public AudioClip[] roarWolf;
+    private AudioSource _audioSource;
+
     private GameObject[] _places;
 
     private bool _startCoroutine = false;
@@ -55,6 +58,13 @@ public class Wolf : MonoBehaviour
             _animator.SetTrigger("Die");
             Invoke("Delete", 300.0f);
             return;
+        }
+
+        if (!_audioSource.isPlaying)
+        {
+            _audioSource.pitch = Random.Range(0.9f, 1.1f);
+            _audioSource.clip = roarBear[Random.Range(0, roarBear.Length)];
+            _audioSource.Play();
         }
 
         if (Vector3.Distance(transform.position, _player.transform.position) < SafetyDistance() || NearHunters())
@@ -144,6 +154,20 @@ public class Wolf : MonoBehaviour
         _agent.SetDestination(_places[_places.Length - 1].transform.position);
     }
 
+    public void Agressive()
+    {
+        if (!_die)
+        {
+            if (NearHunters())
+            {
+                _agressive = true;
+            }
+            else
+            {
+                RunAway();
+            }
+        }
+    }
     private bool NearHunters()
     {
         float distance = Random.Range(9f, 11f);

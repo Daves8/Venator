@@ -27,7 +27,7 @@ public class BackgroundMusic : MonoBehaviour
 
     private void Update()
     {
-        if (_playerCharacteristics.isBattle )//|| _playerCharacteristics.isBattleAnimal)
+        if (_playerCharacteristics.isBattle || _playerCharacteristics.isBattleAnimal)
         {
             _playingMusic = PlayingMusic.battle;
         }

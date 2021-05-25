@@ -102,6 +102,7 @@ public class Rat : MonoBehaviour
     }
     private void Death()
     {
+        --_animals.allAnimals["Rat"];
         _animator.enabled = false;
         _die = true;
         GetComponent<CapsuleCollider>().enabled = false;
