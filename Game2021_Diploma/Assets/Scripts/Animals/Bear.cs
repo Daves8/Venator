@@ -14,6 +14,9 @@ public class Bear : MonoBehaviour
     private GameObject _player;
     private GameObject[] _hunters;
 
+    public AudioClip ratAudio;
+    private AudioSource _audioSource;
+
     private bool _die = false;
     public bool _agressive = false;
     private bool _startCoroutine = false;

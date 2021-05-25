@@ -12,15 +12,21 @@ public class Rat : MonoBehaviour
     public AudioClip ratAudio;
     private AudioSource _audioSource;
 
+    private Animals _animals;
+
     private bool _die;
     private bool _coroutStarted = false;
 
     void Start()
     {
+        _animals = GameObject.FindGameObjectWithTag("Animal").GetComponent<Animals>();
+        //_animals.allAnimals.Add("Rat", ++_animals.allAnimals["Rat"]);
+        ++_animals.allAnimals["Rat"];
         _animator = GetComponent<Animator>();
         _agent = GetComponent<NavMeshAgent>();
         _die = false;
         _audioSource = GetComponent<AudioSource>();
+        _audioSource.volume = 0.01f;
         //StartCoroutine(Walk());
     }
 
@@ -31,10 +37,9 @@ public class Rat : MonoBehaviour
             return;
         }
 
-        _audioSource.volume = 0.02f;
-        _audioSource.pitch = Random.Range(0.9f, 1.1f);
         if (!_audioSource.isPlaying)
         {
+            _audioSource.pitch = Random.Range(0.9f, 1.1f);
             _audioSource.clip = ratAudio;
             _audioSource.Play();
         }
@@ -100,6 +105,7 @@ public class Rat : MonoBehaviour
         _animator.enabled = false;
         _die = true;
         GetComponent<CapsuleCollider>().enabled = false;
+        _audioSource.enabled = false;
         transform.position -= new Vector3(0f, 0.1f, 0f);
         Invoke("Delete", 200f);
     }
