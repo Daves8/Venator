@@ -13,9 +13,11 @@ public class PlayerCharacteristics : MonoBehaviour
     public List<GameObject> allEnemies;
 
     public GameObject sword;
+    public float damageSword;
     public GameObject[] allSwords; // 0 - базовый меч, 1 - продвинутый меч и т.д.
 
     public GameObject knife;
+    public float damageKnife;
     public GameObject[] allKnifes; // 0 - базовый нож, 1 - продвинутый нож и т.д.
 
     private CharacterMoving _chMove;

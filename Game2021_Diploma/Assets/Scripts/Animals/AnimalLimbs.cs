@@ -6,6 +6,7 @@ public class AnimalLimbs : MonoBehaviour
 {
     public GameObject parent;
     public ParentAnimal typeParent;
+    private PlayerCharacteristics _playerCharacteristics;
 
     private void OnCollisionEnter(Collision collision)
     {
