@@ -63,7 +63,7 @@ public class Wolf : MonoBehaviour
         if (!_audioSource.isPlaying)
         {
             _audioSource.pitch = Random.Range(0.9f, 1.1f);
-            _audioSource.clip = roarBear[Random.Range(0, roarBear.Length)];
+            _audioSource.clip = roarWolf[Random.Range(0, roarWolf.Length)];
             _audioSource.Play();
         }
 
