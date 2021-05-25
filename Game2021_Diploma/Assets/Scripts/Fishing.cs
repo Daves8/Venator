@@ -52,7 +52,7 @@ public class Fishing : MonoBehaviour
     private void GetFish()
     {
         _text.SetActive(true);
-        _text.GetComponent<Text>().text = "Нажимайте E";
+        _text.GetComponent<Text>().text = "Нажимайте F";
         StartCoroutine("GetFishGame");
         Invoke("StopGetFishGame", Random.Range(10, 21) / 10.0f);
     }
@@ -61,7 +61,7 @@ public class Fishing : MonoBehaviour
     {
         while (true)
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetButtonDown("Action"))
             {
                 ++_count;
             }
