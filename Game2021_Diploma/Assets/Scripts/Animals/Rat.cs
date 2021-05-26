@@ -105,6 +105,7 @@ public class Rat : MonoBehaviour
         --_animals.allAnimals["Rat"];
         _animator.enabled = false;
         _die = true;
+        --_animals.allAnimals["Rat"];
         GetComponent<CapsuleCollider>().enabled = false;
         _audioSource.enabled = false;
         transform.position -= new Vector3(0f, 0.1f, 0f);

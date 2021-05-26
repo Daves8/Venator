@@ -43,7 +43,7 @@ public class Wolf : MonoBehaviour
         _places = GameObject.FindGameObjectsWithTag("PlacesForWolf");
         _places[_places.Length - 1] = GameObject.FindGameObjectWithTag("DenWolf");
         _audioSource = GetComponent<AudioSource>();
-        _audioSource.volume = 0.01f;
+        _audioSource.volume = 0.2f;
         hp = 450;
         _animals = GameObject.FindGameObjectWithTag("Animal").GetComponent<Animals>();
         ++_animals.allAnimals["Wolf"];
@@ -55,6 +55,7 @@ public class Wolf : MonoBehaviour
         if (_die) { return; }
         if (hp <= 0)
         {
+            --_animals.allAnimals["Wolf"];
             _die = true;
             _agressive = false;
             _playerCharact.isBattleAnimal = false;
@@ -82,10 +83,41 @@ public class Wolf : MonoBehaviour
             _agent.speed = _speedWalk;
         }
 
-        if (_agressive) { _agent.speed = _speedRun; _playerCharact.isBattleAnimal = true; }
-        else { _agent.speed = _speedWalk; _playerCharact.isBattleAnimal = false; }
+        if (_agressive)
+        {
+            _agent.speed = _speedRun;
+            if (!_playerCharact.allAnimals.Contains(gameObject))
+            {
+                _playerCharact.allAnimals.Add(gameObject);
+            }
+        }
+        else
+        {
+            _agent.speed = _speedWalk;
+            _playerCharact.allAnimals.Remove(gameObject);
+        }
 
-        // animations of moving
+        if (_agent.velocity.magnitude > 0f)
+        {
+            if (_agressive)
+            {
+                _animator.SetBool("Walk", false);
+                _animator.SetBool("Eat", false);
+                _animator.SetBool("Run", true);
+            }
+            else
+            {
+                _animator.SetBool("Run", false);
+                _animator.SetBool("Eat", false);
+                _animator.SetBool("Walk", true);
+            }
+        }
+        else
+        {
+            _animator.SetBool("Walk", false);
+            _animator.SetBool("Run", false);
+            _animator.SetBool("Eat", false);
+        }
 
         if (_agressive && hp <= 250 && Vector3.Distance(transform.position, _places[_places.Length - 1].transform.position) > 7.5f) { RunAway(); }
         else if (_agressive) { Attack(); }

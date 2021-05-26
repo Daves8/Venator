@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Animals : MonoBehaviour
 {
@@ -87,11 +88,13 @@ public class Animals : MonoBehaviour
                 }
                 if (i < 7) // forest
                 {
-                    Instantiate(_allAnimalsObject[i], spawnAnimalForest[Random.Range(0, spawnAnimalForest.Length)].position, Quaternion.identity);
+                    GameObject animal = Instantiate(_allAnimalsObject[i], spawnAnimalForest[Random.Range(0, spawnAnimalForest.Length)].position, Quaternion.identity);
+                    animal.GetComponent<NavMeshAgent>().enabled = true;
                 }
                 else // village
                 {
-                    Instantiate(_allAnimalsObject[i], spawnAnimalVillage[Random.Range(0, spawnAnimalVillage.Length)].position, Quaternion.identity);
+                    GameObject animal = Instantiate(_allAnimalsObject[i], spawnAnimalVillage[Random.Range(0, spawnAnimalVillage.Length)].position, Quaternion.identity);
+                    animal.GetComponent<NavMeshAgent>().enabled = true;
                 }
             }
         }

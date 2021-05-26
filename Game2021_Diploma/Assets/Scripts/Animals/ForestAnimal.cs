@@ -86,6 +86,7 @@ public class ForestAnimal : MonoBehaviour
         if (_die) { return; }
         if (hp <= 0)
         {
+            --_animals.allAnimals[_type];
             _die = true;
             _agressive = false;
             _playerCharact.isBattleAnimal = false;

@@ -9,6 +9,7 @@ public class PlayerCharacteristics : MonoBehaviour
     public bool isBattleAnimal;
     public bool crouch;
     public List<GameObject> allEnemies;
+    public List<GameObject> allAnimals;
 
     public GameObject sword;
     public float damageSword = 50;
@@ -36,6 +37,15 @@ public class PlayerCharacteristics : MonoBehaviour
         {
             isBattle = false;
         }
+        if (allAnimals.Count != 0)
+        {
+            isBattleAnimal = true;
+        }
+        else
+        {
+            isBattleAnimal = false;
+        }
+
         crouch = _chMove._isCrouch;
     }
 

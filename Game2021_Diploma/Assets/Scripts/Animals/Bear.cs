@@ -44,7 +44,7 @@ public class Bear : MonoBehaviour
         _animals = GameObject.FindGameObjectWithTag("Animal").GetComponent<Animals>();
         ++_animals.allAnimals["Bear"];
         _audioSource = GetComponent<AudioSource>();
-        _audioSource.volume = 0.01f;
+        _audioSource.volume = 0.25f;
         hp = 750;
         StartCoroutine(Healing());
     }
@@ -54,6 +54,7 @@ public class Bear : MonoBehaviour
         if (_die) { return; }
         if (hp <= 0)
         {
+            --_animals.allAnimals["Bear"];
             _die = true;
             _agressive = false;
             _playerCharact.isBattleAnimal = false;
@@ -82,8 +83,19 @@ public class Bear : MonoBehaviour
             _bearAgent.speed = _speedWalk;
         }
 
-        if (_agressive) { _bearAgent.speed = _speedRun; _playerCharact.isBattleAnimal = true; }
-        else { _bearAgent.speed = _speedWalk; _playerCharact.isBattleAnimal = false; }
+        if (_agressive)
+        {
+            _bearAgent.speed = _speedRun;
+            if (!_playerCharact.allAnimals.Contains(gameObject))
+            {
+                _playerCharact.allAnimals.Add(gameObject);
+            }
+        }
+        else
+        {
+            _bearAgent.speed = _speedWalk;
+            _playerCharact.allAnimals.Remove(gameObject);
+        }
 
         if (_bearAgent.velocity.magnitude > 0f)
         {
