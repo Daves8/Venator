@@ -12,6 +12,12 @@ public class NPC : MonoBehaviour
 
     private ImportantBuildings _importantBuildings;
     private GameObject[] _allBuildings;
+    private PlayerCharacteristics _playerCharacteristics;
+
+    public AudioClip scream;
+    private AudioSource _audioSource;
+    private bool _attacked = false;
+    private bool _attackedAdd = true;
 
     private bool _isWalk = true;
     private bool _isRun;
@@ -25,18 +31,29 @@ public class NPC : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
         _importantBuildings = GameObject.FindGameObjectWithTag("BuildingsImportant").GetComponent<ImportantBuildings>();
         _allBuildings = new GameObject[] { _importantBuildings.Shop1, _importantBuildings.Shop2, _importantBuildings.Shop3, _importantBuildings.Shop4, _importantBuildings.Shop5, _importantBuildings.EntranceToTavern, _importantBuildings.Garden, _importantBuildings.RightGate, _importantBuildings.RightUpGate, _importantBuildings.LeftUpGate };
-
+        _playerCharacteristics = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCharacteristics>();
         nextBuild = (Build)Random.Range(1, 11);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(gameObject.name=="Father" || gameObject.name == "Mother" || gameObject.name == "Brother")
+        if (gameObject.name == "Father" || gameObject.name == "Mother" || gameObject.name == "Brother")
         {
             return;
         }
-        
+
+        if (_attacked &&_attackedAdd)
+        {
+            _attackedAdd = false;
+            Invoke("ExitFromAttack", 7f);
+            _agent.speed = 4f;
+            _animator.SetBool("Run", true);
+            _agent.SetDestination(_allBuildings[5].transform.position);
+            _audioSource.pitch = Random.Range(0.9f, 1.1f);
+            _audioSource.PlayOneShot(scream);
+        }
+        if (_attacked) { return; }
 
         if (_agent.velocity.normalized.magnitude >= 0.1f)
         {
@@ -65,6 +82,13 @@ public class NPC : MonoBehaviour
             _agent.speed = 4f;
             _isWalk = false;
         }
+    }
+
+    private void ExitFromAttack()
+    {
+        _attacked = false;
+        _animator.SetBool("Run", false);
+        _playerCharacteristics.allEnemies.Remove(gameObject);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -106,8 +130,35 @@ public class NPC : MonoBehaviour
             default:
                 break;
         }
-    }
 
+        if (other.gameObject.tag == "Sword")
+        {
+            _attacked = true;
+            if (!_playerCharacteristics.allEnemies.Contains(gameObject))
+            {
+                _playerCharacteristics.allEnemies.Add(gameObject);
+            }
+        }
+        else if (other.gameObject.tag == "Knife")
+        {
+            _attacked = true;
+            if (!_playerCharacteristics.allEnemies.Contains(gameObject))
+            {
+                _playerCharacteristics.allEnemies.Add(gameObject);
+            }
+        }
+    }
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag == "Arrow")
+        {
+            _attacked = true;
+            if (!_playerCharacteristics.allEnemies.Contains(gameObject))
+            {
+                _playerCharacteristics.allEnemies.Add(gameObject);
+            }
+        }
+    }
     IEnumerator NpcAI()
     {
         yield return new WaitForSeconds(Random.Range(5f, 25f));

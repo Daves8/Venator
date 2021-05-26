@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PlayerCharacteristics : MonoBehaviour
 {
-    // скрипт в котором будет характеристики лук, меч, нож и их очки нанесения урона а также хп игрока, получение игроком урона
-
     public int hp;
     public bool isBattle;
     public bool isBattleAnimal;
@@ -13,11 +11,11 @@ public class PlayerCharacteristics : MonoBehaviour
     public List<GameObject> allEnemies;
 
     public GameObject sword;
-    public float damageSword;
+    public float damageSword = 50;
     public GameObject[] allSwords; // 0 - базовый меч, 1 - продвинутый меч и т.д.
 
     public GameObject knife;
-    public float damageKnife;
+    public float damageKnife = 20;
     public GameObject[] allKnifes; // 0 - базовый нож, 1 - продвинутый нож и т.д.
 
     private CharacterMoving _chMove;

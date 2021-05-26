@@ -8,6 +8,11 @@ public class AnimalLimbs : MonoBehaviour
     public ParentAnimal typeParent;
     private PlayerCharacteristics _playerCharacteristics;
 
+    private void Start()
+    {
+        _playerCharacteristics = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCharacteristics>();
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Arrow")
@@ -104,7 +109,7 @@ public class AnimalLimbs : MonoBehaviour
         // игрок
         if (other.gameObject.tag == "Sword") // 100-150 меч 2-го уровня
         {
-            float damage = Random.Range(30, 70);
+            float damage = Random.Range(_playerCharacteristics.damageSword * 0.75f, _playerCharacteristics.damageSword * 1.25f);
             switch (typeParent)
             {
                 case ParentAnimal.Wolf:
@@ -133,7 +138,7 @@ public class AnimalLimbs : MonoBehaviour
         }
         else if (other.gameObject.tag == "Knife")
         {
-            float damage = Random.Range(10, 30);
+            float damage = Random.Range(_playerCharacteristics.damageKnife * 0.75f, _playerCharacteristics.damageKnife * 1.25f);
             switch (typeParent)
             {
                 case ParentAnimal.Wolf:
