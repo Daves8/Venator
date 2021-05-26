@@ -31,6 +31,8 @@ public class ForestAnimal : MonoBehaviour
     private float _speedRun;
 
     public GameObject[] _places;
+    private Animals _animals;
+    private string _type = "";
 
     void Start()
     {
@@ -51,26 +53,31 @@ public class ForestAnimal : MonoBehaviour
                 hp = 200;
                 _speedWalk = 3.5f;
                 _speedRun = 7.0f;
+                _type = "Rabbit";
                 break;
             case TypeAnimal.Boar:
                 hp = 400;
                 _speedWalk = 1.0f;
                 _speedRun = 3.0f;
+                _type = "Boar";
                 break;
             case TypeAnimal.Ibex:
                 hp = 350;
                 _speedWalk = 3.5f;
                 _speedRun = 6.0f;
+                _type = "Ibex";
                 break;
             case TypeAnimal.Deer:
                 hp = 450;
                 _speedWalk = 2.0f;
                 _speedRun = 4.0f;
+                _type = "Deer";
                 break;
             default:
                 break;
         }
-
+        _animals = GameObject.FindGameObjectWithTag("Animal").GetComponent<Animals>();
+        ++_animals.allAnimals[_type];
         StartCoroutine(Healing());
     }
 

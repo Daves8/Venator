@@ -29,6 +29,7 @@ public class Bear : MonoBehaviour
     private float _speedRun = 4.0f;
 
     private GameObject[] _places;
+    private Animals _animals;
 
     void Start()
     {
@@ -40,9 +41,10 @@ public class Bear : MonoBehaviour
 
         _places = GameObject.FindGameObjectsWithTag("PlacesForBear");
         _places[_places.Length - 1] = GameObject.FindGameObjectWithTag("Den");
-
+        _animals = GameObject.FindGameObjectWithTag("Animal").GetComponent<Animals>();
+        ++_animals.allAnimals["Bear"];
         _audioSource = GetComponent<AudioSource>();
-
+        _audioSource.volume = 0.01f;
         hp = 750;
         StartCoroutine(Healing());
     }

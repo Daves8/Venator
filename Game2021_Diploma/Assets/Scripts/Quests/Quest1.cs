@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System.Xml.Serialization;
 using System.IO;
 using UnityEngine.AI;
+using TMPro;
 
 public class Quest1 : MonoBehaviour
 {
@@ -17,9 +18,9 @@ public class Quest1 : MonoBehaviour
     public GameObject cart;
     public GameObject hunter1;
     public Vector3 startPosition;//
-    public Text subtitles;
-    public Text prompt;
-    public Text target;
+    public TextMeshProUGUI subtitles;
+    public TextMeshProUGUI prompt;
+    public TextMeshProUGUI target;
     public Cinemachine.CinemachineVirtualCamera groupCamera;
     public Cinemachine.CinemachineTargetGroup targetGroup;
     public Subquest subquest;//
@@ -73,7 +74,7 @@ public class Quest1 : MonoBehaviour
         player.transform.position = startPosition;
         player.transform.rotation = Quaternion.Euler(0f, -175f, 0f);
         _riverFishing = GameObject.FindGameObjectWithTag("River").GetComponent<Fishing>();
-
+        
         subtitles.text = "";
         prompt.text = "";
 

@@ -32,8 +32,8 @@ public class Animals : MonoBehaviour
     void Awake()
     {
         allAnimals = new Dictionary<string, int>();
+        _allAnimalsCount = new Dictionary<string, int>();
         _allAnimalsName = new string[] { "Wolf", "Rabbit", "Boar", "Ibex", "Deer", "Bear", "Viper", "Chicken", "Cattle", "Rat", "Pig", "Goat" };
-        _allAnimalsObject = new GameObject[] { Wolf, Rabbit[0], Boar, Ibex, Deer[0], Bear, Viper, Chicken[0], Cattle[0], Rat, Pig[0], Goat };
         for (int i = 0; i < _allAnimalsName.Length; i++)
         {
             allAnimals.Add(_allAnimalsName[i], 0);
@@ -99,9 +99,11 @@ public class Animals : MonoBehaviour
 
     private void Initialize()
     {
+        _allAnimalsObject = new GameObject[] { Wolf, Rabbit[0], Boar, Ibex, Deer[0], Bear, Viper, Chicken[0], Cattle[0], Rat, Pig[0], Goat };
         for (int i = 0; i < _allAnimalsName.Length; i++)
         {
             _allAnimalsCount.Add(_allAnimalsName[i], allAnimals[_allAnimalsName[i]]);
+
         }
     }
 }

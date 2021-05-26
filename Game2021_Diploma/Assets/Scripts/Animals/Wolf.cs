@@ -24,6 +24,7 @@ public class Wolf : MonoBehaviour
     private AudioSource _audioSource;
 
     private GameObject[] _places;
+    private Animals _animals;
 
     private bool _startCoroutine = false;
     private bool _startCoroutineW = false;
@@ -40,9 +41,12 @@ public class Wolf : MonoBehaviour
         _playerCharact = _player.GetComponent<PlayerCharacteristics>();
 
         _places = GameObject.FindGameObjectsWithTag("PlacesForWolf");
-        _places[_places.Length - 1] = GameObject.FindGameObjectWithTag("Den");
-
+        _places[_places.Length - 1] = GameObject.FindGameObjectWithTag("DenWolf");
+        _audioSource = GetComponent<AudioSource>();
+        _audioSource.volume = 0.01f;
         hp = 450;
+        _animals = GameObject.FindGameObjectWithTag("Animal").GetComponent<Animals>();
+        ++_animals.allAnimals["Wolf"];
         StartCoroutine(Healing());
     }
 

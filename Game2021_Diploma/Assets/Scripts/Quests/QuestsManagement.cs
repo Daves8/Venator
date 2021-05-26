@@ -22,7 +22,7 @@ public class QuestsManagement : MonoBehaviour
         button2.SetActive(false);
         button3.SetActive(false);
 
-        GetComponent<Quest1>().enabled = false;
+        GetComponent<Quest1>().enabled = true;
         GetComponent<Quest2>().enabled = false;
     }
 

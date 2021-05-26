@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,16 +16,24 @@ public class Fishing : MonoBehaviour
 
     private bool _readyToFishing = false;
     private bool _startFishing = false;
+    private bool _fishingOutCome = false;
     public bool NowFishing = false;
 
     private bool _nextDo = false;
 
     private int _count = 0;
 
+    private void Start()
+    {
+        _text.GetComponent<TextMeshProUGUI>().text = "";
+    }
+
     private void Update()
     {
-        if (_readyToFishing && Input.GetButtonDown("Action"))
+        if (_readyToFishing && !NowFishing && Input.GetButtonDown("Action"))
         {
+            // УДОЧКА В ТРУ-------------------------------------------------------------------------------------------------------------------------
+            _player.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
             CharacterMoving.IsReadyToMove = false;
             _player.GetComponent<Battle>().AllowBattle = false;
             //_readyToFishing = false;
@@ -52,7 +61,7 @@ public class Fishing : MonoBehaviour
     private void GetFish()
     {
         _text.SetActive(true);
-        _text.GetComponent<Text>().text = "Нажимайте F";
+        _text.GetComponent<TextMeshProUGUI>().text = "Нажимайте F";
         StartCoroutine("GetFishGame");
         Invoke("StopGetFishGame", Random.Range(10, 21) / 10.0f);
     }
@@ -74,17 +83,19 @@ public class Fishing : MonoBehaviour
         StopCoroutine("GetFishGame");
 
         float formula = _count * Random.Range(70, 85) / 100.0f;
-        if (formula >= 2) // 5 под вопросом, коэффициент нужно изменить
+        if (formula >= 4.5f) // 5 под вопросом, коэффициент нужно изменить
         {
-            _text.GetComponent<Text>().text = "Вы поймали рыбу!"; // Вы поймали рыбу!
+            _text.GetComponent<TextMeshProUGUI>().text = "Вы поймали рыбу!"; // Вы поймали рыбу!
             Item item = new Item(fish);
             inventory.AddItem(item, 1);
-
+            _fishingOutCome = true;
             _animator.SetTrigger("FishingEnd");
         }
         else
         {
-            _text.GetComponent<Text>().text = "Вы упустили рыбу!"; // Вы упустили рыбу!
+            _text.GetComponent<TextMeshProUGUI>().text = "Вы упустили рыбу!"; // Вы упустили рыбу!
+            _fishingOutCome = false;
+            // УДОЧКА В ФОЛС-------------------------------------------------------------------------------------------------------------------
             _animator.SetTrigger("Idle");
         }
         Invoke("HideText", 5.0f);
@@ -93,21 +104,33 @@ public class Fishing : MonoBehaviour
         CharacterMoving.IsReadyToMove = true;
         _player.GetComponent<Battle>().AllowBattle = true;
         _readyToFishing = false;
-        NowFishing = false;
+        Invoke("NowFishingChg", 1.0f);
 
         //print("Count: " + _count + ". Формула: " + formula);
     }
-
+    private void NowFishingChg()
+    {
+        NowFishing = false;
+        if (_fishingOutCome)
+        {
+            _fishingOutCome = false;
+            // УДОЧКА В ФОЛС-------------------------------------------------------------------------------------------------------------------
+        }
+    }
     private void HideText()
     {
         _text.SetActive(false);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (other.tag == "Player")
         {
             _readyToFishing = true;
         }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        _readyToFishing = false;
     }
 }
