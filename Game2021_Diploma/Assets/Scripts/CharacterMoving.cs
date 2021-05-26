@@ -26,7 +26,7 @@ public class CharacterMoving : MonoBehaviour
     private float _speedRun;
 
     public bool _isCrouch = false;
-
+    private bool _needfall = true;
     static public bool rotateCharacter = true;
 
     private void Start()
@@ -50,7 +50,17 @@ public class CharacterMoving : MonoBehaviour
         if (Input.GetButtonDown("Jump") && !_isCrouch && IsReadyToMove && IsReadyToRun)
         {
             _animator.SetTrigger("Jump");
+            //transform.position += new Vector3(0f, 1f, 0f);
+            //_controller.attachedRigidbody.AddForce(0f, _controller.attachedRigidbody.velocity.y + Vector3.up.y * 10F, 0f, ForceMode.Impulse);
+            //_controller.center += new Vector3(0f, 1f, 0f);
+            //_needfall = false;
+            //Invoke("Fall", 0.8f);
         }
+    }
+    private void Fall()
+    {
+        _needfall = true;
+        _controller.center -= new Vector3(0f, 1f, 0f);
     }
 
     private void CharacterMove()

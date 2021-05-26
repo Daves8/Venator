@@ -13,6 +13,7 @@ public class Fishing : MonoBehaviour
 
     public InventoryObject inventory;
     public ItemObject fish;
+    public GameObject rod;
 
     private bool _readyToFishing = false;
     private bool _startFishing = false;
@@ -26,13 +27,14 @@ public class Fishing : MonoBehaviour
     private void Start()
     {
         _text.GetComponent<TextMeshProUGUI>().text = "";
+        rod.SetActive(false);
     }
 
     private void Update()
     {
         if (_readyToFishing && !NowFishing && Input.GetButtonDown("Action"))
         {
-            // УДОЧКА В ТРУ-------------------------------------------------------------------------------------------------------------------------
+            rod.SetActive(true);
             _player.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
             CharacterMoving.IsReadyToMove = false;
             _player.GetComponent<Battle>().AllowBattle = false;
@@ -95,7 +97,7 @@ public class Fishing : MonoBehaviour
         {
             _text.GetComponent<TextMeshProUGUI>().text = "Вы упустили рыбу!"; // Вы упустили рыбу!
             _fishingOutCome = false;
-            // УДОЧКА В ФОЛС-------------------------------------------------------------------------------------------------------------------
+            rod.SetActive(false);
             _animator.SetTrigger("Idle");
         }
         Invoke("HideText", 5.0f);
@@ -114,7 +116,7 @@ public class Fishing : MonoBehaviour
         if (_fishingOutCome)
         {
             _fishingOutCome = false;
-            // УДОЧКА В ФОЛС-------------------------------------------------------------------------------------------------------------------
+            rod.SetActive(false);
         }
     }
     private void HideText()

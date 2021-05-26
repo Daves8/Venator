@@ -231,7 +231,7 @@ public class Quest1 : MonoBehaviour
     private void SubQ3() // Начата рыбалка. Задача: поймать рыбу.
     {
         target.text = "Поймать рыбу.";
-        prompt.text = "Чтобы поймать рыбу, быстро нажимайте E, когда увидете подсказку.";
+        prompt.text = "Чтобы поймать рыбу, быстро нажимайте F, когда увидете подсказку.";
 
         if (_scriptPlayer.SearchInInventary(_idFish) >= 1)
         {
@@ -269,10 +269,11 @@ public class Quest1 : MonoBehaviour
             CharacterMoving.IsReadyToMove = false;
             groupCamera.enabled = true;
             Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             button1.gameObject.SetActive(true);
-            button1.gameObject.transform.GetChild(0).GetComponent<Text>().text = "Пойдём";
+            button1.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Пойдём";
             button2.gameObject.SetActive(true);
-            button2.gameObject.transform.GetChild(0).GetComponent<Text>().text = "Еще словлю";
+            button2.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Еще словлю";
             return;
         }
 
@@ -419,6 +420,7 @@ public class Quest1 : MonoBehaviour
         button1.gameObject.SetActive(false);
         button2.gameObject.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
     private void But2()
     {
@@ -428,6 +430,7 @@ public class Quest1 : MonoBehaviour
         button1.gameObject.SetActive(false);
         button2.gameObject.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
     private void But3()
     {
