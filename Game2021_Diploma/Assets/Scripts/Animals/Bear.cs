@@ -24,6 +24,7 @@ public class Bear : MonoBehaviour
     private bool _startCoroutineE = false;
     private bool _walkCorout;
     private bool _attack;
+    private float _timeToEat;
 
     private float _speedWalk = 1.5f;
     private float _speedRun = 4.0f;
@@ -114,11 +115,15 @@ public class Bear : MonoBehaviour
         }
         else
         {
-            _bearAnim.SetBool("Walk", false);
-            _bearAnim.SetBool("Run", false);
-            _bearAnim.SetBool("Eat", false);
-            if (!_agressive && !_startCoroutineE && Random.Range(0, 10) == 0)
+            if (!_startCoroutineE)
             {
+                _bearAnim.SetBool("Walk", false);
+                _bearAnim.SetBool("Run", false);
+                _bearAnim.SetBool("Eat", false);
+            }
+            if (!_agressive && !_startCoroutineE && Time.time - _timeToEat >= Random.Range(60.0f, 140.0f))
+            {
+                _timeToEat = Time.time;
                 StartCoroutine(Eat());
             }
         }
@@ -213,7 +218,7 @@ public class Bear : MonoBehaviour
     {
         _startCoroutineE = true;
         _bearAnim.SetBool("Eat", true);
-        yield return new WaitForSeconds(Random.Range(1f, 5f));
+        yield return new WaitForSeconds(Random.Range(5f, 15f));
         _bearAnim.SetBool("Eat", false);
         _startCoroutineE = false;
     }
