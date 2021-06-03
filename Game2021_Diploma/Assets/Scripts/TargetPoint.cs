@@ -83,6 +83,11 @@ public class TargetPoint : MonoBehaviour
 
 	public void PointToTarget(Transform localTarget)
 	{
+        if (localTarget == null)
+        {
+			target = null;
+			return;
+        }
 		if (Vector3.Distance(player.position, localTarget.position) > 5f)
 		{
 			target = localTarget.transform;

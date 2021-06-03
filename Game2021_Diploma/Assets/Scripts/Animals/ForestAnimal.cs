@@ -6,6 +6,7 @@ using UnityEngine.AI;
 public class ForestAnimal : MonoBehaviour
 {
     public float hp;
+    private float _hpToRunAway;
     private float _defaultHp;
     public TypeAnimal animal;
 
@@ -19,7 +20,7 @@ public class ForestAnimal : MonoBehaviour
     public AudioClip[] roar;
     private AudioSource _audioSource;
 
-    private bool _die = false;
+    public bool _die = false;
     public bool _agressive = false;
     private bool _startCoroutine = false;
     private bool _startCoroutineW = false;
@@ -49,26 +50,30 @@ public class ForestAnimal : MonoBehaviour
 
         switch (animal)
         {
-            case TypeAnimal.Rabbit:
+            case TypeAnimal.Rabbit: // КРОЛИКА МБ В ОТДЕЛЬНЫЙ СКРИПТ КАК КРЫСУ
                 hp = 200;
+                _hpToRunAway = 10;
                 _speedWalk = 3.5f;
                 _speedRun = 7.0f;
                 _type = "Rabbit";
                 break;
             case TypeAnimal.Boar:
                 hp = 400;
+                _hpToRunAway = 300;
                 _speedWalk = 1.0f;
                 _speedRun = 3.0f;
                 _type = "Boar";
                 break;
             case TypeAnimal.Ibex:
                 hp = 350;
+                _hpToRunAway = 200;
                 _speedWalk = 3.5f;
                 _speedRun = 6.0f;
                 _type = "Ibex";
                 break;
             case TypeAnimal.Deer:
                 hp = 450;
+                _hpToRunAway = 300;
                 _speedWalk = 2.0f;
                 _speedRun = 4.0f;
                 _type = "Deer";
@@ -144,7 +149,7 @@ public class ForestAnimal : MonoBehaviour
             }
         }
 
-        if (_agressive && hp <= 250 && Vector3.Distance(transform.position, _places[_places.Length - 1].transform.position) > 7.5f) { RunAway(); }
+        if (_agressive && hp <= _hpToRunAway && Vector3.Distance(transform.position, _places[_places.Length - 1].transform.position) > 7.5f) { RunAway(); }
         else if (_agressive) { Attack(); }
         else { Walking(); }
     }

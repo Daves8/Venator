@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using TMPro;
 using UnityEngine;
 
 public class QuestsManagement : MonoBehaviour
@@ -16,14 +17,20 @@ public class QuestsManagement : MonoBehaviour
     public GameObject button2;
     public GameObject button3;
 
+    public TextMeshProUGUI subtitles;
+    public TextMeshProUGUI prompt;
+    public TextMeshProUGUI target;
+
     void Awake()
     {
         button1.SetActive(false);
         button2.SetActive(false);
         button3.SetActive(false);
 
-        GetComponent<Quest1>().enabled = true;
+        GetComponent<Quest1>().enabled = false;
         GetComponent<Quest2>().enabled = false;
+
+        quest = Quest.none; // ПОМЕНЯТЬ НА КВЕСТ 1
     }
 
     void Update()
@@ -52,26 +59,12 @@ public class QuestsManagement : MonoBehaviour
 
     public enum Quest
     {
+        none = 0,
         quest1 = 1,
         quest2,
         quest3
     }
 }
-
-//[XmlRoot("quest1")]
-//public class Dialogue1
-//{
-//    [XmlElement("node")]
-//    public Node[] nodes;
-
-//    public static Dialogue1 Load(TextAsset _xml)
-//    {
-//        XmlSerializer serializer = new XmlSerializer(typeof(Dialogue1));
-//        StringReader reader = new StringReader(_xml.text);
-//        Dialogue1 dial = serializer.Deserialize(reader) as Dialogue1;
-//        return dial;
-//    }
-//}
 
 [System.Serializable]
 public class Node

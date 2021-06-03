@@ -1,7 +1,40 @@
 <quest2>
   <!-- Квест №2 -->
   <node>
-    <!-- комментарий -->
+    <!-- комментарий0 -->
+    <subtitles name="Охотник">
+      <text>Кабаны обычно обитают возле поляны. Пойдём к ней, может встретим их.</text>
+    </subtitles>
+  </node>
+
+  <node>
+    <!-- комментарий1 -->
+    <subtitles name="Охотник">
+      <text>Вот он! Стреляй!</text>
+    </subtitles>
+    <subtitles name="Я">
+      <text>Хорошо, стреляю!</text>
+    </subtitles>
+  </node>
+  
+  <node>
+    <!-- комментарий2 -->
+    <subtitles name="Охотник">
+      <text>Отлично! Можешь взять себе его мясо и шкуру. Поздравляю, ты хорошо справился.</text>
+    </subtitles>
+    <subtitles name="Я">
+      <text>Спасибо</text>
+    </subtitles>
+  </node>
+
+  <node>
+    <!-- комментарий3 -->
+    <subtitles name="Охотник">
+      <text>идем домой или еще охота</text>
+    </subtitles>
+    <subtitles name="Имя">
+      <text>текст</text>
+    </subtitles>
     <subtitles name="Имя">
       <text>текст</text>
     </subtitles>
