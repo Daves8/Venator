@@ -30,10 +30,16 @@ public class ForestAnimal : MonoBehaviour
 
     private float _speedWalk;
     private float _speedRun;
+    private float _timeToEat;
+    private bool _nextPlaces = false;
+    private Transform _place;
+    private float _timeToWalk;
 
-    public GameObject[] _places;
+    public GameObject[] places;
     private Animals _animals;
     private string _type = "";
+
+    private List<AnimalLimbs> _limbs;
 
     void Start()
     {
@@ -42,21 +48,18 @@ public class ForestAnimal : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag("Player");
         _hunters = GameObject.FindGameObjectsWithTag("Hunter");
         _playerCharact = _player.GetComponent<PlayerCharacteristics>();
-
-        //_places = GameObject.FindGameObjectsWithTag("PlacesForBear");
-        //_places[_places.Length - 1] = GameObject.FindGameObjectWithTag("Den");
-
+        _place = places[Random.Range(0, places.Length)].transform;
         _audioSource = GetComponent<AudioSource>();
+        _limbs = new List<AnimalLimbs>();
+        _limbs.AddRange(GetComponentsInChildren<AnimalLimbs>());
+        for (int i = 0; i < _limbs.Count; i++)
+        {
+            _limbs[i].parent = gameObject;
+            _limbs[i].typeParent = AnimalLimbs.ParentAnimal.ForestAnimal;
+        }
 
         switch (animal)
         {
-            case TypeAnimal.Rabbit: // КРОЛИКА МБ В ОТДЕЛЬНЫЙ СКРИПТ КАК КРЫСУ
-                hp = 200;
-                _hpToRunAway = 10;
-                _speedWalk = 3.5f;
-                _speedRun = 7.0f;
-                _type = "Rabbit";
-                break;
             case TypeAnimal.Boar:
                 hp = 400;
                 _hpToRunAway = 300;
@@ -91,7 +94,7 @@ public class ForestAnimal : MonoBehaviour
         if (_die) { return; }
         if (hp <= 0)
         {
-            --_animals.allAnimals[_type];
+            --_animals.allAnimals["Bear"];
             _die = true;
             _agressive = false;
             _playerCharact.isBattleAnimal = false;
@@ -120,8 +123,19 @@ public class ForestAnimal : MonoBehaviour
             _agent.speed = _speedWalk;
         }
 
-        if (_agressive) { _agent.speed = _speedRun; _playerCharact.isBattleAnimal = true; }
-        else { _agent.speed = _speedWalk; _playerCharact.isBattleAnimal = false; }
+        if (_agressive)
+        {
+            _agent.speed = _speedRun;
+            if (!_playerCharact.allAnimals.Contains(gameObject))
+            {
+                _playerCharact.allAnimals.Add(gameObject);
+            }
+        }
+        else
+        {
+            _agent.speed = _speedWalk;
+            _playerCharact.allAnimals.Remove(gameObject);
+        }
 
         if (_agent.velocity.magnitude > 0f)
         {
@@ -140,16 +154,20 @@ public class ForestAnimal : MonoBehaviour
         }
         else
         {
-            _animator.SetBool("Walk", false);
-            _animator.SetBool("Run", false);
-            _animator.SetBool("Eat", false);
-            if (!_agressive && !_startCoroutineE && Random.Range(0, 10) == 0)
+            if (!_startCoroutineE)
             {
+                _animator.SetBool("Walk", false);
+                _animator.SetBool("Run", false);
+                _animator.SetBool("Eat", false);
+            }
+            if (!_agressive && !_startCoroutineE && Time.time - _timeToEat >= Random.Range(60.0f, 140.0f))
+            {
+                _timeToEat = Time.time;
                 StartCoroutine(Eat());
             }
         }
 
-        if (_agressive && hp <= _hpToRunAway && Vector3.Distance(transform.position, _places[_places.Length - 1].transform.position) > 7.5f) { RunAway(); }
+        if (_agressive && hp <= 250 && Vector3.Distance(transform.position, places[places.Length - 1].transform.position) > 7.5f) { RunAway(); }
         else if (_agressive) { Attack(); }
         else { Walking(); }
     }
@@ -220,6 +238,18 @@ public class ForestAnimal : MonoBehaviour
     private void Walking()
     {
         _walkCorout = true;
+        if (Vector3.Distance(_place.position, transform.position) < 2.0f)
+        {
+            if (Time.time - _timeToWalk >= Random.Range(3.0f, 30.0f))
+            {
+                _nextPlaces = true;
+            }
+        }
+        else
+        {
+            _timeToWalk = Time.time;
+            _agent.SetDestination(_place.position);
+        }
         if (!_startCoroutineW)
         {
             StartCoroutine(Walk());
@@ -230,8 +260,9 @@ public class ForestAnimal : MonoBehaviour
         _startCoroutineW = true;
         while (_walkCorout)
         {
-            _agent.SetDestination(_places[Random.Range(0, _places.Length)].transform.position);
-            yield return new WaitForSeconds(Random.Range(5f, 180f));
+            _place = places[Random.Range(0, places.Length)].transform;
+            yield return new WaitUntil(() => _nextPlaces);
+            _nextPlaces = false;
         }
         _startCoroutineW = false;
     }
@@ -239,7 +270,7 @@ public class ForestAnimal : MonoBehaviour
     {
         _startCoroutineE = true;
         _animator.SetBool("Eat", true);
-        yield return new WaitForSeconds(Random.Range(1f, 5f));
+        yield return new WaitForSeconds(Random.Range(5f, 15f));
         _animator.SetBool("Eat", false);
         _startCoroutineE = false;
     }
@@ -247,9 +278,8 @@ public class ForestAnimal : MonoBehaviour
     private void RunAway()
     {
         _attack = false;
-        _agent.SetDestination(_places[_places.Length - 1].transform.position);
+        _agent.SetDestination(places[places.Length - 1].transform.position);
     }
-
     public void Agressive()
     {
         if (!_die)
@@ -269,9 +299,9 @@ public class ForestAnimal : MonoBehaviour
     {
         while (!_die)
         {
-            if (hp < _defaultHp * 0.75f)
+            if (hp < 500)
             {
-                hp += 10;
+                hp += 20;
             }
             yield return new WaitForSeconds(10f);
         }
@@ -282,7 +312,6 @@ public class ForestAnimal : MonoBehaviour
     }
     public enum TypeAnimal
     {
-        Rabbit,
         Boar,
         Ibex,
         Deer,

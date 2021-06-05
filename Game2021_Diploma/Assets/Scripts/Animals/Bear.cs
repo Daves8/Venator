@@ -35,6 +35,8 @@ public class Bear : MonoBehaviour
     private GameObject[] _places;
     private Animals _animals;
 
+    private List<AnimalLimbs> _limbs;
+
     void Start()
     {
         _bearAnim = GetComponent<Animator>();
@@ -45,12 +47,20 @@ public class Bear : MonoBehaviour
 
         _places = GameObject.FindGameObjectsWithTag("PlacesForBear");
         _places[_places.Length - 1] = GameObject.FindGameObjectWithTag("Den");
+        _place = _places[Random.Range(0, _places.Length)].transform;
         _animals = GameObject.FindGameObjectWithTag("Animal").GetComponent<Animals>();
         ++_animals.allAnimals["Bear"];
         _audioSource = GetComponent<AudioSource>();
         _audioSource.volume = 0.25f;
         hp = 750;
         StartCoroutine(Healing());
+        _limbs = new List<AnimalLimbs>();
+        _limbs.AddRange(GetComponentsInChildren<AnimalLimbs>());
+        for (int i = 0; i < _limbs.Count; i++)
+        {
+            _limbs[i].parent = gameObject;
+            _limbs[i].typeParent = AnimalLimbs.ParentAnimal.Bear;
+        }
     }
 
     void Update()
@@ -212,6 +222,7 @@ public class Bear : MonoBehaviour
         else
         {
             _timeToWalk = Time.time;
+            _bearAgent.SetDestination(_place.position);
         }
         if (!_startCoroutineW)
         {
@@ -224,7 +235,7 @@ public class Bear : MonoBehaviour
         while (_walkCorout)
         {
             _place = _places[Random.Range(0, _places.Length)].transform;
-            _bearAgent.SetDestination(_place.position);
+            
             yield return new WaitUntil(() => _nextPlaces);
             _nextPlaces = false;
         }
