@@ -33,7 +33,7 @@ public class Quest1 : MonoBehaviour
     private Button button2;
     private Button button3;
 
-    private bool _startCoroutineSS = false;//
+    private bool _startCoroutineSS = false;
     bool localCoroutQ5 = false;//
     bool localCoroutQ8 = true;//
     bool locCorQ10 = true;//
@@ -87,6 +87,7 @@ public class Quest1 : MonoBehaviour
 
         _targetDialogue = brother;
         _brNavMesh = brother.GetComponent<NavMeshAgent>();
+        _startCoroutineSS = false;
 
         _targetPoint = GetComponent<TargetPoint>();
 

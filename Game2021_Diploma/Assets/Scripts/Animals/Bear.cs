@@ -25,12 +25,17 @@ public class Bear : MonoBehaviour
     private bool _walkCorout;
     private bool _attack;
     private float _timeToEat;
+    private bool _nextPlaces = false;
+    private Transform _place;
+    private float _timeToWalk;
 
     private float _speedWalk = 1.5f;
     private float _speedRun = 4.0f;
 
     private GameObject[] _places;
     private Animals _animals;
+
+    private List<AnimalLimbs> _limbs;
 
     void Start()
     {
@@ -42,12 +47,20 @@ public class Bear : MonoBehaviour
 
         _places = GameObject.FindGameObjectsWithTag("PlacesForBear");
         _places[_places.Length - 1] = GameObject.FindGameObjectWithTag("Den");
+        _place = _places[Random.Range(0, _places.Length)].transform;
         _animals = GameObject.FindGameObjectWithTag("Animal").GetComponent<Animals>();
         ++_animals.allAnimals["Bear"];
         _audioSource = GetComponent<AudioSource>();
-        _audioSource.volume = 0.25f;
+        _audioSource.volume = 1.0f;
         hp = 750;
         StartCoroutine(Healing());
+        _limbs = new List<AnimalLimbs>();
+        _limbs.AddRange(GetComponentsInChildren<AnimalLimbs>());
+        for (int i = 0; i < _limbs.Count; i++)
+        {
+            _limbs[i].parent = gameObject;
+            _limbs[i].typeParent = AnimalLimbs.ParentAnimal.Bear;
+        }
     }
 
     void Update()
@@ -199,6 +212,18 @@ public class Bear : MonoBehaviour
     private void Walking()
     {
         _walkCorout = true;
+        if (Vector3.Distance(_place.position, transform.position) < 2.0f)
+        {
+            if (Time.time - _timeToWalk >= Random.Range(3.0f, 30.0f))
+            {
+                _nextPlaces = true;
+            }
+        }
+        else
+        {
+            _timeToWalk = Time.time;
+            _bearAgent.SetDestination(_place.position);
+        }
         if (!_startCoroutineW)
         {
             StartCoroutine(Walk());
@@ -209,8 +234,10 @@ public class Bear : MonoBehaviour
         _startCoroutineW = true;
         while (_walkCorout)
         {
-            _bearAgent.SetDestination(_places[Random.Range(0, _places.Length)].transform.position);
-            yield return new WaitForSeconds(Random.Range(5f, 180f));
+            _place = _places[Random.Range(0, _places.Length)].transform;
+            
+            yield return new WaitUntil(() => _nextPlaces);
+            _nextPlaces = false;
         }
         _startCoroutineW = false;
     }
