@@ -12,11 +12,11 @@ public class PlayerCharacteristics : MonoBehaviour
     public List<GameObject> allAnimals;
 
     public GameObject sword;
-    public float damageSword = 50;
+    public float damageSword;
     public GameObject[] allSwords; // 0 - базовый меч, 1 - продвинутый меч и т.д.
 
     public GameObject knife;
-    public float damageKnife = 20;
+    public float damageKnife;
     public GameObject[] allKnifes; // 0 - базовый нож, 1 - продвинутый нож и т.д.
 
     private CharacterMoving _chMove;
@@ -25,6 +25,9 @@ public class PlayerCharacteristics : MonoBehaviour
     {
         allEnemies = new List<GameObject>();
         _chMove = GetComponent<CharacterMoving>();
+
+        damageSword = 50;
+        damageKnife = 20;
     }
 
     void Update()

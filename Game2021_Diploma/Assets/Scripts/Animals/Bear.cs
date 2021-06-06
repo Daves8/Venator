@@ -51,7 +51,7 @@ public class Bear : MonoBehaviour
         _animals = GameObject.FindGameObjectWithTag("Animal").GetComponent<Animals>();
         ++_animals.allAnimals["Bear"];
         _audioSource = GetComponent<AudioSource>();
-        _audioSource.volume = 0.25f;
+        _audioSource.volume = 1.0f;
         hp = 750;
         StartCoroutine(Healing());
         _limbs = new List<AnimalLimbs>();

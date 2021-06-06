@@ -50,6 +50,7 @@ public class ForestAnimal : MonoBehaviour
         _playerCharact = _player.GetComponent<PlayerCharacteristics>();
         _place = places[Random.Range(0, places.Length)].transform;
         _audioSource = GetComponent<AudioSource>();
+        _audioSource.volume = 1.0f;
         _limbs = new List<AnimalLimbs>();
         _limbs.AddRange(GetComponentsInChildren<AnimalLimbs>());
         for (int i = 0; i < _limbs.Count; i++)
@@ -81,6 +82,13 @@ public class ForestAnimal : MonoBehaviour
                 _speedRun = 4.0f;
                 _type = "Deer";
                 break;
+            case TypeAnimal.Wolf:
+                hp = 450;
+                _hpToRunAway = 150;
+                _speedWalk = 2.0f;
+                _speedRun = 5.0f;
+                _type = "Wolf";
+                break;
             default:
                 break;
         }
@@ -94,7 +102,7 @@ public class ForestAnimal : MonoBehaviour
         if (_die) { return; }
         if (hp <= 0)
         {
-            --_animals.allAnimals["Bear"];
+            --_animals.allAnimals[_type];
             _die = true;
             _agressive = false;
             _playerCharact.isBattleAnimal = false;
@@ -312,6 +320,7 @@ public class ForestAnimal : MonoBehaviour
     }
     public enum TypeAnimal
     {
+        Wolf,
         Boar,
         Ibex,
         Deer,
