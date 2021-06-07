@@ -90,11 +90,16 @@ public class Animals : MonoBehaviour
                 {
                     GameObject animal = Instantiate(_allAnimalsObject[i], spawnAnimalForest[Random.Range(0, spawnAnimalForest.Length)].position, Quaternion.identity);
                     animal.GetComponent<NavMeshAgent>().enabled = true;
+                    animal.GetComponent<Animator>().enabled = true;
+                    animal.GetComponent<AudioSource>().enabled = true;
                 }
                 else // village
                 {
                     GameObject animal = Instantiate(_allAnimalsObject[i], spawnAnimalVillage[Random.Range(0, spawnAnimalVillage.Length)].position, Quaternion.identity);
                     animal.GetComponent<NavMeshAgent>().enabled = true;
+                    animal.GetComponent<Animator>().enabled = true;
+                    animal.GetComponent<AudioSource>().enabled = true;
+                    animal.GetComponent<CapsuleCollider>().enabled = true;
                 }
             }
         }

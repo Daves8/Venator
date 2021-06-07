@@ -32,7 +32,7 @@ public class Bear : MonoBehaviour
     private float _speedWalk = 1.5f;
     private float _speedRun = 4.0f;
 
-    private GameObject[] _places;
+    public GameObject[] _places;
     private Animals _animals;
 
     private List<AnimalLimbs> _limbs;
@@ -45,7 +45,6 @@ public class Bear : MonoBehaviour
         _hunters = GameObject.FindGameObjectsWithTag("Hunter");
         _playerCharact = _player.GetComponent<PlayerCharacteristics>();
 
-        _places = GameObject.FindGameObjectsWithTag("PlacesForBear");
         _places[_places.Length - 1] = GameObject.FindGameObjectWithTag("Den");
         _place = _places[Random.Range(0, _places.Length)].transform;
         _animals = GameObject.FindGameObjectWithTag("Animal").GetComponent<Animals>();
