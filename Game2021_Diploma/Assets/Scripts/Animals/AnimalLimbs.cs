@@ -35,11 +35,11 @@ public class AnimalLimbs : MonoBehaviour
                     forestAnimal.Agressive();
                     forestAnimal.hp -= damage;
                     break;
-                case ParentAnimal.VillageAnimal:
-                    VillageAnimal villagetAnimal = parent.GetComponent<VillageAnimal>();
-                    villagetAnimal.Agressive();
-                    villagetAnimal.hp -= damage;
-                    break;
+                //case ParentAnimal.VillageAnimal:
+                //    VillageAnimal villagetAnimal = parent.GetComponent<VillageAnimal>();
+                //    villagetAnimal.Agressive();
+                //    villagetAnimal.hp -= damage;
+                //    break;
                 default:
                     break;
             }
@@ -68,11 +68,11 @@ public class AnimalLimbs : MonoBehaviour
                     forestAnimal.Agressive();
                     forestAnimal.hp -= damage;
                     break;
-                case ParentAnimal.VillageAnimal:
-                    VillageAnimal villagetAnimal = parent.GetComponent<VillageAnimal>();
-                    villagetAnimal.Agressive();
-                    villagetAnimal.hp -= damage;
-                    break;
+                //case ParentAnimal.VillageAnimal:
+                //    VillageAnimal villagetAnimal = parent.GetComponent<VillageAnimal>();
+                //    villagetAnimal.Agressive();
+                //    villagetAnimal.hp -= damage;
+                //    break;
                 default:
                     break;
             }
@@ -97,11 +97,11 @@ public class AnimalLimbs : MonoBehaviour
                     forestAnimal.Agressive();
                     forestAnimal.hp -= damage;
                     break;
-                case ParentAnimal.VillageAnimal:
-                    VillageAnimal villagetAnimal = parent.GetComponent<VillageAnimal>();
-                    villagetAnimal.Agressive();
-                    villagetAnimal.hp -= damage;
-                    break;
+                //case ParentAnimal.VillageAnimal:
+                //    VillageAnimal villagetAnimal = parent.GetComponent<VillageAnimal>();
+                //    villagetAnimal.Agressive();
+                //    villagetAnimal.hp -= damage;
+                //    break;
                 default:
                     break;
             }
@@ -127,11 +127,11 @@ public class AnimalLimbs : MonoBehaviour
                     forestAnimal.Agressive();
                     forestAnimal.hp -= damage;
                     break;
-                case ParentAnimal.VillageAnimal:
-                    VillageAnimal villagetAnimal = parent.GetComponent<VillageAnimal>();
-                    villagetAnimal.Agressive();
-                    villagetAnimal.hp -= damage;
-                    break;
+                //case ParentAnimal.VillageAnimal:
+                //    VillageAnimal villagetAnimal = parent.GetComponent<VillageAnimal>();
+                //    villagetAnimal.Agressive();
+                //    villagetAnimal.hp -= damage;
+                //    break;
                 default:
                     break;
             }
@@ -156,11 +156,11 @@ public class AnimalLimbs : MonoBehaviour
                     forestAnimal.Agressive();
                     forestAnimal.hp -= damage;
                     break;
-                case ParentAnimal.VillageAnimal:
-                    VillageAnimal villagetAnimal = parent.GetComponent<VillageAnimal>();
-                    villagetAnimal.Agressive();
-                    villagetAnimal.hp -= damage;
-                    break;
+                //case ParentAnimal.VillageAnimal:
+                //    VillageAnimal villagetAnimal = parent.GetComponent<VillageAnimal>();
+                //    villagetAnimal.Agressive();
+                //    villagetAnimal.hp -= damage;
+                //    break;
                 default:
                     break;
             }
@@ -171,6 +171,6 @@ public class AnimalLimbs : MonoBehaviour
         Wolf,
         Bear,
         ForestAnimal,
-        VillageAnimal
+        //VillageAnimal
     }
 }

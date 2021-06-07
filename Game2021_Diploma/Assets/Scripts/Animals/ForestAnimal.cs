@@ -105,7 +105,9 @@ public class ForestAnimal : MonoBehaviour
             --_animals.allAnimals[_type];
             _die = true;
             _agressive = false;
-            _playerCharact.isBattleAnimal = false;
+            _audioSource.Stop();
+            _audioSource.enabled = false;
+            _playerCharact.allAnimals.Remove(gameObject);
             _agent.enabled = false;
             _animator.SetTrigger("Die");
             Invoke("Delete", 300.0f);

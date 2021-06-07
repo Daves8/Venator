@@ -71,7 +71,9 @@ public class Bear : MonoBehaviour
             --_animals.allAnimals["Bear"];
             _die = true;
             _agressive = false;
-            _playerCharact.isBattleAnimal = false;
+            _audioSource.Stop();
+            _audioSource.enabled = false;
+            _playerCharact.allAnimals.Remove(gameObject);
             _bearAgent.enabled = false;
             _bearAnim.SetTrigger("Die");
             Invoke("Delete", 300.0f);
