@@ -763,9 +763,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
-  m_TransitionOffset: 0
-  m_ExitTime: 0.8717949
+  m_TransitionDuration: 0.45597267
+  m_TransitionOffset: 0.91998976
+  m_ExitTime: 0.85119766
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -975,8 +975,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -203655887218126122, guid: 6fc01bd869573954bb4b196fb1306f8b,
-    type: 3}
+  m_Motion: {fileID: 7400000, guid: 7da41804a2b49b748ab613bf9789a20c, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -1074,9 +1073,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
-  m_TransitionOffset: 0
-  m_ExitTime: 0.85
+  m_TransitionDuration: 0.39447904
+  m_TransitionOffset: 0.003791021
+  m_ExitTime: 0.86516386
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1555,7 +1554,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: CrouchedWalking
-  m_Speed: 1
+  m_Speed: 0.8
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 5535653173589801447}
@@ -1568,8 +1567,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -203655887218126122, guid: b25cd513125a4f6408b22df841bf3740,
-    type: 3}
+  m_Motion: {fileID: 7400000, guid: 6085beb14dc094a458aec016ea588f69, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -2020,8 +2018,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -203655887218126122, guid: 552656eeed1f07a42976245c23bc9ff0,
-    type: 3}
+  m_Motion: {fileID: 7400000, guid: e31fb36713f3a6c4d8938f1688855f46, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

@@ -10,7 +10,7 @@ public class PlayerCharacteristics : MonoBehaviour
     public bool crouch;
     public List<GameObject> allEnemies;
     public List<GameObject> allAnimals;
-
+    public Place place;
     public GameObject sword;
     public float damageSword;
     public GameObject[] allSwords; // 0 - базовый меч, 1 - продвинутый меч и т.д.
@@ -66,5 +66,11 @@ public class PlayerCharacteristics : MonoBehaviour
         {
             hp -= Random.Range(30, 100);
         }
+    }
+
+    public enum Place
+    {
+        village,
+        forest
     }
 }

@@ -5,7 +5,10 @@ using UnityEngine;
 public class BackgroundMusic : MonoBehaviour
 {
     private AudioSource _backgroundMusic;
-    public AudioClip[] musics;
+    public AudioClip forestMusics;
+    public AudioClip villageMusics;
+    public AudioClip battleMusics;
+    private AudioClip _music;
     public PlayingMusic _playingMusic;
 
     private GameObject _player;
@@ -15,6 +18,7 @@ public class BackgroundMusic : MonoBehaviour
     {
         nothing = -1,
         village = 0,
+        forest,
         battle
     }
 
@@ -30,20 +34,25 @@ public class BackgroundMusic : MonoBehaviour
         if (_playerCharacteristics.isBattle || _playerCharacteristics.isBattleAnimal)
         {
             _playingMusic = PlayingMusic.battle;
+            _music = battleMusics;
         }
-        else
+        else if (_playerCharacteristics.place == PlayerCharacteristics.Place.village)
         {
             _playingMusic = PlayingMusic.village;
+            _music = villageMusics;
+        }
+        else if (_playerCharacteristics.place == PlayerCharacteristics.Place.forest)
+        {
+            _playingMusic = PlayingMusic.forest;
+            _music = forestMusics;
         }
 
-        try
+
+        if (_backgroundMusic.clip != _music || !_backgroundMusic.isPlaying)
         {
-            if (_backgroundMusic.clip != musics[(int)_playingMusic] || !_backgroundMusic.isPlaying)
-            {
-                _backgroundMusic.clip = musics[(int)_playingMusic];
-                _backgroundMusic.Play();
-            }
+            _backgroundMusic.clip = _music;
+            _backgroundMusic.Play();
         }
-        catch { }
+
     }
 }
