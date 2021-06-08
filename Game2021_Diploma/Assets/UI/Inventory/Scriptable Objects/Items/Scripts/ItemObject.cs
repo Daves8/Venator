@@ -35,6 +35,7 @@ public class ItemObject : ScriptableObject
     public int equipmentSetId = 0;  
     [TextArea(15, 20)]
     public string description;
+    public string ruName;
     public Item data = new Item();
     
     public List<string> boneNames = new List<string>();
