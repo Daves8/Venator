@@ -21,6 +21,7 @@ public class CharacterMoving : MonoBehaviour
 
     private float _turnSmoothVelocity;
     private Vector3 _velocity;
+    private bool _needGravity;
 
     private float _speedWalk;
     private float _speedRun;
@@ -34,7 +35,7 @@ public class CharacterMoving : MonoBehaviour
         //Application.targetFrameRate = 300;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
+        _needGravity = true;
         _speedRun = _speed * 4;
         _speedWalk = _speed;
     }
@@ -46,21 +47,31 @@ public class CharacterMoving : MonoBehaviour
         // падение
         CharacterFalling();
 
-        // ПРЫЖОК ---------------------------------------------------------------------
         if (Input.GetButtonDown("Jump") && !_isCrouch && IsReadyToMove && IsReadyToRun)
         {
             _animator.SetTrigger("Jump");
-            //transform.position += new Vector3(0f, 1f, 0f);
-            //_controller.attachedRigidbody.AddForce(0f, _controller.attachedRigidbody.velocity.y + Vector3.up.y * 10F, 0f, ForceMode.Impulse);
-            //_controller.center += new Vector3(0f, 1f, 0f);
-            //_needfall = false;
-            //Invoke("Fall", 0.8f);
+            _needGravity = false;
+            _controller.center = new Vector3(0f, 1.78f, 0f);
+            Invoke("Fall", 0.8f);
+            //_controller.Move(new Vector3(0f, 1f, 0f));
         }
+
+        // ПРЫЖОК ---------------------------------------------------------------------
+        //if (Input.GetButtonDown("Jump") && !_isCrouch && IsReadyToMove && IsReadyToRun)
+        //{
+        //    //_animator.SetTrigger("Jump");
+
+        //    //transform.position += new Vector3(0f, 1f, 0f);
+        //    //_controller.attachedRigidbody.AddForce(0f, _controller.attachedRigidbody.velocity.y + Vector3.up.y * 10F, 0f, ForceMode.Impulse);
+        //    //_controller.center += new Vector3(0f, 1f, 0f);
+        //    //_needfall = false;
+        //    //Invoke("Fall", 0.8f);
+        //}
     }
     private void Fall()
     {
-        _needfall = true;
-        _controller.center -= new Vector3(0f, 1f, 0f);
+        _needGravity = true;
+        _controller.center = new Vector3(0f, 0.98f, 0f);
     }
 
     private void CharacterMove()
@@ -115,12 +126,25 @@ public class CharacterMoving : MonoBehaviour
     }
     private void CharacterFalling()
     {
-        if (_controller.isGrounded && _velocity.y < 0)
+        if (_needGravity)
         {
-            _velocity.y = -2f;
+            if (_controller.isGrounded && _velocity.y < 0)
+            {
+                _velocity.y = -2f;
+            }
+            _velocity.y += _gravity * Time.deltaTime;
+            _controller.Move(_velocity * Time.deltaTime);
+            //print(_velocity * Time.deltaTime);
         }
-        _velocity.y += _gravity * Time.deltaTime;
-        _controller.Move(_velocity * Time.deltaTime);
+        else
+        {
+            //_velocity.y += _gravity * Time.deltaTime;
+            if (moveDirection.magnitude > 0f)
+            {
+                CharacterMove_Func(moveDirection);
+            }
+            //print(_velocity);
+        }
     }
     private void AnimationsStandings()
     {

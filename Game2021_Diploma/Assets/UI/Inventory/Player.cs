@@ -44,7 +44,7 @@ public class Player : MonoBehaviour
         if(SceneManager.GetActiveScene().name == "Village")
         {
             string loadPath = DataHolder.savePath;
-            Debug.Log("Сейчас мы загружаем уровень: " + loadPath);
+            //Debug.Log("Сейчас мы загружаем уровень: " + loadPath);--------------------------------------------------
             LoadPlayer(loadPath);
             
         }

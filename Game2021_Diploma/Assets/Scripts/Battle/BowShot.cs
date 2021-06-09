@@ -28,8 +28,9 @@ public class BowShot : MonoBehaviour
     [SerializeField] private GameObject _aim;
 
     private bool _canShoot = false;
-    private bool _bow = false;
-    private bool _beginBow = false;
+    private bool _bow;
+    private bool _beginBow;
+    private float _timeToShoot;
 
     private Battle _battle;
 
@@ -43,72 +44,136 @@ public class BowShot : MonoBehaviour
 
         _aim.SetActive(false);
         _battle = GetComponent<Battle>();
+
+        _beginBow = false;
+        _bow = false;
     }
 
     void Update()
     {
         if (!_battle.AllowBattle)
         {
-            _rigBow.weight = 0;
-            _arrowInHand.SetActive(false);
-
-            _freeLook.SetActive(true);
-            _cameraBow.SetActive(false);
-
-            _aim.SetActive(false);
+            ExitBow();
             return;
         }
 
-        if (Input.GetButton("Fire1") && WeaponEnum._selectedWeapon == Weapon.Bow)
-        {
-            if (_beginBow == false)
-            {
-                _canShoot = false;
-                _rigBow.weight = 1;
-                StartCoroutine("RotateToCamera");
-                _animator.SetTrigger("BeginShootBow");
-                _beginBow = true;
-                Invoke("CanShoot", 1.0f);
+        #region Старое
+        //if (Input.GetButton("Fire1") && WeaponEnum._selectedWeapon == Weapon.Bow)
+        //{
+        //    if (_beginBow == false)
+        //    {
+        //        _canShoot = false;
+        //        _rigBow.weight = 1;
+        //        StartCoroutine("RotateToCamera");
+        //        _animator.SetTrigger("BeginShootBow");
+        //        _beginBow = true;
+        //        Invoke("CanShoot", 1.0f);
 
-                CharacterMoving.rotateCharacter = false;
-                _freeLook.SetActive(false);
-                _cameraBow.SetActive(true);
-                _cameraBowCinemachine.m_XAxis = _freeLookCinemachine.m_XAxis; // даем X новой камеры значения старой 
-                _cameraBowCinemachine.m_YAxis = _freeLookCinemachine.m_YAxis; // даем Y новой камеры значения старой
-                _aim.SetActive(true);
-            }
+        //        CharacterMoving.rotateCharacter = false;
+        //        _freeLook.SetActive(false);
+        //        _cameraBow.SetActive(true);
+        //        _cameraBowCinemachine.m_XAxis = _freeLookCinemachine.m_XAxis; // даем X новой камеры значения старой 
+        //        _cameraBowCinemachine.m_YAxis = _freeLookCinemachine.m_YAxis; // даем Y новой камеры значения старой
+        //        _aim.SetActive(true);
+        //    }
+        //    CharacterMoving.IsReadyToRun = false;
+        //    //print("Держим"); //
+        //}
+        //else if (Input.GetButtonUp("Fire1") && WeaponEnum._selectedWeapon == Weapon.Bow && _canShoot)
+        //{
+        //    _animator.SetTrigger("ShootBow");
+        //    _beginBow = false;
+        //    _canShoot = false;
+        //    CharacterMoving.IsReadyToRun = true;
+        //    //print("Отпустили"); //
+        //}
+        //else if (Input.GetButtonUp("Fire1") && WeaponEnum._selectedWeapon == Weapon.Bow && !_canShoot)
+        //{
+        //    _rigBow.weight = 0;
+        //    StopCoroutine("RotateToCamera");
+        //    _animator.SetTrigger("ExitBow");
+        //    _beginBow = false;
+        //    _canShoot = false;
+        //    //print("Не держим"); //
+
+        //    CharacterMoving.rotateCharacter = true;
+        //    _cameraBow.SetActive(false);
+        //    _freeLook.SetActive(true);
+        //    _freeLookCinemachine.m_XAxis = _cameraBowCinemachine.m_XAxis; // даем X новой камеры значения старой 
+        //    _freeLookCinemachine.m_YAxis = _cameraBowCinemachine.m_YAxis; // даем Y новой камеры значения старой
+        //    _aim.SetActive(false);
+        //}
+        //else
+        //{
+        //    _rigBow.weight = 0;
+        //}
+        //Debug.DrawRay(_mainCamera.transform.position, _mainCamera.transform.forward * 40, Color.red); // Луч идёт как надо, правильно
+        #endregion
+
+        // тут новый код, "правильный" -----------------------------------------------------------------------------------------------------------------------------------
+
+        if (WeaponEnum._selectedWeapon != Weapon.Bow)
+        {
+            //ExitBow();
+            return;
+        }
+
+        if (Input.GetButtonDown("Fire1"))
+        {
+            // начало анимации заряжания, начало стрельбы из лука
+            _bow = true;
+            _rigBow.weight = 1;
+            StartCoroutine("RotateToCamera");
+            _animator.SetTrigger("BeginShootBow");
+            CharacterMoving.rotateCharacter = false;
+            _freeLook.SetActive(false);
+            _cameraBow.SetActive(true);
+            _cameraBowCinemachine.m_XAxis = _freeLookCinemachine.m_XAxis;
+            _cameraBowCinemachine.m_YAxis = _freeLookCinemachine.m_YAxis;
+            _aim.SetActive(true);
             CharacterMoving.IsReadyToRun = false;
-            //print("Держим"); //
+            _timeToShoot = Time.time;
         }
-        else if (Input.GetButtonUp("Fire1") && WeaponEnum._selectedWeapon == Weapon.Bow && _canShoot)
+        if (Input.GetButton("Fire1"))
         {
-            _animator.SetTrigger("ShootBow");
-            _beginBow = false;
-            _canShoot = false;
-            CharacterMoving.IsReadyToRun = true;
-            //print("Отпустили"); //
+            // таймер, проверяющий достаточно ли держим, сбрасывается при отпускании
+            
         }
-        else if (Input.GetButtonUp("Fire1") && WeaponEnum._selectedWeapon == Weapon.Bow && !_canShoot)
+        if (Input.GetButtonUp("Fire1"))
         {
+            // отпустили, проверка: если достаточно долго держали, то выстрел, иначе ExitBow
+            if (Time.time - _timeToShoot >= 1.0f)
+            {
+                // выстрел
+                _animator.SetTrigger("ShootBow");
+            }
+            else
+            {
+                ExitBow();
+            }
+            _bow = false;
             _rigBow.weight = 0;
-            StopCoroutine("RotateToCamera");
-            _animator.SetTrigger("ExitBow");
-            _beginBow = false;
-            _canShoot = false;
-            //print("Не держим"); //
+            _arrowInHand.SetActive(false);
+        }
 
-            CharacterMoving.rotateCharacter = true;
-            _cameraBow.SetActive(false);
-            _freeLook.SetActive(true);
-            _freeLookCinemachine.m_XAxis = _cameraBowCinemachine.m_XAxis; // даем X новой камеры значения старой 
-            _freeLookCinemachine.m_YAxis = _cameraBowCinemachine.m_YAxis; // даем Y новой камеры значения старой
-            _aim.SetActive(false);
-        }
-        else
+        if (!_bow)
         {
             _rigBow.weight = 0;
+            _arrowInHand.SetActive(false);
         }
-        Debug.DrawRay(_mainCamera.transform.position, _mainCamera.transform.forward * 40, Color.red); // Луч идёт как надо, правильно
+    }
+
+    private void ExitBow()
+    {
+        _rigBow.weight = 0;
+        _arrowInHand.SetActive(false);
+        _animator.SetTrigger("ExitBow");
+        _freeLook.SetActive(true);
+        _cameraBow.SetActive(false);
+        StopCoroutine("RotateToCamera");
+        _aim.SetActive(false);
+        CharacterMoving.rotateCharacter = true;
+        CharacterMoving.IsReadyToRun = true;
     }
 
     private void Shoot()
@@ -122,6 +187,7 @@ public class BowShot : MonoBehaviour
         StopCoroutine("RotateToCamera");
 
         CharacterMoving.rotateCharacter = true;
+        CharacterMoving.IsReadyToRun = true;
         _cameraBow.SetActive(false);
         _freeLook.SetActive(true);
         _freeLookCinemachine.m_XAxis = _cameraBowCinemachine.m_XAxis; // даем X новой камеры значения старой 

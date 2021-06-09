@@ -23,12 +23,13 @@ public class VillageAnimal : MonoBehaviour
     private bool _nextPlace;
     private float _timeToWalk;
     private float _timeToEat;
-
+    public string testPlace;
     void Start()
     {
         _animator = GetComponent<Animator>();
         _agent = GetComponent<NavMeshAgent>();
         _audioSource = GetComponent<AudioSource>();
+        _audioSource.volume = 0.5f;
         _animals = GameObject.FindGameObjectWithTag("Animal").GetComponent<Animals>();
         _playerCharact = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCharacteristics>();
         _place = places[Random.Range(0, places.Length)];
@@ -59,7 +60,7 @@ public class VillageAnimal : MonoBehaviour
     void Update()
     {
         if (_die) { return; }
-
+        testPlace = _place.name;
         if (!_audioSource.isPlaying)
         {
             _audioSource.pitch = Random.Range(0.9f, 1.1f);

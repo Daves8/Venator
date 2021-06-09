@@ -25,7 +25,7 @@ public class PlayerCharacteristics : MonoBehaviour
     {
         allEnemies = new List<GameObject>();
         _chMove = GetComponent<CharacterMoving>();
-
+        hp = 500;
         damageSword = 50;
         damageKnife = 20;
     }

@@ -12,7 +12,7 @@ public class Arrow : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        print("Стрела попала в " + collision.gameObject.name);
+        //print("Стрела попала в " + collision.gameObject.name);
         if (collision.gameObject.tag != "Player" && collision.gameObject.tag != "Arrow")
         {   
             //GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
