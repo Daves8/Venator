@@ -44,7 +44,7 @@ public class Player : MonoBehaviour
         if(SceneManager.GetActiveScene().name == "Village")
         {
             string loadPath = DataHolder.savePath;
-            //Debug.Log("Сейчас мы загружаем уровень: " + loadPath);--------------------------------------------------
+            Debug.Log("Сейчас мы загружаем уровень: " + loadPath);
             LoadPlayer(loadPath);
             
         }
@@ -117,22 +117,28 @@ public class Player : MonoBehaviour
         position.y = data.position[1];
         position.z = data.position[2];
 
+        Debug.Log("ОСЬ ИКС ПРИ ЗАУГРЗКЕ " + data.position[0]);
+        Debug.Log("ОСЬ ИГРИК ПРИ ЗАУГРЗКЕ "+data.position[1]);        
+        Debug.Log("ОСЬ ЗЕТ ПРИ ЗАУГРЗКЕ " + data.position[2]);
         _controller.enabled = false;
         //playerPosition.position = new Vector3(0,200,0);
         playerPosition.position = position;
         _controller.enabled = true;
 
         // инвентарь
+        if(savePath != Application.persistentDataPath + "/Saves/" + "NewGame" + ".bin")
+        { 
         inventory.Container = data.inventory;
         equipment.Container = data.equipment;
-        
+        }
+
         //Inventory newContainer1 = data.inventory;
         //InventorySlot[] GetSlots1 = newContainer1.Slots;
         //for (int i = 0; i < GetSlots1.Length; i++)
         //{
         //    GetSlots1[i].UpdateSlot(newContainer1.Slots[i].item, newContainer1.Slots[i].amount);
         //}
-        
+
         //Inventory newContainer2 = data.inventory;
         //InventorySlot[] GetSlots2 = newContainer2.Slots;
         //for (int i = 0; i < GetSlots2.Length; i++)

@@ -14,7 +14,18 @@ public class LevelLoader : MonoBehaviour
     public Slider slider;
     public Animator transition;
     public GameObject loadingScreenImage;
+    public GameObject player;
 
+    private void Awake()
+    {
+        try
+        {
+            var playerOn = player.GetComponent<Player>();
+            playerOn.enabled = true;
+        }
+        catch (Exception e){ }
+        
+    }
     public void Start()
     {
         transition.SetTrigger("End");

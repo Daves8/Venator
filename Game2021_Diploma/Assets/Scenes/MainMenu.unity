@@ -3882,6 +3882,7 @@ MonoBehaviour:
   slider: {fileID: 985432283}
   transition: {fileID: 636190158}
   loadingScreenImage: {fileID: 636190154}
+  player: {fileID: 0}
 --- !u!4 &712775355
 Transform:
   m_ObjectHideFlags: 0
@@ -5057,7 +5058,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Inventory
+          m_StringArgument: Village
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &985773848
@@ -11065,7 +11066,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Inventory
+          m_StringArgument: Village
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!224 &1917987338539647197

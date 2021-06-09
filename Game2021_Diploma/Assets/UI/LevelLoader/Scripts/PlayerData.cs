@@ -14,6 +14,7 @@ public class PlayerData
     public Inventory inventory;
     public Inventory equipment;
 
+
     public PlayerData(Player player)//if continue
     {
         level = "LoadedLevel";//Можно удалить (PlayerData.cs, Player.cs)
@@ -35,9 +36,10 @@ public class PlayerData
 
         position = new float[3];
         position[0] = 0;
-        position[1] = 0;
+        position[1] = -4;
         position[2] = 0;
-        
+
+        //ошибка с инвентарем, нельзя получить доступ к нему
         // квесты
         // инвернтарь
     }
