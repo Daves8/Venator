@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerCharacteristics : MonoBehaviour
 {
     public int hp;
+    private bool _dead;
     public bool isBattle;
     public bool isBattleAnimal;
     public bool crouch;
@@ -26,12 +27,23 @@ public class PlayerCharacteristics : MonoBehaviour
         allEnemies = new List<GameObject>();
         _chMove = GetComponent<CharacterMoving>();
         hp = 500;
+        _dead = false;
         damageSword = 50;
         damageKnife = 20;
     }
 
     void Update()
     {
+        if (_dead)
+        {
+            return;
+        }
+        if (hp <= 0)
+        {
+            Death();
+            return;
+        }
+
         if (allEnemies.Count != 0)
         {
             isBattle = true;
@@ -50,6 +62,8 @@ public class PlayerCharacteristics : MonoBehaviour
         }
 
         crouch = _chMove._isCrouch;
+
+        Teleport();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -66,6 +80,38 @@ public class PlayerCharacteristics : MonoBehaviour
         {
             hp -= Random.Range(30, 100);
         }
+    }
+    private void Death()
+    {
+        _dead = true;
+        print("Умер!");
+    }
+    private void Teleport()
+    {
+        if (Input.GetKeyDown(KeyCode.Backslash))
+        {
+            if (place == Place.village)
+            {
+                // в лес
+                GetComponent<CharacterController>().enabled = false;
+                transform.position = new Vector3(282f, -166f, -2180f);
+                GetComponent<CharacterController>().enabled = true;
+            }
+            else if (place == Place.forest)
+            {
+                // в деревню
+                GetComponent<CharacterController>().enabled = false;
+                transform.position = new Vector3(915f, 3.8f, 673f);
+                GetComponent<CharacterController>().enabled = true;
+            }
+        }
+        //else if (Input.GetKeyDown(KeyCode.Less))
+        //{
+        //    // в деревню
+        //    GetComponent<CharacterController>().enabled = false;
+        //    transform.position = new Vector3(915f, 3.8f, 673f);
+        //    GetComponent<CharacterController>().enabled = true;
+        //}
     }
 
     public enum Place

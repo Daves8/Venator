@@ -43,6 +43,8 @@ public class Enemy : MonoBehaviour
         _buildsForPatrol = new GameObject[] { _importantBuildings.EntranceToTavern, _importantBuildings.Garden, _importantBuildings.RightGate, _importantBuildings.RightUpGate, _importantBuildings.LeftUpGate };
         _nextBuild = (BuildEn)Random.Range(0, _buildsForPatrol.Length);
 
+        SwordOff();
+
         //ragdolls.AddRange(GetComponentsInChildren<Rigidbody>());
         //foreach (Rigidbody rigidbody in ragdolls)
         //{
@@ -221,10 +223,10 @@ public class Enemy : MonoBehaviour
         _playerCharacteristics.allEnemies.Remove(gameObject);
 
         //gameObject.GetComponent<CapsuleCollider>().enabled = false;
-        foreach (Rigidbody rigidbody in ragdolls)
-        {
-            rigidbody.isKinematic = false;
-        }
+        //foreach (Rigidbody rigidbody in ragdolls)
+        //{
+        //    rigidbody.isKinematic = false;
+        //}
     }
     private void Delete()
     {

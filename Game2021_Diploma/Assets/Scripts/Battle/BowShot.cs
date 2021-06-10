@@ -110,8 +110,6 @@ public class BowShot : MonoBehaviour
         //Debug.DrawRay(_mainCamera.transform.position, _mainCamera.transform.forward * 40, Color.red); // Луч идёт как надо, правильно
         #endregion
 
-        // тут новый код, "правильный" -----------------------------------------------------------------------------------------------------------------------------------
-
         if (WeaponEnum._selectedWeapon != Weapon.Bow)
         {
             //ExitBow();
@@ -120,6 +118,7 @@ public class BowShot : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1"))
         {
+            // если нету стрел в инвентаре, вывод сообщения в "подбор предметов" "Остутствуют стрелы!" и return -------------------------------------------------------------------
             // начало анимации заряжания, начало стрельбы из лука
             _bow = true;
             _rigBow.weight = 1;
