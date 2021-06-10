@@ -35,9 +35,9 @@ public class PlayerData
         level = "NewGame";
 
         position = new float[3];
-        position[0] = 0;
-        position[1] = -4;
-        position[2] = 0;
+        position[0] = 925;
+        position[1] = 7.6F;
+        position[2] = 776;
 
         //ошибка с инвентарем, нельзя получить доступ к нему
         // квесты

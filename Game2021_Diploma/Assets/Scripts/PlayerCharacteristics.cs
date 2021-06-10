@@ -22,6 +22,9 @@ public class PlayerCharacteristics : MonoBehaviour
 
     private CharacterMoving _chMove;
 
+    public GameObject DeathUI;
+    private bool DeathUIOnOff = false;
+
     void Start()
     {
         allEnemies = new List<GameObject>();
@@ -34,6 +37,22 @@ public class PlayerCharacteristics : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            DeathUIOnOff = !DeathUIOnOff;
+            DeathUI.SetActive(DeathUIOnOff);
+            if (DeathUIOnOff)
+            {
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+            }
+            else
+            {                
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+        }
+
         if (_dead)
         {
             return;
