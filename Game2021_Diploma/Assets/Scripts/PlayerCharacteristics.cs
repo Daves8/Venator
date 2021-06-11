@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerCharacteristics : MonoBehaviour
 {
     public int hp;
-    private bool _dead;
+    public bool _dead;
     private bool _deadHelper = true;
     public bool isBattle;
     public bool isBattleAnimal;
@@ -32,7 +32,7 @@ public class PlayerCharacteristics : MonoBehaviour
         _chMove = GetComponent<CharacterMoving>();
         hp = 500;
         _dead = false;
-        damageSword = 50;
+        damageSword = 10;
         damageKnife = 20;
     }
 
@@ -56,13 +56,6 @@ public class PlayerCharacteristics : MonoBehaviour
 
     void Update()
     {
-        //Input.GetKeyDown(KeyCode.L)
-        if (_dead && _deadHelper)
-        {
-            showHideDeath();
-            _deadHelper = false;
-        }
-
         if (_dead)
         {
             return;
@@ -113,7 +106,13 @@ public class PlayerCharacteristics : MonoBehaviour
     private void Death()
     {
         _dead = true;
-        print("Умер!");
+        allEnemies.Clear();
+        allAnimals.Clear();
+        isBattle = false;
+        isBattleAnimal = false;
+        int timeToUI = Random.Range(1, 3);
+        Invoke("showHideDeath", 2.0f);
+        GetComponent<Animator>().SetTrigger("Death" + timeToUI);
     }
     private void Teleport()
     {

@@ -213,7 +213,7 @@ public class Bear : MonoBehaviour
     private void Walking()
     {
         _walkCorout = true;
-        if (Vector3.Distance(_place.position, transform.position) < 2.0f)
+        if (Vector3.Distance(new Vector3(_place.position.x, 0f, _place.position.z), new Vector3(transform.position.x, 0f, transform.position.z)) <= 2.0f)
         {
             if (Time.time - _timeToWalk >= Random.Range(3.0f, 30.0f))
             {

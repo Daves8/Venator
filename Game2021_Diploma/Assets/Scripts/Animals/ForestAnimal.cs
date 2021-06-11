@@ -31,6 +31,7 @@ public class ForestAnimal : MonoBehaviour
     private float _speedWalk;
     private float _speedRun;
     private float _timeToEat;
+    private float _timeToNextPlace;
     private bool _nextPlaces = false;
     private Transform _place;
     private float _timeToWalk;
@@ -51,6 +52,7 @@ public class ForestAnimal : MonoBehaviour
         _place = places[Random.Range(0, places.Length)].transform;
         _audioSource = GetComponent<AudioSource>();
         _audioSource.volume = 1.0f;
+        _timeToNextPlace = Random.Range(3.0f, 15.0f);
         _limbs = new List<AnimalLimbs>();
         _limbs.AddRange(GetComponentsInChildren<AnimalLimbs>());
         for (int i = 0; i < _limbs.Count; i++)
@@ -248,9 +250,9 @@ public class ForestAnimal : MonoBehaviour
     private void Walking()
     {
         _walkCorout = true;
-        if (Vector3.Distance(_place.position, transform.position) < 2.0f)
+        if (Vector3.Distance(new Vector3(_place.position.x, 0f, _place.position.z), new Vector3(transform.position.x, 0f, transform.position.z)) <= 2.0f)
         {
-            if (Time.time - _timeToWalk >= Random.Range(3.0f, 30.0f))
+            if (Time.time - _timeToWalk >= _timeToNextPlace)
             {
                 _nextPlaces = true;
             }
@@ -271,6 +273,8 @@ public class ForestAnimal : MonoBehaviour
         while (_walkCorout)
         {
             _place = places[Random.Range(0, places.Length)].transform;
+            _place.transform.position += new Vector3(Random.Range(-5.0f, 5.0f), 0f, Random.Range(-5.0f, 5.0f));
+            _timeToNextPlace = Random.Range(3.0f, 15.0f);
             yield return new WaitUntil(() => _nextPlaces);
             _nextPlaces = false;
         }

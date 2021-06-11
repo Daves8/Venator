@@ -37,7 +37,7 @@ public class Enemy : MonoBehaviour
         _playerCharacteristics = _player.GetComponent<PlayerCharacteristics>();
         _agent = GetComponent<NavMeshAgent>();
 
-        _hp = Random.Range(100, 200);
+        _hp = Random.Range(200, 400);
 
         _importantBuildings = GameObject.FindGameObjectWithTag("BuildingsImportant").GetComponent<ImportantBuildings>();
         _buildsForPatrol = new GameObject[] { _importantBuildings.EntranceToTavern, _importantBuildings.Garden, _importantBuildings.RightGate, _importantBuildings.RightUpGate, _importantBuildings.LeftUpGate };
@@ -71,9 +71,10 @@ public class Enemy : MonoBehaviour
             _agressive = true;
             Add(gameObject);
         }
-        else if (Vector3.Distance(_player.transform.position, transform.position) > 20f)
+        else if (Vector3.Distance(_player.transform.position, transform.position) > 20f || _playerCharacteristics._dead)
         {
             _agressive = false;
+            _attack = false;
             _canAttack = false;
             _playerCharacteristics.allEnemies.Remove(gameObject);
             if (_agrPast != _agressive)
