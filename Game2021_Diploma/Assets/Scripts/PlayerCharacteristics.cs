@@ -6,6 +6,7 @@ public class PlayerCharacteristics : MonoBehaviour
 {
     public int hp;
     private bool _dead;
+    private bool _deadHelper = true;
     public bool isBattle;
     public bool isBattleAnimal;
     public bool crouch;
@@ -35,22 +36,31 @@ public class PlayerCharacteristics : MonoBehaviour
         damageKnife = 20;
     }
 
+    public void showHideDeath()
+    {
+        DeathUIOnOff = !DeathUIOnOff;
+        DeathUI.SetActive(DeathUIOnOff);
+        if (DeathUIOnOff)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            Time.timeScale = 1;
+        }
+    }
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L))
+        //Input.GetKeyDown(KeyCode.L)
+        if (_dead && _deadHelper)
         {
-            DeathUIOnOff = !DeathUIOnOff;
-            DeathUI.SetActive(DeathUIOnOff);
-            if (DeathUIOnOff)
-            {
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
-            }
-            else
-            {                
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-            }
+            showHideDeath();
+            _deadHelper = false;
         }
 
         if (_dead)

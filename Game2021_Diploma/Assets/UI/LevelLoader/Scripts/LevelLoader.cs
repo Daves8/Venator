@@ -40,8 +40,8 @@ public class LevelLoader : MonoBehaviour
     public void ContinueGame()
     {
         Dictionary<string, string> saves = ScrollView.GetSaves();
-        string last = saves.Values.Last();
-        DataHolder.savePath = last;
+        string first = saves.Values.First();
+        DataHolder.savePath = first;
         Debug.Log(DataHolder.savePath);
         //Player player = new Player();
         //player.LoadPlayer(last);
