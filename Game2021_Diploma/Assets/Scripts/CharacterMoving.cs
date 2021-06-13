@@ -36,7 +36,7 @@ public class CharacterMoving : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         _needGravity = true;
-        _speedRun = _speed * 4;
+        _speedRun = _speed * 2;
         _speedWalk = _speed;
     }
 

@@ -33,8 +33,9 @@ public class Player : MonoBehaviour
 
     public BoneCombiner boneCombiner;
     private ItemButton itemButton;
-    private ScrollView scrollView;    
-    
+    private ScrollView scrollView;
+
+    private bool _initInv;
 
     private void Awake()
     {
@@ -62,7 +63,30 @@ public class Player : MonoBehaviour
         {
             equipment.GetSlots[i].OnBeforeUpdate += OnRemoveItem;
             equipment.GetSlots[i].OnAfterUpdate += OnAddItem;
-        }   
+        }
+        _initInv = true;
+    }
+
+    private void Update()
+    {
+        if (_initInv)
+        {
+            _initInv = false;
+            InitializeInventory();
+        }
+    }
+
+    private void InitializeInventory()
+    {
+        foreach (var item in inventory.Container.Slots)
+        {
+            item.UpdateSlot(item.item, item.amount);
+        }
+
+        foreach (var item in equipment.Container.Slots)
+        {
+            item.UpdateSlot(item.item, item.amount);
+        }
     }
 
     public void StartBlackScreen()
@@ -117,9 +141,6 @@ public class Player : MonoBehaviour
         position.y = data.position[1];
         position.z = data.position[2];
 
-        Debug.Log("ОСЬ ИКС ПРИ ЗАУГРЗКЕ " + data.position[0]);
-        Debug.Log("ОСЬ ИГРИК ПРИ ЗАУГРЗКЕ "+data.position[1]);        
-        Debug.Log("ОСЬ ЗЕТ ПРИ ЗАУГРЗКЕ " + data.position[2]);
         _controller.enabled = false;
         //playerPosition.position = new Vector3(0,200,0);
         playerPosition.position = position;
@@ -276,8 +297,8 @@ public class Player : MonoBehaviour
         }*/
     }
 
-    private void Update()
-    {
+    //private void Update()
+    //{
         ////Debug.Log(playerPosition.position);
         //if (Input.GetKeyDown(KeyCode.Space))
         //{
@@ -290,7 +311,7 @@ public class Player : MonoBehaviour
         //    inventory.Load();
         //    equipment.Load();
         //}
-    }
+    //}
 
     public void AttributeModified(Attribute attribute)
     {

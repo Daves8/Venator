@@ -102,6 +102,20 @@ public class PlayerCharacteristics : MonoBehaviour
         {
             hp -= Random.Range(30, 100);
         }
+
+        // животные
+        if (other.gameObject.tag == "DamageBear")
+        {
+            hp -= Random.Range(300, 400);
+        }
+        else if (other.gameObject.tag == "DamageBoar")
+        {
+            hp -= Random.Range(150, 200);
+        }
+        else if (other.gameObject.tag == "DamageWolf")
+        {
+            hp -= Random.Range(150, 250);
+        }
     }
     private void Death()
     {

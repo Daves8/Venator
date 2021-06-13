@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
     public GameObject swordOn;
     public GameObject swordOff;
 
-    private bool _agressive = false;
+    public bool _agressive = false;
     private bool _agrPast = false;
     private bool _attack = false;
     public bool _death = false;
@@ -27,10 +27,15 @@ public class Enemy : MonoBehaviour
 
     private bool _canAttack = false;
 
+    private SpawnEnemyes _enemies;
+    private List<EnemyLimbs> _limbs;
     private List<Rigidbody> ragdolls;
 
     private void Start()
     {
+        _enemies = GameObject.FindGameObjectWithTag("Enemies").GetComponent<SpawnEnemyes>();
+        ++_enemies.allEnemies["AllySoldier"];
+
         _animator = GetComponent<Animator>();
 
         _player = GameObject.FindGameObjectWithTag("Player");
@@ -44,6 +49,12 @@ public class Enemy : MonoBehaviour
         _nextBuild = (BuildEn)Random.Range(0, _buildsForPatrol.Length);
 
         SwordOff();
+        _limbs = new List<EnemyLimbs>();
+        _limbs.AddRange(GetComponentsInChildren<EnemyLimbs>());
+        for (int i = 0; i < _limbs.Count; i++)
+        {
+            _limbs[i].parentEnemy = gameObject;
+        }
 
         //ragdolls.AddRange(GetComponentsInChildren<Rigidbody>());
         //foreach (Rigidbody rigidbody in ragdolls)
@@ -179,36 +190,6 @@ public class Enemy : MonoBehaviour
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
             transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, Time.deltaTime * 3f);
             yield return null;
-        }
-    }
-    private void OnCollisionEnter(Collision other) // для стрел
-    {
-        if (!_death)
-        {
-            if (other.gameObject.tag == "Arrow")
-            {
-                Add(gameObject);
-                _agressive = true;
-                _hp -= Random.Range(30, 100);
-            }
-        }
-    }
-    private void OnTriggerEnter(Collider other) // для оружия ближнего боя
-    {
-        if (!_death)
-        {
-            if (other.gameObject.tag == "Sword")
-            {
-                _agressive = true;
-                Add(gameObject);
-                _hp -= Random.Range(30, 70);
-            }
-            else if (other.gameObject.tag == "Knife")
-            {
-                _agressive = true;
-                Add(gameObject);
-                _hp -= Random.Range(10, 30);
-            }
         }
     }
     private void Add(GameObject enemy)

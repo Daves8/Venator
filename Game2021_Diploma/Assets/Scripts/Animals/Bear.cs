@@ -37,6 +37,7 @@ public class Bear : MonoBehaviour
 
     private List<AnimalLimbs> _limbs;
 
+    private bool _checkState;
     void Start()
     {
         _bearAnim = GetComponent<Animator>();
@@ -44,7 +45,7 @@ public class Bear : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag("Player");
         _hunters = GameObject.FindGameObjectsWithTag("Hunter");
         _playerCharact = _player.GetComponent<PlayerCharacteristics>();
-
+        _checkState = true;
         _places[_places.Length - 1] = GameObject.FindGameObjectWithTag("Den");
         _place = _places[Random.Range(0, _places.Length)].transform;
         _animals = GameObject.FindGameObjectWithTag("Animal").GetComponent<Animals>();
@@ -86,16 +87,10 @@ public class Bear : MonoBehaviour
             _audioSource.Play();
         }
 
-
-        if (Vector3.Distance(transform.position, _player.transform.position) < SafetyDistance() || NearHunters())
+        if (_checkState)
         {
-            _agressive = true;
-            _bearAgent.speed = _speedRun;
-        }
-        else
-        {
-            _agressive = false;
-            _bearAgent.speed = _speedWalk;
+            _checkState = false;
+            StartCoroutine(CheckState());
         }
 
         if (_agressive)
@@ -146,6 +141,24 @@ public class Bear : MonoBehaviour
         else if (_agressive) { Attack(); }
         else { Walking(); }
     }
+    private IEnumerator CheckState()
+    {
+        while (!_die)
+        {
+            if (Vector3.Distance(transform.position, _player.transform.position) < SafetyDistance() || NearHunters())
+            {
+                _agressive = true;
+                _bearAgent.speed = _speedRun;
+            }
+            else
+            {
+                _agressive = false;
+                _bearAgent.speed = _speedWalk;
+            }
+            yield return new WaitForSeconds(5.0f);
+        }
+    }
+
     private bool NearHunters()
     {
         float distance = Random.Range(9f, 11f);

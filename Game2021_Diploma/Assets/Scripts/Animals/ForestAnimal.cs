@@ -42,6 +42,8 @@ public class ForestAnimal : MonoBehaviour
 
     private List<AnimalLimbs> _limbs;
 
+    private bool _checkState;
+
     void Start()
     {
         _animator = GetComponent<Animator>();
@@ -97,6 +99,7 @@ public class ForestAnimal : MonoBehaviour
         _animals = GameObject.FindGameObjectWithTag("Animal").GetComponent<Animals>();
         ++_animals.allAnimals[_type];
         StartCoroutine(Healing());
+        _checkState = true;
     }
 
     void Update()
@@ -123,16 +126,10 @@ public class ForestAnimal : MonoBehaviour
             _audioSource.Play();
         }
 
-
-        if (Vector3.Distance(transform.position, _player.transform.position) < SafetyDistance() || NearHunters())
+        if (_checkState)
         {
-            _agressive = true;
-            _agent.speed = _speedRun;
-        }
-        else
-        {
-            _agressive = false;
-            _agent.speed = _speedWalk;
+            _checkState = false;
+            StartCoroutine(CheckState());
         }
 
         if (_agressive)
@@ -183,6 +180,24 @@ public class ForestAnimal : MonoBehaviour
         else if (_agressive) { Attack(); }
         else { Walking(); }
     }
+    private IEnumerator CheckState()
+    {
+        while (!_die)
+        {
+            if (Vector3.Distance(transform.position, _player.transform.position) < SafetyDistance() || NearHunters())
+            {
+                _agressive = true;
+                _agent.speed = _speedRun;
+            }
+            else
+            {
+                _agressive = false;
+                _agent.speed = _speedWalk;
+            }
+            yield return new WaitForSeconds(5.0f);
+        }
+    }
+
     private bool NearHunters()
     {
         float distance = Random.Range(9f, 11f);
