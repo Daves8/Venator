@@ -5,12 +5,17 @@ using UnityEngine.AI;
 
 public class Hunter : MonoBehaviour
 {
+    public float hp;
+    public bool die;
+    private bool _agressive;
     private Animator _animator;
     private NavMeshAgent _agent;
     private AudioSource _audioSource;
 
+    private GameObject[] _allForestAnimals;
     private SpawnEnemyes _enemies;
-    private GameObject arrow;
+    private GameObject _arrow;
+    private AudioClip[] _arrowSound;
 
     private float _speedRun;
     private float _speedWalk;
@@ -22,13 +27,19 @@ public class Hunter : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
         _audioSource = GetComponent<AudioSource>();
 
+        _allForestAnimals = _enemies.allAnimals;
+
         _speedRun = Random.Range(3.0f, 4.0f);
         _speedWalk = Random.Range(1.5f, 2.5f);
         _shot = false;
+        _agressive = false;
+        die = false;
+        StartCoroutine(FindAndAttackAnimals());
 
         _enemies = GameObject.FindGameObjectWithTag("Enemies").GetComponent<SpawnEnemyes>();
         ++_enemies.allEnemies["Partisans"];
-        arrow = _enemies.arrow;
+        _arrow = _enemies.arrow;
+        _arrowSound = _enemies.arrowSound;
     }
 
     void Update()
@@ -52,6 +63,11 @@ public class Hunter : MonoBehaviour
             _animator.SetBool("Run", false);
             _animator.SetBool("Walk", false);
         }
+
+        if (_agressive)
+        {
+
+        }
     }
 
     public void Attack(Transform target)
@@ -63,6 +79,7 @@ public class Hunter : MonoBehaviour
         else
         {
             _shot = true;
+            _agent.isStopped = true;
             StartCoroutine(RotateToTarget(target));
             _animator.SetTrigger("Shot");
         }
@@ -84,15 +101,57 @@ public class Hunter : MonoBehaviour
         _agent.speed = _speedWalk;
         _agent.SetDestination(target.position);
     }
-
     public void RunTo(Transform target)
     {
         _agent.speed = _speedRun;
         _agent.SetDestination(target.position);
     }
+    public void TeleportTo(Transform target)
+    {
+        transform.position = target.position;
+    }
+    public void Agressive(bool agr)
+    {
+        _agressive = agr;
+    }
+
+    private Transform NearAnimals()
+    {
+        float distance = Random.Range(9f, 11f);
+        Transform target = _allForestAnimals[0].transform;
+        for (int i = 0; i < _allForestAnimals.Length; i++)
+        {
+            if (Vector3.Distance(transform.position, _allForestAnimals[i].transform.position) < distance && Vector3.Distance(transform.position, _allForestAnimals[i].transform.position) < Vector3.Distance(transform.position, target.position))
+            {
+                target = _allForestAnimals[i].transform;
+            }
+        }
+        return target;
+    }
+    private IEnumerator FindAndAttackAnimals()
+    {
+        while (true)
+        {
+            if (_agressive)
+            {
+                Attack(NearAnimals());
+            }
+            yield return new WaitForSeconds(10.0f);
+        }
+    }
+
 
     private void ShotArrow()
     {
+        _shot = false;
+        _agent.isStopped = false;
 
+        _audioSource.pitch = Random.Range(0.9f, 1.1f);
+        _audioSource.PlayOneShot(_arrowSound[Random.Range(0, _arrowSound.Length)]);
+
+        GameObject newArrow = Instantiate(_arrow, transform.forward + new Vector3(0f, 1.0f, 0f), transform.rotation);
+        //newArrow.transform.LookAt(_target);
+        newArrow.GetComponent<Rigidbody>().useGravity = false;
+        newArrow.GetComponent<Rigidbody>().velocity = newArrow.transform.forward * 10;
     }
 }

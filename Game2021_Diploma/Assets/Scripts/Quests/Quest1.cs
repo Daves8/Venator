@@ -17,7 +17,7 @@ public class Quest1 : MonoBehaviour
     public GameObject home;
     public GameObject cart;
     public GameObject hunter1;
-    public Vector3 startPosition;//
+    public Vector3 startPosition;
     public TextMeshProUGUI subtitles;
     public TextMeshProUGUI prompt;
     public TextMeshProUGUI target;
@@ -33,10 +33,10 @@ public class Quest1 : MonoBehaviour
     private Button button2;
     private Button button3;
 
-    private bool _startCoroutineSS = false;
-    bool localCoroutQ5 = false;//
-    bool localCoroutQ8 = true;//
-    bool locCorQ10 = true;//
+    private bool _startCoroutineSS;
+    bool localCoroutQ5;
+    bool localCoroutQ8;
+    bool locCorQ10;
 
     private int _idFish = 8;
     private int _resultQuest;//
@@ -99,6 +99,11 @@ public class Quest1 : MonoBehaviour
         button1.onClick.AddListener(But1);
         button2.onClick.AddListener(But2);
         button3.onClick.AddListener(But3);
+
+        _startCoroutineSS = false;
+        localCoroutQ5 = false;
+        localCoroutQ8 = true;
+        locCorQ10 = true;
     }
 
     // Update is called once per frame

@@ -32,8 +32,8 @@ public class PlayerCharacteristics : MonoBehaviour
         _chMove = GetComponent<CharacterMoving>();
         hp = 500;
         _dead = false;
-        damageSword = 10;
-        damageKnife = 20;
+        damageSword = 200;
+        damageKnife = 100;
     }
 
     public void showHideDeath()

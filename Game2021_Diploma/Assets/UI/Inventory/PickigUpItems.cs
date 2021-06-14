@@ -67,7 +67,7 @@ public class PickigUpItems : MonoBehaviour
                 if (distanceTohit <= _rayCastMaxDistance)
                 {
                     showHelpObj.SetActive(true);
-                    showHelp.text = "Нажмите Е";
+                    showHelp.text = "Нажмите Е – " + groundItem.item.ruName;
                 }
                 if (groundItem && Input.GetKeyDown(KeyCode.E) && distanceTohit <= _rayCastMaxDistance)
                 {

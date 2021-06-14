@@ -41,6 +41,11 @@ public class ChangeClothes : MonoBehaviour
 
         switch (i)
         {
+            case 0:
+                Clothe(_firstClothers, false);
+                Clothe(_secondClothers, false);
+                Clothe(_thirdClothers, false);
+                break;
             case 1:
                 Clothe(_firstClothers, true);
                 break;

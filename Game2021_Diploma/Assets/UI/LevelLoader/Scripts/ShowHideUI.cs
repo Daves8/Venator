@@ -58,6 +58,9 @@ public class ShowHideUI : MonoBehaviour
             _characterInventory.GetComponent<Canvas>().enabled = true;
             _characterCamera.GetComponent<Cinemachine.CinemachineFreeLook>().m_XAxis.m_InputAxisName = "";
             _characterCamera.GetComponent<Cinemachine.CinemachineFreeLook>().m_YAxis.m_InputAxisName = "";
+            _characterCamera.GetComponent<Cinemachine.CinemachineFreeLook>().m_XAxis.m_MaxSpeed = 0;
+            _characterCamera.GetComponent<Cinemachine.CinemachineFreeLook>().m_YAxis.m_MaxSpeed = 0;
+
             //_characterCamera.SetActive(false);
             //_characterCamera2.SetActive(false);
             _character.GetComponent<CharacterMoving>().enabled = false;            
@@ -69,6 +72,8 @@ public class ShowHideUI : MonoBehaviour
             _characterInventory.GetComponent<Canvas>().enabled = false;
             _characterCamera.GetComponent<Cinemachine.CinemachineFreeLook>().m_XAxis.m_InputAxisName = "Mouse X";
             _characterCamera.GetComponent<Cinemachine.CinemachineFreeLook>().m_YAxis.m_InputAxisName = "Mouse Y";
+            _characterCamera.GetComponent<Cinemachine.CinemachineFreeLook>().m_XAxis.m_MaxSpeed = 300;
+            _characterCamera.GetComponent<Cinemachine.CinemachineFreeLook>().m_YAxis.m_MaxSpeed = 2;
             //_characterCamera.SetActive(true);
             //_characterCamera2.SetActive(true);
             _character.GetComponent<CharacterMoving>().enabled = true;            

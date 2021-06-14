@@ -6,6 +6,7 @@ using UnityEngine.AI;
 public class Bear : MonoBehaviour
 {
     public float hp;
+    public bool loot;
 
     private Animator _bearAnim;
     private NavMeshAgent _bearAgent;
@@ -53,6 +54,7 @@ public class Bear : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
         _audioSource.volume = 1.0f;
         hp = 750;
+        loot = true;
         StartCoroutine(Healing());
         _limbs = new List<AnimalLimbs>();
         _limbs.AddRange(GetComponentsInChildren<AnimalLimbs>());
@@ -61,6 +63,7 @@ public class Bear : MonoBehaviour
             _limbs[i].parent = gameObject;
             _limbs[i].typeParent = AnimalLimbs.ParentAnimal.Bear;
         }
+        GetComponent<SphereCollider>().enabled = false;
     }
 
     void Update()
@@ -77,6 +80,7 @@ public class Bear : MonoBehaviour
             _bearAgent.enabled = false;
             _bearAnim.SetTrigger("Die");
             Invoke("Delete", 300.0f);
+            GetComponent<SphereCollider>().enabled = true;
             return;
         }
 

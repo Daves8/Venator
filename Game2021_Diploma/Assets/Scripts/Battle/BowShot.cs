@@ -132,6 +132,8 @@ public class BowShot : MonoBehaviour
             _aim.SetActive(true);
             CharacterMoving.IsReadyToRun = false;
             _timeToShoot = Time.time;
+            //Invoke("BowChargingAnim", 0.01f);
+            BowChargingAnim();
         }
         if (Input.GetButton("Fire1"))
         {
@@ -181,7 +183,7 @@ public class BowShot : MonoBehaviour
         newArrow.transform.LookAt(_target);
         newArrow.GetComponent<Rigidbody>().velocity = newArrow.transform.forward * 100;
 
-
+        _bowAnimation.Play("MECANIM");
         _rigBow.weight = 0;
         StopCoroutine("RotateToCamera");
 

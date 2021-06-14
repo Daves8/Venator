@@ -6,6 +6,7 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
     private Animator _animator;
+    private AudioSource _audioSource;
 
     public float _hp;
     public GameObject swordOn;
@@ -31,6 +32,8 @@ public class Enemy : MonoBehaviour
     private List<EnemyLimbs> _limbs;
     private List<Rigidbody> ragdolls;
 
+    private AudioClip[] _swordSound;
+
     private void Start()
     {
         _enemies = GameObject.FindGameObjectWithTag("Enemies").GetComponent<SpawnEnemyes>();
@@ -41,7 +44,8 @@ public class Enemy : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag("Player");
         _playerCharacteristics = _player.GetComponent<PlayerCharacteristics>();
         _agent = GetComponent<NavMeshAgent>();
-
+        _audioSource = GetComponent<AudioSource>();
+        _swordSound = _enemies.swordSound;
         _hp = Random.Range(200, 400);
 
         _importantBuildings = GameObject.FindGameObjectWithTag("BuildingsImportant").GetComponent<ImportantBuildings>();
@@ -68,6 +72,11 @@ public class Enemy : MonoBehaviour
         if (_death) { return; }
         if (_hp <= 0f)
         {
+            for (int i = 0; i < _limbs.Count; i++)
+            {
+                _limbs[i].enabled = false;
+            }
+
             _death = true;
             _attack = false;
             _agent.enabled = false;
@@ -162,6 +171,8 @@ public class Enemy : MonoBehaviour
         while (_attack)
         {
             _animator.SetTrigger("Attack" + Random.Range(0, 4));
+            _audioSource.pitch = Random.Range(0.9f, 1.1f);
+            _audioSource.PlayOneShot(_swordSound[Random.Range(0, _swordSound.Length)]);
             yield return new WaitForSeconds(Random.Range(0.9f, 1.6f));
         }
         _agent.isStopped = false;

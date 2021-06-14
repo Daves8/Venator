@@ -98,6 +98,10 @@ public abstract class UserInterface : MonoBehaviour
         if (MouseData.interfaceMouseIsOver == null)
         {
             slotsOnInterface[obj].RemoveItem();
+            if (slotsOnInterface[obj].AllowedItems[0] == ItemType.Helmet)
+            {
+                ChangeClothes.Change(0);
+            }
             return;
         }
         if (MouseData.slotHoveredOver)

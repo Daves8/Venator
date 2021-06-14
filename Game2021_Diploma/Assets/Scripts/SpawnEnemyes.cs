@@ -10,9 +10,12 @@ public class SpawnEnemyes : MonoBehaviour
     public GameObject partisans;
     public GameObject enemySoldier;
     public Transform[] spawnEnemy;
+    public GameObject[] allAnimals;
     private bool _init;
 
     public GameObject arrow;
+    public AudioClip[] arrowSound;
+    public AudioClip[] swordSound;
 
     private void Awake()
     {
@@ -21,6 +24,7 @@ public class SpawnEnemyes : MonoBehaviour
         allEnemies.Add("AllySoldier", 0);
         allEnemies.Add("Partisans", 0);
         allEnemies.Add("EnemySoldier", 0);
+        allAnimals = GameObject.FindGameObjectsWithTag("ForestAnimals");
         _init = true;
     }
 

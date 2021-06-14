@@ -36,7 +36,7 @@ public class CharacterMoving : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         _needGravity = true;
-        _speedRun = _speed * 2;
+        _speedRun = _speed * 3.5f;
         _speedWalk = _speed;
     }
 
@@ -50,9 +50,9 @@ public class CharacterMoving : MonoBehaviour
         if (Input.GetButtonDown("Jump") && !_isCrouch && IsReadyToMove && IsReadyToRun)
         {
             _animator.SetTrigger("Jump");
-            _needGravity = false;
-            _controller.center = new Vector3(0f, 1.78f, 0f);
-            Invoke("Fall", 0.8f);
+            //_needGravity = false;
+            //_controller.center = new Vector3(0f, 1.78f, 0f);
+            //Invoke("Fall", 0.8f);
             //_controller.Move(new Vector3(0f, 1f, 0f));
         }
 

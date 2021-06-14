@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class Arrow : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private Rigidbody _rigidbody;
+    private Vector3 _rbVel;
+
     void Start()
     {
-        Invoke("Delete", 300.0f);
+        Invoke("Delete", 5.0f); // было 300.0f
+        _rigidbody = GetComponent<Rigidbody>();
+        _rbVel = _rigidbody.velocity;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -18,6 +22,12 @@ public class Arrow : MonoBehaviour
             //GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
             //transform.SetParent(collision.transform);
         }
+        //print(name + ": " + _rigidbody.velocity + " - " + _rbVel);
+        //if (Mathf.Abs(_rigidbody.velocity.magnitude - _rbVel.magnitude) > 1)
+        //{
+        //    //GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        //    //transform.SetParent(collision.transform);
+        //}
     }
 
     private void Delete()

@@ -8,6 +8,7 @@ public class ForestAnimal : MonoBehaviour
     public float hp;
     private float _hpToRunAway;
     private float _defaultHp;
+    public bool loot;
     public TypeAnimal animal;
 
     private Animator _animator;
@@ -54,6 +55,7 @@ public class ForestAnimal : MonoBehaviour
         _place = places[Random.Range(0, places.Length)].transform;
         _audioSource = GetComponent<AudioSource>();
         _audioSource.volume = 1.0f;
+        loot = true;
         _timeToNextPlace = Random.Range(3.0f, 15.0f);
         _limbs = new List<AnimalLimbs>();
         _limbs.AddRange(GetComponentsInChildren<AnimalLimbs>());
@@ -100,6 +102,7 @@ public class ForestAnimal : MonoBehaviour
         ++_animals.allAnimals[_type];
         StartCoroutine(Healing());
         _checkState = true;
+        GetComponent<SphereCollider>().enabled = false;
     }
 
     void Update()
@@ -116,6 +119,7 @@ public class ForestAnimal : MonoBehaviour
             _agent.enabled = false;
             _animator.SetTrigger("Die");
             Invoke("Delete", 300.0f);
+            GetComponent<SphereCollider>().enabled = true;
             return;
         }
 

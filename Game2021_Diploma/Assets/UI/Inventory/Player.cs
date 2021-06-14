@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
 {
     public InventoryObject inventory;
     public InventoryObject equipment;
+    public ItemDatabaseObject dbVenator;
     public bool test = false;
 
     public Transform playerPosition;
@@ -74,10 +75,23 @@ public class Player : MonoBehaviour
             _initInv = false;
             InitializeInventory();
         }
+        
+        // ПРОВЕРКА СЛОТОВ ЭКИПИРПОВКИ: ЕСЛИ ПУСТО ТО УБИРАТЬ
+        if (equipment.Container.Slots[0].item.Name != new Item(dbVenator.ItemObjects[0]).Name && equipment.Container.Slots[0].item.Name != new Item(dbVenator.ItemObjects[1]).Name)
+        {
+            ChangeClothes.Change(0);
+        }
+
     }
 
     private void InitializeInventory()
     {
+        if (level == "NewGame")
+        {
+            equipment.AddItem(new Item(dbVenator.ItemObjects[0]), 1);
+            inventory.AddItem(new Item(dbVenator.ItemObjects[18]), 1);
+            inventory.AddItem(new Item(dbVenator.ItemObjects[22]), 1);
+        }
         foreach (var item in inventory.Container.Slots)
         {
             item.UpdateSlot(item.item, item.amount);
@@ -134,7 +148,7 @@ public class Player : MonoBehaviour
         //Invoke("StartBlackScreen", 0.5f);
         PlayerData data = SaveSystem.LoadPlayer(savePath);
 
-        //level = data.level;
+        level = data.level;
 
         Vector3 position;
         position.x = data.position[0];
@@ -169,7 +183,26 @@ public class Player : MonoBehaviour
 
         //Invoke("EndBlackScreen", 1f);
 
+        if(level== "NewGame")
+        {
+            //Item helm1 = new Item(dbVenator.ItemObjects[0]);
+            //inventory.AddItem(helm1, 1);
+            //Item sword1 = new Item(dbVenator.ItemObjects[18]);
+            //inventory.AddItem(sword1, 1);
+            //inventory.Container.Slots[0].UpdateSlot(helm1, 1);
+            //inventory.Container.Slots[1].UpdateSlot(sword1, 1);
+            //inventory.Container.Slots[2].UpdateSlot(sword1, 1);
+            //Item bow1 = new Item(dbVenator.ItemObjects[22]);
+            //equipment.AddItem(bow1, 1);
+            //dbVenator.ItemObjects[0].stackable = false;
 
+            //equipment.Container.Slots[0].item = new Item(dbVenator.ItemObjects[0]);
+            //equipment.Container.Slots[1].item = new Item(dbVenator.ItemObjects[18]);
+            //equipment.Container.Slots[2].item = new Item(dbVenator.ItemObjects[22]);
+
+            //equipment.GetSlots[0].UpdateSlot(helm1, 1);
+            //equipment.GetSlots[1].UpdateSlot(sword1, 1);
+        }
     }
 
     public void OnRemoveItem(InventorySlot _slot)

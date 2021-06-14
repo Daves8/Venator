@@ -17,7 +17,7 @@ public class AnimalLimbs : MonoBehaviour
     {
         if (collision.gameObject.tag == "Arrow")
         {
-            float damage = Random.Range(30, 70);
+            float damage = Random.Range(250, 350);
             switch (typeParent)
             {
                 case ParentAnimal.Wolf:
