@@ -114,7 +114,7 @@ public class Hunter : MonoBehaviour
     }
     public void TeleportTo(Transform target)
     {
-        transform.position = target.position;
+        transform.position = target.position + new Vector3(Random.Range(-2f, 2f), 0f, Random.Range(-2f, 2f));
     }
     public void Agressive(bool agr)
     {

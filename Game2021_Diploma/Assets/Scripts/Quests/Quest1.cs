@@ -38,7 +38,7 @@ public class Quest1 : MonoBehaviour
     bool localCoroutQ8;
     bool locCorQ10;
 
-    private int _idFish = 8;
+    private int _idFish = 9;
     private int _resultQuest;//
     private Player _scriptPlayer;
 
@@ -218,6 +218,7 @@ public class Quest1 : MonoBehaviour
         _resultQuest = 0;
         if (!_startCoroutineSS)
         {
+            _scriptPlayer.inventory.AddItem(new Item(_scriptPlayer.dbVenator.ItemObjects[24]), 1); // добавляем удочку
             target.text = "Поговорить с братом.";
             groupCamera.enabled = true;
             StartCoroutine(ShowSubtitles(_dialogue1.nodes[0]));
@@ -349,7 +350,7 @@ public class Quest1 : MonoBehaviour
     }
     private void SubQ9()
     {
-        target.text = "Зайти в дом и поговорить с матерью";
+        target.text = "Поговорить с матерью";
         _targetPoint.PointToTarget(mother.transform);
         if(Vector3.Distance(player.transform.position, mother.transform.position) < 1.5f)
         {
@@ -365,6 +366,22 @@ public class Quest1 : MonoBehaviour
             ChangeCompanion(mother);
             groupCamera.enabled = true;
             StartCoroutine(ShowSubtitles(_dialogue1.nodes[6 + _resultQuest]));
+            // ПРОЛОЖИТЬ В ИНВЕНТАРЬ МНОГО ЕДЫ
+            if (_scriptPlayer.inventory.FindItemOnInventory(9) == 1)
+            {
+                _scriptPlayer.inventory.AddItem(new Item(_scriptPlayer.dbVenator.ItemObjects[7]), 7);
+            }
+            else if (_scriptPlayer.inventory.FindItemOnInventory(9) == 2)
+            {
+                _scriptPlayer.inventory.AddItem(new Item(_scriptPlayer.dbVenator.ItemObjects[7]), 7);
+                _scriptPlayer.inventory.AddItem(new Item(_scriptPlayer.dbVenator.ItemObjects[15]), 7);
+            }
+            else if (_scriptPlayer.inventory.FindItemOnInventory(9) > 2)
+            {
+                _scriptPlayer.inventory.AddItem(new Item(_scriptPlayer.dbVenator.ItemObjects[7]), 7); // сыр
+                _scriptPlayer.inventory.AddItem(new Item(_scriptPlayer.dbVenator.ItemObjects[12]), 7); // жареное мясо
+                _scriptPlayer.inventory.AddItem(new Item(_scriptPlayer.dbVenator.ItemObjects[15]), 7); //  молоко
+            }
         }
     }
     private void SubQ11()
@@ -384,6 +401,8 @@ public class Quest1 : MonoBehaviour
             groupCamera.enabled = true;
             StartCoroutine(ShowSubtitles(_dialogue1.nodes[10]));
             // ПОЛОЖИТЬ В ИНВЕНТАРЬ ИГРОКА ЛУК СО СТРЕЛАМИ
+            _scriptPlayer.inventory.AddItem(new Item(_scriptPlayer.dbVenator.ItemObjects[21]), 20);
+            _scriptPlayer.inventory.AddItem(new Item(_scriptPlayer.dbVenator.ItemObjects[22]), 1);
         }
     }
     private void SubQ13()
@@ -391,15 +410,30 @@ public class Quest1 : MonoBehaviour
         target.text = "Отправится на телеге в лес";
         _targetPoint.PointToTarget(cart.transform);
 
-        if (true) // если игрок подошел к телеге, смотрит на нее и нажал на Е
+        if (player.GetComponent<PlayerCharacteristics>().place == PlayerCharacteristics.Place.village) // если игрок подошел к телеге, смотрит на нее и нажал на Е
         {
             // старт корутины (затухание экрана и перемещение игрока в точку)
-            Invoke("NextQuest", 5f); // ПОМЕНЯТЬ ВРЕМЯ
+            target.text = "";
+            _targetPoint.PointToTarget(null);
+            Invoke("NextQuest", 3f); // ПОМЕНЯТЬ ВРЕМЯ
         }
     }
 
     private void NextQuest()
     {
+        if (_scriptPlayer.inventory.FindItemOnInventory(9) == 1)
+        {
+            _resultQuest = 1;
+        }
+        else if (_scriptPlayer.inventory.FindItemOnInventory(9) == 2)
+        {
+            _resultQuest = 2;
+        }
+        else if (_scriptPlayer.inventory.FindItemOnInventory(9) > 2)
+        {
+            _resultQuest = 3;
+        }
+        _questManag.resultQuests[0] = _resultQuest;
         _questManag.quest = QuestsManagement.Quest.quest2;
     }
 

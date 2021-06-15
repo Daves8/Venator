@@ -34,12 +34,38 @@ public class Quest2 : MonoBehaviour
     private Transform _glade;
     private ForestAnimal _boar;
 
+    private GameObject _mother;
+    private GameObject _father;
+    private GameObject _innkeeper;
+
+
     private bool _coroutSS;
     private bool _startCoroutineSC;
     private int _resultButtn;
 
     // сохранять
     public Subquest subquest;
+    public int resultQuest;
+
+    public enum Subquest
+    {
+        none = 0,
+        subquest1 = 1,
+        subquest2,
+        subquest3,
+        subquest4,
+        subquest5,
+        subquest6,
+        subquest7,
+        subquest8,
+        subquest9,
+        subquest10,
+        subquest11,
+        subquest12,
+        subquest13,
+        subquest14,
+        subquest15
+    }
 
     void Start()
     {
@@ -51,8 +77,8 @@ public class Quest2 : MonoBehaviour
         _targetDialogue = hunter1;
         _groupCamera.enabled = false;
         _targetGroup.m_Targets = new Cinemachine.CinemachineTargetGroup.Target[] { new Cinemachine.CinemachineTargetGroup.Target { target = GameObject.FindGameObjectWithTag("HeadPlayer").transform, weight = 1f, radius = 0f }, new Cinemachine.CinemachineTargetGroup.Target { target = _targetDialogue.transform.GetChild(0).transform, weight = 1f, radius = 0f } };
-        subquest = Subquest.subquest1;
-        _questManag = GetComponent<QuestsManagement>();
+        subquest = Subquest.subquest1; // сзапписываем
+        resultQuest = 0; //
         button1 = _questManag.button1.GetComponent<Button>();
         button2 = _questManag.button2.GetComponent<Button>();
         button3 = _questManag.button3.GetComponent<Button>();
@@ -71,6 +97,9 @@ public class Quest2 : MonoBehaviour
         _coroutSS = true;
         _resultButtn = 0;
         _playerCharact = _player.GetComponent<PlayerCharacteristics>();
+        _mother = _questManag.mother;
+        _father = _questManag.father;
+        _innkeeper = _questManag.innkeeper;
     }
 
     void Update()
@@ -242,7 +271,7 @@ public class Quest2 : MonoBehaviour
         {
             StartCoroutine(ShowSubtitles(2));
         }
-        if (_scriptPlayer.SearchInInventary(6) >= 1 ) // в инвентаре есть шкура и мясо кабана? 0 - шкура, 1- мясо
+        if (_scriptPlayer.SearchInInventary(6) >= 1) // в инвентаре есть шкура и мясо кабана? 0 - шкура, 1- мясо
         {
             subquest = (Subquest)(int)++subquest;
             _coroutSS = true;
@@ -275,6 +304,10 @@ public class Quest2 : MonoBehaviour
         if (!_startCoroutineSC)
         {
             StartCoroutine(ShowCutscene(4));
+            foreach (var item in new GameObject[] { hunter1, hunter2, hunter3, hunter4 })
+            {
+                item.GetComponent<Hunter>().WalkTo(GameObject.FindGameObjectWithTag("ForestCart").transform);
+            }
         }
     }
     private void SubQ7()
@@ -291,6 +324,10 @@ public class Quest2 : MonoBehaviour
         if (!_startCoroutineSC)
         {
             StartCoroutine(ShowCutscene(5));
+            foreach (var item in new GameObject[] { hunter1, hunter2, hunter3, hunter4 })
+            {
+                item.GetComponent<Hunter>().WalkTo(GameObject.FindGameObjectWithTag("ForestCart").transform);
+            }
         }
     }
     private void SubQ9()
@@ -317,11 +354,11 @@ public class Quest2 : MonoBehaviour
         {
             if (_scriptPlayer.inventory.FindItemOnInventory(6) == 2)
             {
-                StartCoroutine(ShowCutscene(5));
+                StartCoroutine(ShowCutscene(6));
             }
             else if (_scriptPlayer.inventory.FindItemOnInventory(6) > 2)
             {
-                StartCoroutine(ShowCutscene(5));
+                StartCoroutine(ShowCutscene(7));
             }
         }
     }
@@ -331,16 +368,59 @@ public class Quest2 : MonoBehaviour
         _targetPoint.PointToTarget(GameObject.FindGameObjectWithTag("ForestCart").transform);
         if (_playerCharact.place == PlayerCharacteristics.Place.village)
         {
-            subquest = (Subquest)13;// совмещаем ветки квеста
+            foreach (var item in new GameObject[] { hunter1, hunter2, hunter3, hunter4 })
+            {
+                Transform tr = new GameObject().transform;
+                tr.position = new Vector3(946f, 8f, 767f);
+                item.GetComponent<Hunter>().TeleportTo(tr);
+            }
+            ChangeCompanion(_mother);
+            subquest = (Subquest)13;
         }
     }
     private void SubQ13()
     {
         // мы в деревне. задача: подойти к матери, дать одну шкуру, она пошлет к корчмарю и ему продать все
+        _target.text = "Подойти к матери";
+        _targetPoint.PointToTarget(_mother.transform);
+        if (!_startCoroutineSC && Vector3.Distance(_player.transform.position, _mother.transform.position) < 2f)
+        {
+            if (_scriptPlayer.inventory.FindItemOnInventory(6) == 1)
+            {
+                StartCoroutine(ShowCutscene(8));
+            }
+            else if (_scriptPlayer.inventory.FindItemOnInventory(6) == 2)
+            {
+                StartCoroutine(ShowCutscene(9));
+            }
+            else if (_scriptPlayer.inventory.FindItemOnInventory(6) > 2)
+            {
+                StartCoroutine(ShowCutscene(10));
+            }
+        }
     }
     private void SubQ14()
     {
-
+        _target.text = "Подойти к трактирщику";
+        _targetPoint.PointToTarget(_innkeeper.transform);
+        ChangeCompanion(_innkeeper);
+        if (Vector3.Distance(_player.transform.position, _innkeeper.transform.position) < 2f)
+        {
+            if (_scriptPlayer.inventory.FindItemOnInventory(6) == 1)
+            {
+                resultQuest = 1;
+            }
+            else if (_scriptPlayer.inventory.FindItemOnInventory(6) == 2)
+            {
+                resultQuest = 2;
+            }
+            else if (_scriptPlayer.inventory.FindItemOnInventory(6) > 2)
+            {
+                resultQuest = 3;
+            }
+            _questManag.resultQuests[1] = resultQuest;
+            _questManag.quest = QuestsManagement.Quest.quest3;
+        }
     }
     private void SubQ15()
     {
@@ -380,23 +460,4 @@ public class Dialogue2
         Dialogue2 dial = serializer.Deserialize(reader) as Dialogue2;
         return dial;
     }
-}
-public enum Subquest
-{
-    none = 0,
-    subquest1 = 1,
-    subquest2,
-    subquest3,
-    subquest4,
-    subquest5,
-    subquest6,
-    subquest7,
-    subquest8,
-    subquest9,
-    subquest10,
-    subquest11,
-    subquest12,
-    subquest13,
-    subquest14,
-    subquest15
 }

@@ -38,6 +38,16 @@ public class NPC : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (_agent.velocity.normalized.magnitude >= 0.1f)
+        {
+            //StopCoroutine("AnimIdle");
+            _animator.SetBool("Walk", true);
+        }
+        else
+        {
+            _animator.SetBool("Walk", false);
+        }
+
         if (gameObject.name == "Father" || gameObject.name == "Mother" || gameObject.name == "Brother")
         {
             return;

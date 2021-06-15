@@ -12,7 +12,7 @@ public class Fishing : MonoBehaviour
     //[SerializeField] private GameObject _text;
 
     public InventoryObject inventory;
-    public ItemObject fish;
+    private ItemObject fish;
     public GameObject rod;
     public TextMeshProUGUI showPickeditem;
     public TextMeshProUGUI showEnterF;
@@ -31,6 +31,7 @@ public class Fishing : MonoBehaviour
         showEnterF.text = "";
         showPickeditem.text = "";
         rod.SetActive(false);
+        fish = _player.GetComponent<Player>().dbVenator.ItemObjects[9];
     }
 
     private void Update()
