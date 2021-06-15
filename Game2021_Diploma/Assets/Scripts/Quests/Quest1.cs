@@ -190,14 +190,14 @@ public class Quest1 : MonoBehaviour
         StartCoroutine(RotateToTarget());
         foreach (Subtitles subt in nodes.npcText)
         {
-            if (subt.name == "Я")
-            {
-                player.GetComponent<Animator>().SetBool("Speak", true);
-            }
-            else
-            {
-                player.GetComponent<Animator>().SetBool("Speak", false);
-            }
+            //if (subt.name == "Я")
+            //{
+            //    player.GetComponent<Animator>().SetBool("Speak", true);
+            //}
+            //else
+            //{
+            //    player.GetComponent<Animator>().SetBool("Speak", false);
+            //}
             subtitles.text = subt.name + ": ";
             subtitles.text += subt.text;
             yield return new WaitForSeconds(3f);

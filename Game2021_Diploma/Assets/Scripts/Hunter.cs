@@ -65,7 +65,7 @@ public class Hunter : MonoBehaviour
 
         if (_agressive)
         {
-
+            Attack(NearAnimals());
         }
     }
 
@@ -98,7 +98,14 @@ public class Hunter : MonoBehaviour
     public void WalkTo(Transform target)
     {
         _agent.speed = _speedWalk;
-        _agent.SetDestination(target.position);
+        if (Vector3.Distance(transform.position, target.position) < 2f)
+        {
+            _agent.SetDestination(transform.position);
+        }
+        else
+        {
+            _agent.SetDestination(target.position);
+        }
     }
     public void RunTo(Transform target)
     {

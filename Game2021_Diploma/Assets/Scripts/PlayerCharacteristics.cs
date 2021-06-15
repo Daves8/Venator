@@ -35,6 +35,7 @@ public class PlayerCharacteristics : MonoBehaviour
 
     private CharacterMoving _chMove;
     private Battle _battleScripts;
+    private Player _playerScript;
 
     public GameObject DeathUI;
     private bool DeathUIOnOff = false;
@@ -49,6 +50,7 @@ public class PlayerCharacteristics : MonoBehaviour
         damageSword = 200;
         damageKnife = 100;
         _battleScripts = GetComponent<Battle>();
+        _playerScript = GetComponent<Player>();
     }
 
     public void showHideDeath()
@@ -113,9 +115,12 @@ public class PlayerCharacteristics : MonoBehaviour
         //------------------------------------------ в зависимости от того какой у нас меч, мы меняем его для Battle
         if (sword == allSwords[0])
         {
-            if (_battleScripts._swordOn != allSwordsOn[0])
+            if (_playerScript.equipSword1)
             {
-                ////////////////////////////////////////////////////////////////////////////////////////////
+                _playerScript.equipSword1 = false;
+                WeaponEnum._selectedWeapon = Weapon.None;
+                allSwordsOn[0].SetActive(false);
+                allSwordsOff[0].SetActive(true);
             }
             _battleScripts._swordOn = allSwordsOn[0];
             _battleScripts._swordOff = allSwordsOff[0];
@@ -124,9 +129,12 @@ public class PlayerCharacteristics : MonoBehaviour
         }
         else if (sword == allSwords[1])
         {
-            if (_battleScripts._swordOn != allSwordsOn[1])
+            if (_playerScript.equipSword2)
             {
-                ////////////////////////////////////////////////////////////////////////////////
+                _playerScript.equipSword2 = false;
+                WeaponEnum._selectedWeapon = Weapon.None;
+                allSwordsOn[1].SetActive(false);
+                allSwordsOff[1].SetActive(true);
             }
             _battleScripts._swordOn = allSwordsOn[1];
             _battleScripts._swordOff = allSwordsOff[1];
@@ -141,11 +149,14 @@ public class PlayerCharacteristics : MonoBehaviour
             allSwordsOff[0].SetActive(false);
         }
 
-        if (bow == allBows[0])
+        if (bow != null && bow == allBows[0])
         {
-            if (_battleScripts._bowOn != allBowsOn[0])
+            if (_playerScript.equipBow)
             {
-                ///////////////////////////////////////////////////////////////////////////
+                _playerScript.equipBow = false;
+                WeaponEnum._selectedWeapon = Weapon.None;
+                allBowsOn[0].SetActive(false);
+                allBowsOff[0].SetActive(true);
             }
             _battleScripts._bowOn = allBowsOn[0];
             _battleScripts._bowOff = allBowsOff[0];

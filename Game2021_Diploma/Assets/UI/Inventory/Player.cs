@@ -39,6 +39,11 @@ public class Player : MonoBehaviour
     private PlayerCharacteristics _playerCharact;
     private bool _initInv;
 
+    public bool equipBow;
+    public bool equipSword1;
+    public bool equipSword2;
+
+
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
@@ -68,6 +73,10 @@ public class Player : MonoBehaviour
         }
         _playerCharact = GetComponent<PlayerCharacteristics>();
         _initInv = true;
+
+        equipBow = false;
+        equipSword1=false;
+        equipSword2=false;
     }
 
     private void Update()
@@ -94,10 +103,18 @@ public class Player : MonoBehaviour
 
         if (equipment.FindItemOnInventory(18) > 0) // базовый меч
         {
+            if (_playerCharact.sword == null)
+            {
+                equipSword1 = true;
+            }
             _playerCharact.sword = _playerCharact.allSwords[0];
         }
         else if (equipment.FindItemOnInventory(19) > 0) // улучшенный меч
         {
+            if (_playerCharact.sword == null)
+            {
+                equipSword2 = true;
+            }
             _playerCharact.sword = _playerCharact.allSwords[1];
         }
         else
@@ -107,6 +124,10 @@ public class Player : MonoBehaviour
 
         if (equipment.FindItemOnInventory(22) > 0) // лук
         {
+            if (_playerCharact.bow == null)
+            {
+                equipBow = true;
+            }
             _playerCharact.bow = _playerCharact.allBows[0];
         }
         else
@@ -121,7 +142,7 @@ public class Player : MonoBehaviour
         if (level == "NewGame")
         {
             equipment.AddItem(new Item(dbVenator.ItemObjects[0]), 1);
-            inventory.AddItem(new Item(dbVenator.ItemObjects[18]), 1);
+            inventory.AddItem(new Item(dbVenator.ItemObjects[18]), 1); // -------------------------------------------------------------------- ТУТ!!!
             inventory.AddItem(new Item(dbVenator.ItemObjects[22]), 1);
         }
         foreach (var item in inventory.Container.Slots)

@@ -15,6 +15,7 @@ public class Quest2 : MonoBehaviour
 
     private GameObject _player;
     private Player _scriptPlayer;
+    private PlayerCharacteristics _playerCharact;
 
     private QuestsManagement _questManag;
     private Dialogue2 _dialogue2;
@@ -35,6 +36,7 @@ public class Quest2 : MonoBehaviour
 
     private bool _coroutSS;
     private bool _startCoroutineSC;
+    private int _resultButtn;
 
     // сохранять
     public Subquest subquest;
@@ -67,6 +69,8 @@ public class Quest2 : MonoBehaviour
         _boar = GameObject.FindGameObjectsWithTag("Boar")[0].GetComponent<ForestAnimal>();
         _startCoroutineSC = false;
         _coroutSS = true;
+        _resultButtn = 0;
+        _playerCharact = _player.GetComponent<PlayerCharacteristics>();
     }
 
     void Update()
@@ -161,14 +165,6 @@ public class Quest2 : MonoBehaviour
         StartCoroutine(RotateToTarget());
         foreach (Subtitles subt in nodes.npcText)
         {
-            if (subt.name == "Я")
-            {
-                _player.GetComponent<Animator>().SetBool("Speak", true);
-            }
-            else
-            {
-                _player.GetComponent<Animator>().SetBool("Speak", false);
-            }
             _subtitles.text = subt.name + ": ";
             _subtitles.text += subt.text;
             yield return new WaitForSeconds(3f);
@@ -179,7 +175,7 @@ public class Quest2 : MonoBehaviour
         _groupCamera.enabled = false;
         CharacterMoving.IsReadyToMove = true;
         _player.GetComponent<Battle>().AllowBattle = true;
-        _player.GetComponent<Animator>().SetBool("Speak", false);
+        //_player.GetComponent<Animator>().SetBool("Speak", false);
         if (nextQuest)
         {
             subquest = (Subquest)(int)++subquest;
@@ -206,12 +202,23 @@ public class Quest2 : MonoBehaviour
             subquest = (Subquest)(int)++subquest;
             _coroutSS = true;
         }
+
+        foreach (var item in new GameObject[] { hunter1, hunter2, hunter3, hunter4 })
+        {
+            item.GetComponent<Hunter>().WalkTo(_glade.transform);
+        }
+
     }
     private void SubQ2()
     {
         // увидели? кабана, цель: убить кабана, подсказка: как стрелять из лука
         _target.text = "Убить кабана";
+        _prompt.text = "Для выстрела из лука зажмите кнопку выстрела, пока стрела не зарядится, и отпуатите";
         _targetPoint.PointToTarget(_boar.gameObject.transform);
+        foreach (var item in new GameObject[] { hunter1, hunter2, hunter3, hunter4 })
+        {
+            item.GetComponent<Hunter>().Agressive(true);
+        }
         if (_coroutSS)
         {
             StartCoroutine(ShowSubtitles(1));
@@ -227,11 +234,15 @@ public class Quest2 : MonoBehaviour
         // освежевать его
         _target.text = "Освежевать кабана";
         _targetPoint.PointToTarget(_boar.gameObject.transform);
+        foreach (var item in new GameObject[] { hunter1, hunter2, hunter3, hunter4 })
+        {
+            item.GetComponent<Hunter>().Agressive(false);
+        }
         if (_coroutSS)
         {
             StartCoroutine(ShowSubtitles(2));
         }
-        if (_scriptPlayer.SearchInInventary(0) >= 1 && _scriptPlayer.SearchInInventary(1) >= 1) // в инвентаре есть шкура и мясо кабана? 0 - шкура, 1- мясо
+        if (_scriptPlayer.SearchInInventary(6) >= 1 ) // в инвентаре есть шкура и мясо кабана? 0 - шкура, 1- мясо
         {
             subquest = (Subquest)(int)++subquest;
             _coroutSS = true;
@@ -249,39 +260,83 @@ public class Quest2 : MonoBehaviour
     }
     private void SubQ5()
     {
+        button1.gameObject.SetActive(true);
+        button2.gameObject.SetActive(true);
 
+        _target.text = "";
+        _targetPoint.target = null;
+        _groupCamera.enabled = true;
+        CharacterMoving.IsReadyToMove = false;
+        _player.GetComponent<Battle>().AllowBattle = false;
+        StartCoroutine(RotateToTarget());
     }
-    private void SubQ6()
+    private void SubQ6() // уходим, больше не охотимся
     {
-
+        if (!_startCoroutineSC)
+        {
+            StartCoroutine(ShowCutscene(4));
+        }
     }
     private void SubQ7()
     {
-
+        _target.text = "Отправиться в деревню";
+        _targetPoint.PointToTarget(GameObject.FindGameObjectWithTag("ForestCart").transform);
+        if (_playerCharact.place == PlayerCharacteristics.Place.village)
+        {
+            subquest = (Subquest)13;// совмещаем ветки квеста
+        }
     }
-    private void SubQ8()
+    private void SubQ8() // остаемся, еще на одного нападаем 
     {
-
+        if (!_startCoroutineSC)
+        {
+            StartCoroutine(ShowCutscene(5));
+        }
     }
     private void SubQ9()
     {
-
+        _target.text = "Добыть и освежевать кабана";
+        _targetPoint.PointToTarget(null);
+        if (_scriptPlayer.inventory.FindItemOnInventory(6) > 1)
+        {
+            subquest = (Subquest)(int)++subquest;
+        }
     }
     private void SubQ10()
     {
-
+        _target.text = "Вернуться к охотникам";
+        _targetPoint.PointToTarget(hunter1.transform);
+        if (Vector3.Distance(_player.transform.position, hunter1.transform.position) < 2f)
+        {
+            subquest = (Subquest)(int)++subquest;
+        }
     }
     private void SubQ11()
     {
-
+        if (!_startCoroutineSC)
+        {
+            if (_scriptPlayer.inventory.FindItemOnInventory(6) == 2)
+            {
+                StartCoroutine(ShowCutscene(5));
+            }
+            else if (_scriptPlayer.inventory.FindItemOnInventory(6) > 2)
+            {
+                StartCoroutine(ShowCutscene(5));
+            }
+        }
     }
     private void SubQ12()
     {
-
+        _target.text = "Отправиться в деревню";
+        _targetPoint.PointToTarget(GameObject.FindGameObjectWithTag("ForestCart").transform);
+        if (_playerCharact.place == PlayerCharacteristics.Place.village)
+        {
+            subquest = (Subquest)13;// совмещаем ветки квеста
+        }
     }
     private void SubQ13()
     {
-
+        // мы в деревне. задача: подойти к матери, дать одну шкуру, она пошлет к корчмарю и ему продать все
     }
     private void SubQ14()
     {
@@ -295,15 +350,21 @@ public class Quest2 : MonoBehaviour
 
     private void But1()
     {
-
+        _resultButtn = 1;
+        button1.gameObject.SetActive(false);
+        button2.gameObject.SetActive(false);
+        subquest = (Subquest)6;
     }
     private void But2()
     {
-
+        _resultButtn = 2;
+        button1.gameObject.SetActive(false);
+        button2.gameObject.SetActive(false);
+        subquest = (Subquest)8;
     }
     private void But3()
     {
-
+        _resultButtn = 3;
     }
 }
 [XmlRoot("quest2")]

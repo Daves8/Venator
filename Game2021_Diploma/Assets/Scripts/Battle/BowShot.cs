@@ -132,6 +132,8 @@ public class BowShot : MonoBehaviour
             }
             if (_playerScript.inventory.FindItemOnInventory(21) <= 0)
             {
+                showPickedItem.gameObject.SetActive(true);
+                Invoke("ShowAttention", 1f);
                 showPickedItem.text = "Отсутствуют стрелы!";
                 return;
             }
@@ -179,6 +181,11 @@ public class BowShot : MonoBehaviour
             _rigBow.weight = 0;
             _arrowInHand.SetActive(false);
         }
+    }
+
+    private void ShowAttention()
+    {
+        showPickedItem.gameObject.SetActive(false);
     }
 
     private void ExitBow()

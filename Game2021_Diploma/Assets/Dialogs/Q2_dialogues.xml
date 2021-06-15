@@ -30,13 +30,47 @@
   <node>
     <!-- комментарий3 -->
     <subtitles name="Охотник">
-      <text>идем домой или еще охота</text>
+      <text>Возвращаемся в деревню или еще будешь охотиться?</text>
     </subtitles>
-    <subtitles name="Имя">
-      <text>текст</text>
+  </node>
+
+  <node>
+    <!-- комментарий4 -->
+    <subtitles name="Я">
+      <text>Давай возвращаться. На сегодня все.</text>
     </subtitles>
-    <subtitles name="Имя">
-      <text>текст</text>
+    <subtitles name="Охотник">
+      <text>Хорошо. Зайди потом к корчмарю. Он про тебя спрашивал.</text>
+    </subtitles>
+  </node>
+
+  <node>
+    <!-- комментарий5 -->
+    <subtitles name="Я">
+      <text>Я, пожалуй, добуду еще кабана. Лишняя шкура не помешает.</text>
+    </subtitles>
+    <subtitles name="Охотник">
+      <text>Отлично. Мы будем ждать тебя около хижины. Удачной охоты!</text>
+    </subtitles>
+  </node>
+
+  <node>
+    <!-- комментарий6 -->
+    <subtitles name="Охотник">
+      <text>убил 2 кабана</text>
+    </subtitles>
+    <subtitles name="Охотник">
+      <text>Отлично. Мы будем ждать тебя около хижины. Удачной охоты!</text>
+    </subtitles>
+  </node>
+
+  <node>
+    <!-- комментарий7 -->
+    <subtitles name="Охотник">
+      <text>убил 2+ кабана</text>
+    </subtitles>
+    <subtitles name="Охотник">
+      <text>Отлично. Мы будем ждать тебя около хижины. Удачной охоты!</text>
     </subtitles>
   </node>
 </quest2>
