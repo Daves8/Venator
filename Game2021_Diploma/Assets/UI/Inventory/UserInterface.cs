@@ -60,6 +60,7 @@ public abstract class UserInterface : MonoBehaviour
     public void OnEnter(GameObject obj)
     {
         MouseData.slotHoveredOver = obj;
+       
     }
     public void OnExit(GameObject obj)
     {
@@ -76,6 +77,8 @@ public abstract class UserInterface : MonoBehaviour
     public void OnDragStart(GameObject obj)
     {
         MouseData.tempItemBeingDragged = CreateTempItem(obj);
+
+        Debug.Log(slotsOnInterface[obj].item.Name);
     }
     public GameObject CreateTempItem(GameObject obj)
     {
