@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -27,6 +28,9 @@ public class BowShot : MonoBehaviour
 
     [SerializeField] private GameObject _aim;
 
+    private Player _playerScript;
+    public TextMeshProUGUI showPickedItem;
+
     private bool _canShoot = false;
     private bool _bow;
     private bool _beginBow;
@@ -47,6 +51,8 @@ public class BowShot : MonoBehaviour
 
         _beginBow = false;
         _bow = false;
+
+        _playerScript = GetComponent<Player>();
     }
 
     void Update()
@@ -120,6 +126,17 @@ public class BowShot : MonoBehaviour
         {
             // если нету стрел в инвентаре, вывод сообщения в "подбор предметов" "Остутствуют стрелы!" и return -------------------------------------------------------------------
             // начало анимации заряжания, начало стрельбы из лука
+            if(_playerScript.equipment.FindItemOnInventory(22) <= 0)
+            {
+                return;
+            }
+            if (_playerScript.inventory.FindItemOnInventory(21) <= 0)
+            {
+                showPickedItem.text = "Отсутствуют стрелы!";
+                return;
+            }
+
+            --_playerScript.inventory.FindItemOnInventory(new Item(_playerScript.dbVenator.ItemObjects[21])).amount;
             _bow = true;
             _rigBow.weight = 1;
             StartCoroutine("RotateToCamera");
@@ -138,7 +155,7 @@ public class BowShot : MonoBehaviour
         if (Input.GetButton("Fire1"))
         {
             // таймер, проверяющий достаточно ли держим, сбрасывается при отпускании
-            
+
         }
         if (Input.GetButtonUp("Fire1"))
         {

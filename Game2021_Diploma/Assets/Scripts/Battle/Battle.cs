@@ -23,14 +23,14 @@ public class Battle : MonoBehaviour
     private float _turnSmoothTime = 0.1f;
     private float _turnSmoothVelocity;
 
-    [SerializeField] private GameObject _swordOn;
-    [SerializeField] private GameObject _swordOff;
+    public GameObject _swordOn;
+    public GameObject _swordOff;
 
     [SerializeField] private GameObject _knifeOn;
     [SerializeField] private GameObject _knifeOff;
 
-    [SerializeField] private GameObject _bowOn;
-    [SerializeField] private GameObject _bowOff;
+    public GameObject _bowOn;
+    public GameObject _bowOff;
 
 
 
@@ -39,24 +39,28 @@ public class Battle : MonoBehaviour
 
     [SerializeField] private  Animation _bowAnimation;
 
+    private PlayerCharacteristics _playerCharact;
+
     private string _changeWeaponAnim;
     private bool _previousWeapon = false;
 
     public bool AllowBattle = true;
 
-    private void Awake()
+    private void Start()
     {
-        _swordOn.SetActive(false);
-        _swordOff.SetActive(true);
+        //_swordOn.SetActive(false);
+        //_swordOff.SetActive(true);
 
-        _bowOn.SetActive(false);
-        _bowOff.SetActive(true);
+        //_bowOn.SetActive(false);
+        //_bowOff.SetActive(true);
 
         _knifeOn.SetActive(false);
         _knifeOff.SetActive(true);
 
         _knifeCollider.enabled = false;
         _swordCollider.enabled = false;
+
+        _playerCharact = GetComponent<PlayerCharacteristics>();
     }
 
     // Update is called once per frame
@@ -96,9 +100,12 @@ public class Battle : MonoBehaviour
                     KnifeBattle();
                     break;
                 case Weapon.Sword:
-                    _swordCollider.enabled = true;
-                    Invoke("WeaponColliderOff", 1.0f);
-                    SwordBattle();
+                    if (_playerCharact.sword != null)
+                    {
+                        _swordCollider.enabled = true;
+                        Invoke("WeaponColliderOff", 1.0f);
+                        SwordBattle();
+                    }
                     break;
                 default:
                     break;
@@ -158,7 +165,7 @@ public class Battle : MonoBehaviour
             _previousWeapon = false;
             WeaponEnum._selectedWeapon = Weapon.Khife;
         }
-        else if (Input.GetButtonDown("Equip Second Item")) // 2 - МЕЧ
+        else if (Input.GetButtonDown("Equip Second Item") && _playerCharact.sword != null) // 2 - МЕЧ
         {
             _changeWeaponAnim = "Withdrawing";
 
@@ -195,7 +202,7 @@ public class Battle : MonoBehaviour
             _previousWeapon = false;
             WeaponEnum._selectedWeapon = Weapon.Sword;
         }
-        else if (Input.GetButtonDown("Equip Third Item")) // 3 - ЛУК
+        else if (Input.GetButtonDown("Equip Third Item") && _playerCharact.bow != null) // 3 - ЛУК
         {
             _changeWeaponAnim = "BowOut";
 
@@ -317,6 +324,8 @@ public class Battle : MonoBehaviour
             _previousTime = Time.time;
             if (_countCombo == 3 && _thirdCombo_1 && _thirdCombo_2)
             {
+                _playerCharact.damageSword *= 1.5f;
+                Invoke("ReturnDamageSwordToBase", 0.7f);
                 _animator.SetTrigger("Sword3");
                 _thirdCombo_1 = false;
                 _thirdCombo_2 = false;
@@ -347,5 +356,9 @@ public class Battle : MonoBehaviour
                 }
             }
         }
+    }
+    private void ReturnDamageSwordToBase()
+    {
+        _playerCharact.damageSword /= 1.5f;
     }
 }

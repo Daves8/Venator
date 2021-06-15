@@ -27,8 +27,6 @@ public class Hunter : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
         _audioSource = GetComponent<AudioSource>();
 
-        _allForestAnimals = _enemies.allAnimals;
-
         _speedRun = Random.Range(3.0f, 4.0f);
         _speedWalk = Random.Range(1.5f, 2.5f);
         _shot = false;
@@ -38,6 +36,7 @@ public class Hunter : MonoBehaviour
 
         _enemies = GameObject.FindGameObjectWithTag("Enemies").GetComponent<SpawnEnemyes>();
         ++_enemies.allEnemies["Partisans"];
+        _allForestAnimals = _enemies.allAnimals;
         _arrow = _enemies.arrow;
         _arrowSound = _enemies.arrowSound;
     }

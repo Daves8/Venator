@@ -15,13 +15,13 @@ using UnityEngine;
 
 public class PickigUpItems : MonoBehaviour
 {
-    
+
     private int _playerLayerMask = 2;
     private float _rayCastMaxDistance = 6F;
     private bool showHelper = false;
-    
+
     public InventoryObject inventory;
-    
+
     public Transform Pointer;
 
     public Canvas showHelpCanvas;
@@ -31,32 +31,36 @@ public class PickigUpItems : MonoBehaviour
     public TextMeshProUGUI showHelp;
     public TextMeshProUGUI showPickedItem;
 
+    private Fishing _river;
+
     IEnumerator ShowPickedItemCourutine()
     {
         showPickedItemObj.SetActive(true);
         showPickedItemObj.SetActive(true);
-        yield return new WaitForSeconds(0.55f);            
+        yield return new WaitForSeconds(0.55f);
         showHelper = false;
         showPickedItemObj.SetActive(false);
+
+        _river = GameObject.FindGameObjectWithTag("River").GetComponent<Fishing>();
     }
 
     void LateUpdate()
     {
-        if(showHelper) StartCoroutine(ShowPickedItemCourutine());
+        if (showHelper) StartCoroutine(ShowPickedItemCourutine());
 
-        RaycastHit hit;        
-        Ray ray = new Ray(transform.position , transform.forward);
+        RaycastHit hit;
+        Ray ray = new Ray(transform.position, transform.forward);
 
         Physics.Raycast(ray, out hit, _rayCastMaxDistance, _playerLayerMask);
-        
 
-        Debug.DrawRay(transform.position , transform.forward * _rayCastMaxDistance , UnityEngine.Color.blue);
-        
-        float distanceTohit = Vector3.Distance(Pointer.position , transform.position);
-        
-        
-        
-        if(Physics.Raycast(ray, out hit))
+
+        Debug.DrawRay(transform.position, transform.forward * _rayCastMaxDistance, UnityEngine.Color.blue);
+
+        float distanceTohit = Vector3.Distance(Pointer.position, transform.position);
+
+
+
+        if (Physics.Raycast(ray, out hit))
         {
             var groundItem = hit.collider.gameObject.GetComponent<GroundItem>();
             Pointer.position = hit.point;
@@ -67,9 +71,9 @@ public class PickigUpItems : MonoBehaviour
                 if (distanceTohit <= _rayCastMaxDistance)
                 {
                     showHelpObj.SetActive(true);
-                    showHelp.text = "Нажмите Е – " + groundItem.item.ruName;
+                    showHelp.text = "Нажмите F – " + groundItem.item.ruName;
                 }
-                if (groundItem && Input.GetKeyDown(KeyCode.E) && distanceTohit <= _rayCastMaxDistance)
+                if (groundItem && Input.GetKeyDown(KeyCode.F) && distanceTohit <= _rayCastMaxDistance)
                 {
                     showHelper = true;
                     showPickedItem.text = "Вы подобрали " + groundItem.item.ruName;
@@ -82,7 +86,10 @@ public class PickigUpItems : MonoBehaviour
             }
             else
             {
-                showHelpObj.SetActive(false);
+                if (_river && !_river.NowFishing)
+                {
+                    showHelpObj.SetActive(false);
+                }
             }
         }
     }

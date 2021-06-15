@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerCharacteristics : MonoBehaviour
 {
     public int hp;
+    public int maxHp;
     public bool _dead;
     private bool _deadHelper = true;
     public bool isBattle;
@@ -15,13 +16,25 @@ public class PlayerCharacteristics : MonoBehaviour
     public Place place;
     public GameObject sword;
     public float damageSword;
-    public GameObject[] allSwords; // 0 - базовый меч, 1 - продвинутый меч и т.д.
+    public GameObject[] allSwords; // 0 - базовый меч, 1 - продвинутый меч и т.д. // кароче тут префабы мечей
+
+    public GameObject[] allSwordsOn; // а тут - мечи уже с правильным расположением
+    public GameObject[] allSwordsOff; //
+
 
     public GameObject knife;
     public float damageKnife;
     public GameObject[] allKnifes; // 0 - базовый нож, 1 - продвинутый нож и т.д.
 
+    public GameObject bow; // лук
+    public GameObject[] allBows;
+
+    public GameObject[] allBowsOn;
+    public GameObject[] allBowsOff;
+    public GameObject quiver;
+
     private CharacterMoving _chMove;
+    private Battle _battleScripts;
 
     public GameObject DeathUI;
     private bool DeathUIOnOff = false;
@@ -31,9 +44,11 @@ public class PlayerCharacteristics : MonoBehaviour
         allEnemies = new List<GameObject>();
         _chMove = GetComponent<CharacterMoving>();
         hp = 500;
+        maxHp = 500;
         _dead = false;
         damageSword = 200;
         damageKnife = 100;
+        _battleScripts = GetComponent<Battle>();
     }
 
     public void showHideDeath()
@@ -65,6 +80,10 @@ public class PlayerCharacteristics : MonoBehaviour
             Death();
             return;
         }
+        if (hp > maxHp)
+        {
+            hp = maxHp;
+        }
 
         if (allEnemies.Count != 0)
         {
@@ -86,6 +105,58 @@ public class PlayerCharacteristics : MonoBehaviour
         crouch = _chMove._isCrouch;
 
         Teleport();
+        ChangeWeapons();
+    }
+
+    private void ChangeWeapons()
+    {
+        //------------------------------------------ в зависимости от того какой у нас меч, мы меняем его для Battle
+        if (sword == allSwords[0])
+        {
+            if (_battleScripts._swordOn != allSwordsOn[0])
+            {
+                ////////////////////////////////////////////////////////////////////////////////////////////
+            }
+            _battleScripts._swordOn = allSwordsOn[0];
+            _battleScripts._swordOff = allSwordsOff[0];
+            allSwordsOn[1].SetActive(false);
+            allSwordsOff[1].SetActive(false);
+        }
+        else if (sword == allSwords[1])
+        {
+            if (_battleScripts._swordOn != allSwordsOn[1])
+            {
+                ////////////////////////////////////////////////////////////////////////////////
+            }
+            _battleScripts._swordOn = allSwordsOn[1];
+            _battleScripts._swordOff = allSwordsOff[1];
+            allSwordsOn[0].SetActive(false);
+            allSwordsOff[0].SetActive(false);
+        }
+        else
+        {
+            allSwordsOn[1].SetActive(false);
+            allSwordsOff[1].SetActive(false);
+            allSwordsOn[0].SetActive(false);
+            allSwordsOff[0].SetActive(false);
+        }
+
+        if (bow == allBows[0])
+        {
+            if (_battleScripts._bowOn != allBowsOn[0])
+            {
+                ///////////////////////////////////////////////////////////////////////////
+            }
+            _battleScripts._bowOn = allBowsOn[0];
+            _battleScripts._bowOff = allBowsOff[0];
+            quiver.SetActive(true);
+        }
+        else
+        {
+            allBowsOn[0].SetActive(false);
+            allBowsOff[0].SetActive(false);
+            quiver.SetActive(false);
+        }
     }
 
     private void OnTriggerEnter(Collider other)

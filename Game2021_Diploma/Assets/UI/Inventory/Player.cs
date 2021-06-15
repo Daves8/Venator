@@ -36,6 +36,7 @@ public class Player : MonoBehaviour
     private ItemButton itemButton;
     private ScrollView scrollView;
 
+    private PlayerCharacteristics _playerCharact;
     private bool _initInv;
 
     private void Awake()
@@ -65,6 +66,7 @@ public class Player : MonoBehaviour
             equipment.GetSlots[i].OnBeforeUpdate += OnRemoveItem;
             equipment.GetSlots[i].OnAfterUpdate += OnAddItem;
         }
+        _playerCharact = GetComponent<PlayerCharacteristics>();
         _initInv = true;
     }
 
@@ -75,11 +77,41 @@ public class Player : MonoBehaviour
             _initInv = false;
             InitializeInventory();
         }
-        
+
         // ПРОВЕРКА СЛОТОВ ЭКИПИРПОВКИ: ЕСЛИ ПУСТО ТО УБИРАТЬ
         if (equipment.Container.Slots[0].item.Name != new Item(dbVenator.ItemObjects[0]).Name && equipment.Container.Slots[0].item.Name != new Item(dbVenator.ItemObjects[1]).Name)
         {
             ChangeClothes.Change(0);
+        }
+        if (equipment.Container.Slots[0].item.Name == new Item(dbVenator.ItemObjects[0]).Name)
+        {
+            _playerCharact.maxHp = 600;
+        }
+        else if (equipment.Container.Slots[0].item.Name == new Item(dbVenator.ItemObjects[1]).Name)
+        {
+            _playerCharact.maxHp = 750;
+        }
+
+        if (equipment.FindItemOnInventory(18) > 0) // базовый меч
+        {
+            _playerCharact.sword = _playerCharact.allSwords[0];
+        }
+        else if (equipment.FindItemOnInventory(19) > 0) // улучшенный меч
+        {
+            _playerCharact.sword = _playerCharact.allSwords[1];
+        }
+        else
+        {
+            _playerCharact.sword = null;
+        }
+
+        if (equipment.FindItemOnInventory(22) > 0) // лук
+        {
+            _playerCharact.bow = _playerCharact.allBows[0];
+        }
+        else
+        {
+            _playerCharact.bow = null;
         }
 
     }

@@ -9,11 +9,13 @@ public class Fishing : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private GameObject _river;
     [SerializeField] private GameObject _player;
-    [SerializeField] private GameObject _text;
+    //[SerializeField] private GameObject _text;
 
     public InventoryObject inventory;
     public ItemObject fish;
     public GameObject rod;
+    public TextMeshProUGUI showPickeditem;
+    public TextMeshProUGUI showEnterF;
 
     private bool _readyToFishing = false;
     private bool _startFishing = false;
@@ -26,7 +28,8 @@ public class Fishing : MonoBehaviour
 
     private void Start()
     {
-        _text.GetComponent<TextMeshProUGUI>().text = "";
+        showEnterF.text = "";
+        showPickeditem.text = "";
         rod.SetActive(false);
     }
 
@@ -62,8 +65,8 @@ public class Fishing : MonoBehaviour
 
     private void GetFish()
     {
-        _text.SetActive(true);
-        _text.GetComponent<TextMeshProUGUI>().text = "Нажимайте F";
+        showEnterF.gameObject.SetActive(true);
+        showEnterF.text = "Нажимайте F";
         StartCoroutine("GetFishGame");
         Invoke("StopGetFishGame", Random.Range(10, 21) / 10.0f);
     }
@@ -87,7 +90,10 @@ public class Fishing : MonoBehaviour
         float formula = _count * Random.Range(70, 85) / 100.0f;
         if (formula >= 4.5f) // 5 под вопросом, коэффициент нужно изменить
         {
-            _text.GetComponent<TextMeshProUGUI>().text = "Вы поймали рыбу!"; // Вы поймали рыбу!
+            //_text.GetComponent<TextMeshProUGUI>().text = "Вы поймали рыбу!"; // Вы поймали рыбу!
+            showEnterF.gameObject.SetActive(false);
+            showPickeditem.gameObject.SetActive(true);
+            showPickeditem.text = "Вы поймали рыбу!";
             Item item = new Item(fish);
             inventory.AddItem(item, 1);
             _fishingOutCome = true;
@@ -95,7 +101,10 @@ public class Fishing : MonoBehaviour
         }
         else
         {
-            _text.GetComponent<TextMeshProUGUI>().text = "Вы упустили рыбу!"; // Вы упустили рыбу!
+            //_text.GetComponent<TextMeshProUGUI>().text = "Вы упустили рыбу!"; // Вы упустили рыбу!
+            showEnterF.gameObject.SetActive(false);
+            showPickeditem.gameObject.SetActive(true);
+            showPickeditem.text = "Вы упустили рыбу!";
             _fishingOutCome = false;
             rod.SetActive(false);
             _animator.SetTrigger("Idle");
@@ -121,7 +130,7 @@ public class Fishing : MonoBehaviour
     }
     private void HideText()
     {
-        _text.SetActive(false);
+        showPickeditem.gameObject.SetActive(false);
     }
 
     private void OnTriggerStay(Collider other)
