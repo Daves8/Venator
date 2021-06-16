@@ -51,6 +51,8 @@ public class PlayerCharacteristics : MonoBehaviour
         damageKnife = 100;
         _battleScripts = GetComponent<Battle>();
         _playerScript = GetComponent<Player>();
+
+        
     }
 
     public void showHideDeath()
@@ -210,24 +212,36 @@ public class PlayerCharacteristics : MonoBehaviour
         Invoke("showHideDeath", 2.0f);
         GetComponent<Animator>().SetTrigger("Death" + timeToUI);
     }
+    private void BlackScreenEnd(){ _playerScript.EndBlackScreen(); }
+
+    private void TeleportHelper()
+    {
+        if (place == Place.village)
+        {
+            // в лес
+            GetComponent<CharacterController>().enabled = false;
+            transform.position = new Vector3(282f, -166f, -2180f);
+            GetComponent<CharacterController>().enabled = true;
+        }
+        else if (place == Place.forest)
+        {
+            _playerScript.StartBlackScreen();
+            Invoke("BlackScreen", 1.5F);
+
+            // в деревню
+            GetComponent<CharacterController>().enabled = false;
+            transform.position = new Vector3(915f, 3.8f, 673f);
+            GetComponent<CharacterController>().enabled = true;
+        }
+    }
     private void Teleport()
     {
         if (Input.GetKeyDown(KeyCode.Backslash))
         {
-            if (place == Place.village)
-            {
-                // в лес
-                GetComponent<CharacterController>().enabled = false;
-                transform.position = new Vector3(282f, -166f, -2180f);
-                GetComponent<CharacterController>().enabled = true;
-            }
-            else if (place == Place.forest)
-            {
-                // в деревню
-                GetComponent<CharacterController>().enabled = false;
-                transform.position = new Vector3(915f, 3.8f, 673f);
-                GetComponent<CharacterController>().enabled = true;
-            }
+            _playerScript.StartBlackScreen();
+            Invoke("TeleportHelper",5f);
+            Invoke("BlackScreenEnd", 6f);
+            
         }
         //else if (Input.GetKeyDown(KeyCode.Less))
         //{
