@@ -24,6 +24,8 @@ public class TargetPoint : MonoBehaviour
 	}
 	private void LateUpdate()
 	{
+		target = null; //
+		
         if (target == null)
         {
 			pointerUI.gameObject.SetActive(false);
@@ -83,6 +85,8 @@ public class TargetPoint : MonoBehaviour
 
 	public void PointToTarget(Transform localTarget)
 	{
+		target = null; //
+		return; //
         if (localTarget == null)
         {
 			target = null;

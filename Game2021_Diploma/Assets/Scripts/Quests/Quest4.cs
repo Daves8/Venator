@@ -218,13 +218,13 @@ public class Quest4 : MonoBehaviour
     #region Задания
     private void SubQ1()
     {
-        _target.text = "Узнать что происходит";
         if (_coroutSS)
         {
             StartCoroutine(ShowSubtitles(0));
             switch (_questManag.resultGame)
             {
                 case 1:
+                    _target.text = "Пройти по дороге к началу леса";
                     foreach (var item in enemySoldiers)
                     {
                         // телепортируем в нужное место
@@ -236,6 +236,7 @@ public class Quest4 : MonoBehaviour
                     tr = enemySoldiers[0].transform;
                     break;
                 case 2:
+                    _target.text = "Подойти к заднему двору таверны";
                     foreach (var item in partisans)
                     {
                         Transform tr1 = new GameObject().transform;
@@ -246,6 +247,7 @@ public class Quest4 : MonoBehaviour
                     tr = partisans[0].transform;
                     break;
                 case 3:
+                    _target.text = "Подойти к мосту через реку";
                     foreach (var item in allySoldiers)
                     {
                         item.GetComponent<Enemy>().control = true;

@@ -87,6 +87,10 @@ public abstract class UserInterface : MonoBehaviour
         {
             GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCharacteristics>().hp += 50;
             slotsOnInterface[obj].AddAmount(-1);
+            if (slotsOnInterface[obj].amount < 1)
+            {
+                slotsOnInterface[obj].RemoveItem();
+            }
         }
         MouseData.tempItemBeingDragged = CreateTempItem(obj);
         

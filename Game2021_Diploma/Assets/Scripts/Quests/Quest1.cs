@@ -416,7 +416,7 @@ public class Quest1 : MonoBehaviour
     }
     private void SubQ11()
     {
-        target.text = "Подойти к точке сбора";
+        target.text = "Подойти к телеге у ворот";
         _targetPoint.PointToTarget(cart.transform);
         if (Vector3.Distance(player.transform.position, cart.transform.position) < 2f)
         {
