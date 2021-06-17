@@ -21,12 +21,14 @@ public class Hunter : MonoBehaviour
     private float _speedWalk;
     private bool _shot;
 
+    private Transform _target;
+
     void Start()
     {
         _animator = GetComponent<Animator>();
         _agent = GetComponent<NavMeshAgent>();
         _audioSource = GetComponent<AudioSource>();
-
+        hp = 2000;
         _speedRun = Random.Range(3.0f, 4.0f);
         _speedWalk = Random.Range(1.5f, 2.5f);
         _shot = false;
@@ -71,19 +73,31 @@ public class Hunter : MonoBehaviour
 
     public void Attack(Transform target)
     {
+        _target = target;
         if (Vector3.Distance(transform.position, target.position) > Random.Range(8.0f, 15.0f))
         {
             RunTo(target);
         }
         else
         {
-            _shot = true;
             _agent.isStopped = true;
             StartCoroutine(RotateToTarget(target));
-            _animator.SetTrigger("Shot");
+            if (!_shot)
+            {
+                StartCoroutine(Shot());
+            }
         }
     }
 
+    private IEnumerator Shot()
+    {
+        _shot = true;
+        while (_shot)
+        {
+            _animator.SetTrigger("Shot");
+            yield return new WaitForSeconds(5f);
+        }
+    }
     private IEnumerator RotateToTarget(Transform target)
     {
         while (_shot)
@@ -114,7 +128,9 @@ public class Hunter : MonoBehaviour
     }
     public void TeleportTo(Transform target)
     {
+        _agent.enabled = false;
         transform.position = target.position + new Vector3(Random.Range(-2f, 2f), 0f, Random.Range(-2f, 2f));
+        _agent.enabled = true;
     }
     public void Agressive(bool agr)
     {
@@ -155,9 +171,10 @@ public class Hunter : MonoBehaviour
         _audioSource.pitch = Random.Range(0.9f, 1.1f);
         _audioSource.PlayOneShot(_arrowSound[Random.Range(0, _arrowSound.Length)]);
 
-        GameObject newArrow = Instantiate(_arrow, transform.forward + new Vector3(0f, 1.0f, 0f), transform.rotation);
-        //newArrow.transform.LookAt(_target);
-        newArrow.GetComponent<Rigidbody>().useGravity = false;
-        newArrow.GetComponent<Rigidbody>().velocity = newArrow.transform.forward * 10;
+        GameObject newArrow = Instantiate(_arrow, gameObject.transform.position + new Vector3(0f, 1.0f, 0f), gameObject.transform.rotation);
+        newArrow.transform.LookAt(_target);
+        newArrow.GetComponent<Rigidbody>().useGravity = true;
+        newArrow.GetComponent<Rigidbody>().velocity = newArrow.transform.forward * 100;
+        Debug.DrawRay(newArrow.transform.position, Vector3.forward, Color.blue);
     }
 }

@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour
     private bool _agrPast = false;
     private bool _attack = false;
     public bool _death = false;
-
+    public bool control;
     private bool _coroutStart;
 
     private NavMeshAgent _agent;
@@ -58,8 +58,9 @@ public class Enemy : MonoBehaviour
         for (int i = 0; i < _limbs.Count; i++)
         {
             _limbs[i].parentEnemy = gameObject;
+            _limbs[i].type = EnemyLimbs.TypeEnemy.enemy;
         }
-
+        control = false;
         //ragdolls.AddRange(GetComponentsInChildren<Rigidbody>());
         //foreach (Rigidbody rigidbody in ragdolls)
         //{
@@ -86,23 +87,6 @@ public class Enemy : MonoBehaviour
             return;
         }
 
-        if (_playerCharacteristics.isBattle && Vector3.Distance(_player.transform.position, transform.position) <= 20f)
-        {
-            _agressive = true;
-            Add(gameObject);
-        }
-        else if (Vector3.Distance(_player.transform.position, transform.position) > 20f || _playerCharacteristics._dead)
-        {
-            _agressive = false;
-            _attack = false;
-            _canAttack = false;
-            _playerCharacteristics.allEnemies.Remove(gameObject);
-            if (_agrPast != _agressive)
-            {
-                StartCoroutine(CycleAfterBattle());
-            }
-        }
-
         if (_agent.velocity.magnitude > 0f)
         {
             if (_agressive)
@@ -122,6 +106,28 @@ public class Enemy : MonoBehaviour
         {
             _animator.SetBool("IdleToRun", false);
             _animator.SetBool("IdleToWalk", false);
+        }
+
+        if (control)
+        {
+            return;
+        }
+
+        if (_playerCharacteristics.isBattle && Vector3.Distance(_player.transform.position, transform.position) <= 20f)
+        {
+            _agressive = true;
+            Add(gameObject);
+        }
+        else if (Vector3.Distance(_player.transform.position, transform.position) > 20f || _playerCharacteristics._dead)
+        {
+            _agressive = false;
+            _attack = false;
+            _canAttack = false;
+            _playerCharacteristics.allEnemies.Remove(gameObject);
+            if (_agrPast != _agressive)
+            {
+                StartCoroutine(CycleAfterBattle());
+            }
         }
 
         if (_agressive) { Attack(); }

@@ -26,8 +26,8 @@ public class Quest2 : MonoBehaviour
     private Button button1;
     private Button button2;
     private Button button3;
-    private Cinemachine.CinemachineVirtualCamera _groupCamera;
-    private Cinemachine.CinemachineTargetGroup _targetGroup;
+    public Cinemachine.CinemachineVirtualCamera _groupCamera;
+    public Cinemachine.CinemachineTargetGroup _targetGroup;
     private GameObject _targetDialogue;
     private TargetPoint _targetPoint;
 
@@ -49,7 +49,6 @@ public class Quest2 : MonoBehaviour
 
     public enum Subquest
     {
-        none = 0,
         subquest1 = 1,
         subquest2,
         subquest3,
@@ -77,14 +76,14 @@ public class Quest2 : MonoBehaviour
         _targetDialogue = hunter1;
         _groupCamera.enabled = false;
         _targetGroup.m_Targets = new Cinemachine.CinemachineTargetGroup.Target[] { new Cinemachine.CinemachineTargetGroup.Target { target = GameObject.FindGameObjectWithTag("HeadPlayer").transform, weight = 1f, radius = 0f }, new Cinemachine.CinemachineTargetGroup.Target { target = _targetDialogue.transform.GetChild(0).transform, weight = 1f, radius = 0f } };
-        subquest = Subquest.subquest1; // сзапписываем
+        
         resultQuest = 0; //
         button1 = _questManag.button1.GetComponent<Button>();
         button2 = _questManag.button2.GetComponent<Button>();
         button3 = _questManag.button3.GetComponent<Button>();
-        _subtitles = _questManag.subtitles.GetComponent<TextMeshProUGUI>();
-        _prompt = _questManag.prompt.GetComponent<TextMeshProUGUI>();
-        _target = _questManag.target.GetComponent<TextMeshProUGUI>();
+        _subtitles = _questManag.subtitles;
+        _prompt = _questManag.prompt;
+        _target = _questManag.target;
         button1.onClick.AddListener(But1);
         button2.onClick.AddListener(But2);
         button3.onClick.AddListener(But3);
@@ -100,6 +99,22 @@ public class Quest2 : MonoBehaviour
         _mother = _questManag.mother;
         _father = _questManag.father;
         _innkeeper = _questManag.innkeeper;
+        Transform tr = new GameObject().transform;
+        tr.position = new Vector3(181.2f, -164f, -2252.8f);
+        foreach (var item in new GameObject[] { hunter1, hunter2, hunter3, hunter4 })
+        {
+            item.GetComponent<Hunter>().TeleportTo(tr);
+        }
+
+
+        _subtitles.text = "";
+        CharacterMoving.IsReadyToMove = true;
+        _player.GetComponent<Battle>().AllowBattle = true;
+        button1.gameObject.SetActive(false);
+        button2.gameObject.SetActive(false);
+        button3.gameObject.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     void Update()
@@ -194,6 +209,7 @@ public class Quest2 : MonoBehaviour
         StartCoroutine(RotateToTarget());
         foreach (Subtitles subt in nodes.npcText)
         {
+            _target.text = "";
             _subtitles.text = subt.name + ": ";
             _subtitles.text += subt.text;
             yield return new WaitForSeconds(3f);
@@ -226,15 +242,18 @@ public class Quest2 : MonoBehaviour
         {
             StartCoroutine(ShowSubtitles(0));
         }
-        if (Vector3.Distance(_player.transform.position, _glade.position) <= 5.0f)
+        if (Vector3.Distance(_player.transform.position, _glade.position) <= 5.0f || _playerCharact.isBattleAnimal)
         {
             subquest = (Subquest)(int)++subquest;
             _coroutSS = true;
         }
-
+        int i = 0;
         foreach (var item in new GameObject[] { hunter1, hunter2, hunter3, hunter4 })
         {
-            item.GetComponent<Hunter>().WalkTo(_glade.transform);
+            ++i;
+            Transform tr = new GameObject().transform;
+            tr.position = _glade.transform.position + new Vector3(i, 0f, i);
+            item.GetComponent<Hunter>().WalkTo(tr);
         }
 
     }
@@ -242,11 +261,11 @@ public class Quest2 : MonoBehaviour
     {
         // увидели? кабана, цель: убить кабана, подсказка: как стрелять из лука
         _target.text = "Убить кабана";
-        _prompt.text = "Для выстрела из лука зажмите кнопку выстрела, пока стрела не зарядится, и отпуатите";
+        _prompt.text = "Для выстрела из лука зажмите кнопку выстрела, пока стрела не зарядится, и отпустите";
         _targetPoint.PointToTarget(_boar.gameObject.transform);
         foreach (var item in new GameObject[] { hunter1, hunter2, hunter3, hunter4 })
         {
-            item.GetComponent<Hunter>().Agressive(true);
+            item.GetComponent<Hunter>().Attack(_boar.transform);
         }
         if (_coroutSS)
         {
@@ -255,26 +274,34 @@ public class Quest2 : MonoBehaviour
         if (_boar._die)
         {
             subquest = (Subquest)(int)++subquest;
+            _prompt.text = "";
             _coroutSS = true;
         }
     }
     private void SubQ3()
     {
+        if (_scriptPlayer.inventory.FindItemOnInventory(6) > 0 && _scriptPlayer.inventory.FindItemOnInventory(new Item(_scriptPlayer.dbVenator.ItemObjects[6])).amount >= 1) // в инвентаре есть шкура и мясо кабана? 0 - шкура, 1- мясо
+        {
+            subquest = (Subquest)(int)++subquest;
+            _coroutSS = true;
+        }
         // освежевать его
         _target.text = "Освежевать кабана";
+        _prompt.text = "";
         _targetPoint.PointToTarget(_boar.gameObject.transform);
+        int i = 0;
         foreach (var item in new GameObject[] { hunter1, hunter2, hunter3, hunter4 })
         {
+            ++i;
+            Transform tr = new GameObject().transform;
+            tr.position = GameObject.FindGameObjectWithTag("ForestCart").transform.position;
+            tr.position += new Vector3(Random.Range(-3, 3), 0f, Random.Range(-3, 3));
             item.GetComponent<Hunter>().Agressive(false);
+            item.GetComponent<Hunter>().WalkTo(tr);
         }
         if (_coroutSS)
         {
             StartCoroutine(ShowSubtitles(2));
-        }
-        if (_scriptPlayer.SearchInInventary(6) >= 1) // в инвентаре есть шкура и мясо кабана? 0 - шкура, 1- мясо
-        {
-            subquest = (Subquest)(int)++subquest;
-            _coroutSS = true;
         }
     }
     private void SubQ4()
@@ -290,7 +317,11 @@ public class Quest2 : MonoBehaviour
     private void SubQ5()
     {
         button1.gameObject.SetActive(true);
+        button1.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Возвращаемся";
         button2.gameObject.SetActive(true);
+        button2.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Еще буду охотиться";
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
         _target.text = "";
         _targetPoint.target = null;
@@ -326,7 +357,7 @@ public class Quest2 : MonoBehaviour
             StartCoroutine(ShowCutscene(5));
             foreach (var item in new GameObject[] { hunter1, hunter2, hunter3, hunter4 })
             {
-                item.GetComponent<Hunter>().WalkTo(GameObject.FindGameObjectWithTag("ForestCart").transform);
+                //item.GetComponent<Hunter>().WalkTo(GameObject.FindGameObjectWithTag("ForestCart").transform);
             }
         }
     }
@@ -334,7 +365,7 @@ public class Quest2 : MonoBehaviour
     {
         _target.text = "Добыть и освежевать кабана";
         _targetPoint.PointToTarget(null);
-        if (_scriptPlayer.inventory.FindItemOnInventory(6) > 1)
+        if (_scriptPlayer.inventory.FindItemOnInventory(new Item(_scriptPlayer.dbVenator.ItemObjects[6])).amount > 1)
         {
             subquest = (Subquest)(int)++subquest;
         }
@@ -352,11 +383,11 @@ public class Quest2 : MonoBehaviour
     {
         if (!_startCoroutineSC)
         {
-            if (_scriptPlayer.inventory.FindItemOnInventory(6) == 2)
+            if (_scriptPlayer.inventory.FindItemOnInventory(new Item(_scriptPlayer.dbVenator.ItemObjects[6])).amount == 2)
             {
                 StartCoroutine(ShowCutscene(6));
             }
-            else if (_scriptPlayer.inventory.FindItemOnInventory(6) > 2)
+            else if (_scriptPlayer.inventory.FindItemOnInventory(new Item(_scriptPlayer.dbVenator.ItemObjects[6])).amount > 2)
             {
                 StartCoroutine(ShowCutscene(7));
             }
@@ -383,17 +414,25 @@ public class Quest2 : MonoBehaviour
         // мы в деревне. задача: подойти к матери, дать одну шкуру, она пошлет к корчмарю и ему продать все
         _target.text = "Подойти к матери";
         _targetPoint.PointToTarget(_mother.transform);
+        ChangeCompanion(_mother);
         if (!_startCoroutineSC && Vector3.Distance(_player.transform.position, _mother.transform.position) < 2f)
         {
-            if (_scriptPlayer.inventory.FindItemOnInventory(6) == 1)
+            foreach (var item in new GameObject[] { hunter1, hunter2, hunter3, hunter4 })
+            {
+                Transform tr = new GameObject().transform;
+                tr.position = new Vector3(946f, 8f, 767f);
+                item.GetComponent<Hunter>().TeleportTo(tr);
+            }
+            _scriptPlayer.SavePlayer();
+            if (_scriptPlayer.inventory.FindItemOnInventory(new Item(_scriptPlayer.dbVenator.ItemObjects[6])).amount == 1)
             {
                 StartCoroutine(ShowCutscene(8));
             }
-            else if (_scriptPlayer.inventory.FindItemOnInventory(6) == 2)
+            else if (_scriptPlayer.inventory.FindItemOnInventory(new Item(_scriptPlayer.dbVenator.ItemObjects[6])).amount == 2)
             {
                 StartCoroutine(ShowCutscene(9));
             }
-            else if (_scriptPlayer.inventory.FindItemOnInventory(6) > 2)
+            else if (_scriptPlayer.inventory.FindItemOnInventory(new Item(_scriptPlayer.dbVenator.ItemObjects[6])).amount > 2)
             {
                 StartCoroutine(ShowCutscene(10));
             }
@@ -403,23 +442,24 @@ public class Quest2 : MonoBehaviour
     {
         _target.text = "Подойти к трактирщику";
         _targetPoint.PointToTarget(_innkeeper.transform);
-        ChangeCompanion(_innkeeper);
+        
         if (Vector3.Distance(_player.transform.position, _innkeeper.transform.position) < 2f)
         {
-            if (_scriptPlayer.inventory.FindItemOnInventory(6) == 1)
+            if (_scriptPlayer.inventory.FindItemOnInventory(new Item(_scriptPlayer.dbVenator.ItemObjects[6])).amount == 1)
             {
                 resultQuest = 1;
             }
-            else if (_scriptPlayer.inventory.FindItemOnInventory(6) == 2)
+            else if (_scriptPlayer.inventory.FindItemOnInventory(new Item(_scriptPlayer.dbVenator.ItemObjects[6])).amount == 2)
             {
                 resultQuest = 2;
             }
-            else if (_scriptPlayer.inventory.FindItemOnInventory(6) > 2)
+            else if (_scriptPlayer.inventory.FindItemOnInventory(new Item(_scriptPlayer.dbVenator.ItemObjects[6])).amount > 2)
             {
                 resultQuest = 3;
             }
             _questManag.resultQuests[1] = resultQuest;
-            _questManag.quest = QuestsManagement.Quest.quest3;
+            _questManag.quest = Quest.quest3;
+            ChangeCompanion(_innkeeper);
         }
     }
     private void SubQ15()
@@ -430,6 +470,8 @@ public class Quest2 : MonoBehaviour
 
     private void But1()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         _resultButtn = 1;
         button1.gameObject.SetActive(false);
         button2.gameObject.SetActive(false);
@@ -437,6 +479,8 @@ public class Quest2 : MonoBehaviour
     }
     private void But2()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         _resultButtn = 2;
         button1.gameObject.SetActive(false);
         button2.gameObject.SetActive(false);

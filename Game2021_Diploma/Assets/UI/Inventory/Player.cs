@@ -103,6 +103,7 @@ public class Player : MonoBehaviour
 
         if (equipment.FindItemOnInventory(18) > 0) // базовый меч
         {
+            //print("шота есть 1");
             if (_playerCharact.sword == null)
             {
                 equipSword1 = true;
@@ -111,6 +112,7 @@ public class Player : MonoBehaviour
         }
         else if (equipment.FindItemOnInventory(19) > 0) // улучшенный меч
         {
+            //print("шота есть 2");
             if (_playerCharact.sword == null)
             {
                 equipSword2 = true;
@@ -119,6 +121,7 @@ public class Player : MonoBehaviour
         }
         else
         {
+            //print("ничего нет");
             _playerCharact.sword = null;
         }
 
@@ -141,9 +144,11 @@ public class Player : MonoBehaviour
     {
         if (level == "NewGame")
         {
+            //inventory.Clear();
+            //equipment.Clear();
             equipment.AddItem(new Item(dbVenator.ItemObjects[0]), 1);
-            inventory.AddItem(new Item(dbVenator.ItemObjects[18]), 1); // -------------------------------------------------------------------- ТУТ!!!
-            inventory.AddItem(new Item(dbVenator.ItemObjects[22]), 1);
+            //inventory.AddItem(new Item(dbVenator.ItemObjects[18]), 1);
+            //inventory.AddItem(new Item(dbVenator.ItemObjects[22]), 1);
         }
         foreach (var item in inventory.Container.Slots)
         {
@@ -200,7 +205,7 @@ public class Player : MonoBehaviour
         test = true;
         //Invoke("StartBlackScreen", 0.5f);
         PlayerData data = SaveSystem.LoadPlayer(savePath);
-
+        
         level = data.level;
 
         Vector3 position;
@@ -214,10 +219,42 @@ public class Player : MonoBehaviour
         _controller.enabled = true;
 
         // инвентарь
-        if(savePath != Application.persistentDataPath + "/Saves/" + "NewGame" + ".bin")
-        { 
-        inventory.Container = data.inventory;
-        equipment.Container = data.equipment;
+        //inventory.Clear();
+        //equipment.Clear();
+        //print(data.subquest + "-----------------------------");
+        if (savePath != Application.persistentDataPath + "/Saves/" + "NewGame" + ".bin")
+        {
+            inventory.Container = data.inventory;
+            equipment.Container = data.equipment;
+        }
+        if (data.resultQuests.Length == 0)
+        {
+            data.resultQuests = new int[4];
+        }
+        QuestsManagement quests0 = GameObject.FindGameObjectWithTag("QuestsManag").GetComponent<QuestsManagement>();
+        quests0.quest = data.quest;
+        quests0.resultQuests = data.resultQuests;
+        quests0.resultGame = data.resultGame;
+        GetComponent<PlayerCharacteristics>().gold = data.gold;
+        GetComponent<PlayerCharacteristics>().attackOnPopulation = data.attackOnPop;
+        switch (data.quest)
+        {
+            case Quest.none:
+                break;
+            case Quest.quest1:
+                GameObject.FindGameObjectWithTag("QuestsManag").GetComponent<Quest1>().subquest = (Quest1.Subquest)data.subquest;
+                break;
+            case Quest.quest2:
+                GameObject.FindGameObjectWithTag("QuestsManag").GetComponent<Quest2>().subquest = (Quest2.Subquest)data.subquest;
+                break;
+            case Quest.quest3:
+                GameObject.FindGameObjectWithTag("QuestsManag").GetComponent<Quest3>().subquest = (Quest3.Subquest)data.subquest;
+                break;
+            case Quest.quest4:
+                GameObject.FindGameObjectWithTag("QuestsManag").GetComponent<Quest4>().subquest = (Quest4.Subquest)data.subquest;
+                break;
+            default:
+                break;
         }
 
         //Inventory newContainer1 = data.inventory;
@@ -236,7 +273,7 @@ public class Player : MonoBehaviour
 
         //Invoke("EndBlackScreen", 1f);
 
-        if(level== "NewGame")
+        if (level== "NewGame")
         {
             //Item helm1 = new Item(dbVenator.ItemObjects[0]);
             //inventory.AddItem(helm1, 1);

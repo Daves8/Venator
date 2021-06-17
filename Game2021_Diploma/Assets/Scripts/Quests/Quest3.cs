@@ -21,15 +21,15 @@ public class Quest3 : MonoBehaviour
     private Button button1;
     private Button button2;
     private Button button3;
-    private Cinemachine.CinemachineVirtualCamera _groupCamera;
-    private Cinemachine.CinemachineTargetGroup _targetGroup;
+    public Cinemachine.CinemachineVirtualCamera _groupCamera;
+    public Cinemachine.CinemachineTargetGroup _targetGroup;
     private GameObject _targetDialogue;
     private TargetPoint _targetPoint;
 
     private GameObject _mother;
     private GameObject _father;
     private GameObject _innkeeper;
-
+    private GameObject _seller;
 
     private bool _coroutSS;
     private bool _startCoroutineSC;
@@ -67,11 +67,12 @@ public class Quest3 : MonoBehaviour
         _mother = _questManag.mother;
         _father = _questManag.father;
         _innkeeper = _questManag.innkeeper;
+        _seller = _questManag.seller;
         _dialogue3 = Dialogue3.Load(_questManag.dialoguesQ3);
         _targetDialogue = _innkeeper;
         _groupCamera.enabled = false;
         _targetGroup.m_Targets = new Cinemachine.CinemachineTargetGroup.Target[] { new Cinemachine.CinemachineTargetGroup.Target { target = GameObject.FindGameObjectWithTag("HeadPlayer").transform, weight = 1f, radius = 0f }, new Cinemachine.CinemachineTargetGroup.Target { target = _targetDialogue.transform.GetChild(0).transform, weight = 1f, radius = 0f } };
-        subquest = Subquest.subquest1; // сзапписываем
+
         resultQuest = 0; //
         button1 = _questManag.button1.GetComponent<Button>();
         button2 = _questManag.button2.GetComponent<Button>();
@@ -90,6 +91,14 @@ public class Quest3 : MonoBehaviour
         _coroutSS = true;
         _resultButtn = 0;
         _playerCharact = _player.GetComponent<PlayerCharacteristics>();
+
+        CharacterMoving.IsReadyToMove = true;
+        _player.GetComponent<Battle>().AllowBattle = true;
+        button1.gameObject.SetActive(false);
+        button2.gameObject.SetActive(false);
+        button3.gameObject.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     void Update()
@@ -184,6 +193,7 @@ public class Quest3 : MonoBehaviour
         StartCoroutine(RotateToTarget());
         foreach (Subtitles subt in nodes.npcText)
         {
+            _target.text = "";
             _subtitles.text = subt.name + ": ";
             _subtitles.text += subt.text;
             yield return new WaitForSeconds(3f);
@@ -223,23 +233,84 @@ public class Quest3 : MonoBehaviour
                 StartCoroutine(ShowCutscene(2));
             }
             // убрать шкуры из инвентаря и дать золото
+            int countSkinBoar = _scriptPlayer.inventory.FindItemOnInventory(6);
+            _playerCharact.gold += countSkinBoar * 75;
+            _scriptPlayer.inventory.FindItemOnInventory(new Item(_scriptPlayer.dbVenator.ItemObjects[6])).RemoveItem();
         }
     }
     private void SubQ2()
     {
-        
+        _target.text = "Купить у торговца молока";
+        _targetPoint.PointToTarget(_seller.transform);
+        if(!_startCoroutineSC && Vector3.Distance(_player.transform.position, _seller.transform.position) < 2f)
+        {
+            ChangeCompanion(_seller);
+            StartCoroutine(ShowCutscene(3));
+            _playerCharact.gold -= 30;
+            _scriptPlayer.inventory.AddItem(new Item(_scriptPlayer.dbVenator.ItemObjects[15]), 1);
+        }
     }
     private void SubQ3()
     {
-        
+        _target.text = "Отдать молоко корчмарю";
+        _targetPoint.PointToTarget(_innkeeper.transform);
+        if (!_startCoroutineSC && Vector3.Distance(_player.transform.position, _innkeeper.transform.position) < 2f)
+        {
+            ChangeCompanion(_innkeeper);
+            StartCoroutine(ShowCutscene(4));
+            _scriptPlayer.inventory.FindItemOnInventory(new Item(_scriptPlayer.dbVenator.ItemObjects[15])).AddAmount(-1);
+        }
     }
     private void SubQ4()
     {
-        
+        _target.text = "Подойти к отцу";
+        _targetPoint.PointToTarget(_father.transform);
+        if (!_startCoroutineSC && Vector3.Distance(_player.transform.position, _father.transform.position) < 2f)
+        {
+            _scriptPlayer.SavePlayer();
+            _playerCharact.gold -= 60;
+            ChangeCompanion(_father);
+            float resultGameHlp = (_questManag.resultQuests[0] + _questManag.resultQuests[1]) / 2;
+            if (resultGameHlp != resultGameHlp.ToString()[0])
+            {
+                if (resultGameHlp > resultGameHlp.ToString()[0])
+                {
+                    _questManag.resultGame = (int)(resultGameHlp - 0.5f);
+                }
+                else if (resultGameHlp < resultGameHlp.ToString()[0])
+                {
+                    _questManag.resultGame = (int)(resultGameHlp + 0.5f);
+                }
+            }
+            else
+            {
+                _questManag.resultGame = (int)resultGameHlp;
+            }
+            switch (_questManag.resultGame)
+            {
+                case 1:
+                    StartCoroutine(ShowCutscene(5));
+                    _scriptPlayer.inventory.AddItem(new Item(_scriptPlayer.dbVenator.ItemObjects[18]), 1);
+                    break;
+                case 2:
+                    StartCoroutine(ShowCutscene(6));
+                    _scriptPlayer.inventory.AddItem(new Item(_scriptPlayer.dbVenator.ItemObjects[19]), 1);
+                    break;
+                case 3:
+                    StartCoroutine(ShowCutscene(7));
+                    _scriptPlayer.inventory.AddItem(new Item(_scriptPlayer.dbVenator.ItemObjects[19]), 1);
+                    _scriptPlayer.inventory.AddItem(new Item(_scriptPlayer.dbVenator.ItemObjects[1]), 1);
+                    break;
+                default:
+                    Debug.LogError("НЕВОЗМОЖНО! Ошибка в просчете результатов игры. 281 строка 3 квеста");
+                    break;
+            }
+        }
     }
     private void SubQ5()
     {
-        
+        // получили экипировку, наверное новый (последний) квест
+        _questManag.quest = Quest.quest4;
     }
     private void SubQ6()
     {
@@ -302,7 +373,7 @@ public class Quest3 : MonoBehaviour
         _resultButtn = 3;
     }
 }
-[XmlRoot("quest2")]
+[XmlRoot("quest3")]
 public class Dialogue3
 {
     [XmlElement("node")]

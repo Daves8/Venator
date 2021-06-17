@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerCharacteristics : MonoBehaviour
 {
     public int hp;
+    public int gold;//сохранять
+    public bool attackOnPopulation; // сохранять
     public int maxHp;
     public bool _dead;
     private bool _deadHelper = true;
@@ -40,6 +43,9 @@ public class PlayerCharacteristics : MonoBehaviour
     public GameObject DeathUI;
     private bool DeathUIOnOff = false;
 
+    public TextMeshProUGUI showHp;
+    public TextMeshProUGUI showGold;
+
     void Start()
     {
         allEnemies = new List<GameObject>();
@@ -51,8 +57,7 @@ public class PlayerCharacteristics : MonoBehaviour
         damageKnife = 100;
         _battleScripts = GetComponent<Battle>();
         _playerScript = GetComponent<Player>();
-
-        
+        StartCoroutine(Healing());
     }
 
     public void showHideDeath()
@@ -108,68 +113,140 @@ public class PlayerCharacteristics : MonoBehaviour
 
         crouch = _chMove._isCrouch;
 
-        Teleport();
+        if (Input.GetKeyDown(KeyCode.Backslash))
+        {
+            Teleport();
+        }
         ChangeWeapons();
+        showHp.text = "Здоровье: " + hp;
+        showGold.text = "Золото: " + gold;
     }
 
     private void ChangeWeapons()
     {
-        //------------------------------------------ в зависимости от того какой у нас меч, мы меняем его для Battle
-        if (sword == allSwords[0])
+        if (sword == null)
+        {
+            foreach (var item in allSwordsOn)
+            {
+                item.SetActive(false);
+            }
+            foreach (var item in allSwordsOff)
+            {
+                item.SetActive(false);
+            }
+        }
+        else if (sword == allSwords[0]) // базовый меч
         {
             if (_playerScript.equipSword1)
             {
                 _playerScript.equipSword1 = false;
+                _battleScripts._swordOn = allSwordsOn[0];
+                _battleScripts._swordOff = allSwordsOff[0];
+                _battleScripts._swordOn.SetActive(false);
+                _battleScripts._swordOff.SetActive(true);
                 WeaponEnum._selectedWeapon = Weapon.None;
-                allSwordsOn[0].SetActive(false);
-                allSwordsOff[0].SetActive(true);
             }
-            _battleScripts._swordOn = allSwordsOn[0];
-            _battleScripts._swordOff = allSwordsOff[0];
             allSwordsOn[1].SetActive(false);
             allSwordsOff[1].SetActive(false);
         }
-        else if (sword == allSwords[1])
+        else if (sword == allSwords[1]) // продвинутый меч
         {
             if (_playerScript.equipSword2)
             {
                 _playerScript.equipSword2 = false;
+                _battleScripts._swordOn = allSwordsOn[1];
+                _battleScripts._swordOff = allSwordsOff[1];
+                _battleScripts._swordOn.SetActive(false);
+                _battleScripts._swordOff.SetActive(true);
                 WeaponEnum._selectedWeapon = Weapon.None;
-                allSwordsOn[1].SetActive(false);
-                allSwordsOff[1].SetActive(true);
             }
-            _battleScripts._swordOn = allSwordsOn[1];
-            _battleScripts._swordOff = allSwordsOff[1];
-            allSwordsOn[0].SetActive(false);
-            allSwordsOff[0].SetActive(false);
-        }
-        else
-        {
-            allSwordsOn[1].SetActive(false);
-            allSwordsOff[1].SetActive(false);
             allSwordsOn[0].SetActive(false);
             allSwordsOff[0].SetActive(false);
         }
 
-        if (bow != null && bow == allBows[0])
+        // лук
+        if (bow == null)
+        {
+            foreach (var item in allBowsOn)
+            {
+                item.SetActive(false);
+            }
+            foreach (var item in allBowsOff)
+            {
+                item.SetActive(false);
+            }
+            quiver.SetActive(false);
+        }
+        else if (bow == allBows[0])
         {
             if (_playerScript.equipBow)
             {
                 _playerScript.equipBow = false;
+                _battleScripts._bowOn = allBowsOn[0];
+                _battleScripts._bowOff = allBowsOff[0];
+                _battleScripts._bowOn.SetActive(false);
+                _battleScripts._bowOff.SetActive(true);
+                quiver.SetActive(true);
                 WeaponEnum._selectedWeapon = Weapon.None;
-                allBowsOn[0].SetActive(false);
-                allBowsOff[0].SetActive(true);
             }
-            _battleScripts._bowOn = allBowsOn[0];
-            _battleScripts._bowOff = allBowsOff[0];
-            quiver.SetActive(true);
         }
-        else
-        {
-            allBowsOn[0].SetActive(false);
-            allBowsOff[0].SetActive(false);
-            quiver.SetActive(false);
-        }
+
+        //------------------------------------------ в зависимости от того какой у нас меч, мы меняем его для Battle
+        //if (sword == allSwords[0])
+        //{
+        //    if (_playerScript.equipSword1)
+        //    {
+        //        _playerScript.equipSword1 = false;
+        //        WeaponEnum._selectedWeapon = Weapon.None;
+        //        allSwordsOn[0].SetActive(false);
+        //        allSwordsOff[0].SetActive(true);
+        //    }
+        //    _battleScripts._swordOn = allSwordsOn[0];
+        //    _battleScripts._swordOff = allSwordsOff[0];
+        //    allSwordsOn[1].SetActive(false);
+        //    allSwordsOff[1].SetActive(false);
+        //}
+        //else if (sword == allSwords[1])
+        //{
+        //    if (_playerScript.equipSword2)
+        //    {
+        //        _playerScript.equipSword2 = false;
+        //        WeaponEnum._selectedWeapon = Weapon.None;
+        //        allSwordsOn[1].SetActive(false);
+        //        allSwordsOff[1].SetActive(true);
+        //    }
+        //    _battleScripts._swordOn = allSwordsOn[1];
+        //    _battleScripts._swordOff = allSwordsOff[1];
+        //    allSwordsOn[0].SetActive(false);
+        //    allSwordsOff[0].SetActive(false);
+        //}
+        //else
+        //{
+        //    allSwordsOn[1].SetActive(false);
+        //    allSwordsOff[1].SetActive(false);
+        //    allSwordsOn[0].SetActive(false);
+        //    allSwordsOff[0].SetActive(false);
+        //}
+
+        //if (bow != null && bow == allBows[0])
+        //{
+        //    if (_playerScript.equipBow)
+        //    {
+        //        _playerScript.equipBow = false;
+        //        WeaponEnum._selectedWeapon = Weapon.None;
+        //        allBowsOn[0].SetActive(false);
+        //        allBowsOff[0].SetActive(true);
+        //    }
+        //    _battleScripts._bowOn = allBowsOn[0];
+        //    _battleScripts._bowOff = allBowsOff[0];
+        //    quiver.SetActive(true);
+        //}
+        //else
+        //{
+        //    allBowsOn[0].SetActive(false);
+        //    allBowsOff[0].SetActive(false);
+        //    quiver.SetActive(false);
+        //}
     }
 
     private void OnTriggerEnter(Collider other)
@@ -212,37 +289,29 @@ public class PlayerCharacteristics : MonoBehaviour
         Invoke("showHideDeath", 2.0f);
         GetComponent<Animator>().SetTrigger("Death" + timeToUI);
     }
-    private void BlackScreenEnd(){ _playerScript.EndBlackScreen(); }
-
-    private void TeleportHelper()
+    public void Teleport()
     {
+        _playerScript.StartBlackScreen();
+        Invoke("TeleportHelper", 3f);
+    }
+    public void TeleportHelper()
+    {
+        Invoke("EndBlackScreen", 7);
         if (place == Place.village)
         {
             // в лес
             GetComponent<CharacterController>().enabled = false;
-            transform.position = new Vector3(282f, -166f, -2180f);
+            transform.position = new Vector3(181.2f, -164f, -2252.8f);
             GetComponent<CharacterController>().enabled = true;
         }
         else if (place == Place.forest)
         {
-            _playerScript.StartBlackScreen();
-            Invoke("BlackScreen", 1.5F);
-
             // в деревню
             GetComponent<CharacterController>().enabled = false;
-            transform.position = new Vector3(915f, 3.8f, 673f);
+            transform.position = new Vector3(906, 3.6f, 674.2f);
             GetComponent<CharacterController>().enabled = true;
         }
-    }
-    private void Teleport()
-    {
-        if (Input.GetKeyDown(KeyCode.Backslash))
-        {
-            _playerScript.StartBlackScreen();
-            Invoke("TeleportHelper",5f);
-            Invoke("BlackScreenEnd", 6f);
-            
-        }
+
         //else if (Input.GetKeyDown(KeyCode.Less))
         //{
         //    // в деревню
@@ -250,6 +319,22 @@ public class PlayerCharacteristics : MonoBehaviour
         //    transform.position = new Vector3(915f, 3.8f, 673f);
         //    GetComponent<CharacterController>().enabled = true;
         //}
+    }
+    private void EndBlackScreen()
+    {
+        _playerScript.EndBlackScreen();
+    }
+
+    IEnumerator Healing()
+    {
+        while (!_dead)
+        {
+            if (hp < maxHp)
+            {
+                hp += 50;
+            }
+            yield return new WaitForSeconds(60f);
+        }
     }
 
     public enum Place

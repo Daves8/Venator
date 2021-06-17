@@ -60,7 +60,7 @@ public abstract class UserInterface : MonoBehaviour
     public void OnEnter(GameObject obj)
     {
         MouseData.slotHoveredOver = obj;
-       
+        
     }
     public void OnExit(GameObject obj)
     {
@@ -76,8 +76,20 @@ public abstract class UserInterface : MonoBehaviour
     }
     public void OnDragStart(GameObject obj)
     {
+        if (slotsOnInterface[obj].item.Id == 24)
+        {
+            // убрать показ инвентаря и начать рыбалку
+            GameObject.FindGameObjectWithTag("River").GetComponent<Fishing>().startFishing = true;
+            GameObject.FindGameObjectWithTag("LevelLoader").GetComponent<ShowHideUI>().ShowHideInv();
+            return;
+        }
+        if(slotsOnInterface[obj].item.Id == 7 || slotsOnInterface[obj].item.Id == 12 || slotsOnInterface[obj].item.Id == 15)
+        {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCharacteristics>().hp += 50;
+            slotsOnInterface[obj].AddAmount(-1);
+        }
         MouseData.tempItemBeingDragged = CreateTempItem(obj);
-
+        
         Debug.Log(slotsOnInterface[obj].item.Name);
     }
     public GameObject CreateTempItem(GameObject obj)
@@ -97,6 +109,10 @@ public abstract class UserInterface : MonoBehaviour
     }
     public void OnDragEnd(GameObject obj)
     {
+        if(slotsOnInterface[obj].item.Id == 24)
+        {
+            return;
+        }
         Destroy(MouseData.tempItemBeingDragged);
         if (MouseData.interfaceMouseIsOver == null)
         {

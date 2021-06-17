@@ -47,8 +47,7 @@ public class NPC : MonoBehaviour
         {
             _animator.SetBool("Walk", false);
         }
-
-        if (gameObject.name == "Father" || gameObject.name == "Mother" || gameObject.name == "Brother")
+        if (gameObject.name == "Father" || gameObject.name == "Mother" || gameObject.name == "Brother" || gameObject.name == "Innkeeper" || gameObject.name == "Seller")
         {
             return;
         }
@@ -63,7 +62,11 @@ public class NPC : MonoBehaviour
             _audioSource.pitch = Random.Range(0.9f, 1.1f);
             _audioSource.PlayOneShot(scream);
         }
-        if (_attacked) { return; }
+        if (_attacked)
+        {
+            _playerCharacteristics.attackOnPopulation = true;
+            return;
+        }
 
         if (_agent.velocity.normalized.magnitude >= 0.1f)
         {

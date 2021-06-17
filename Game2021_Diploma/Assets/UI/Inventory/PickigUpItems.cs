@@ -32,6 +32,17 @@ public class PickigUpItems : MonoBehaviour
     public TextMeshProUGUI showPickedItem;
 
     private Fishing _river;
+    private PlayerCharacteristics _playerCharact;
+    private GameObject _cart;
+    private GameObject _forestCart;
+
+
+    private void Start()
+    {
+        _playerCharact = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCharacteristics>();
+        _cart = GameObject.FindGameObjectWithTag("Cart");
+        _forestCart = GameObject.FindGameObjectWithTag("ForestCart");
+    }
 
     IEnumerator ShowPickedItemCourutine()
     {
@@ -67,14 +78,30 @@ public class PickigUpItems : MonoBehaviour
             //Debug.Log($"Distance to hit: {distanceTohit},Z{hit.point.z}X{hit.point.x}Y{hit.point.y}");
             if (groundItem)
             {
+                if (groundItem.item.ruName == "Перемещение")
+                {
+                    if(Vector3.Distance(_playerCharact.gameObject.transform.position, _cart.transform.position) < 2f || Vector3.Distance(_playerCharact.gameObject.transform.position, _forestCart.transform.position) < 2f)
+                    {
+                        showHelpObj.SetActive(true);
+                        showHelp.text = "Нажмите F – " + groundItem.item.ruName;
+                        Invoke("HidePress", 3f);
+                        if (Input.GetKeyDown(KeyCode.F))
+                        {
+                            _playerCharact.Teleport();
+                        }
+                    }
+                    return;
+                }
                 //Debug.Log("навел на предмет");
                 if (distanceTohit <= _rayCastMaxDistance)
                 {
                     showHelpObj.SetActive(true);
                     showHelp.text = "Нажмите F – " + groundItem.item.ruName;
+                    Invoke("HidePress", 3f);
                 }
                 if (groundItem && Input.GetKeyDown(KeyCode.F) && distanceTohit <= _rayCastMaxDistance)
                 {
+
                     showHelper = true;
                     showPickedItem.text = "Вы подобрали " + groundItem.item.ruName;
                     Item _item = new Item(groundItem.item);
@@ -82,6 +109,7 @@ public class PickigUpItems : MonoBehaviour
                     {
                         Destroy(hit.collider.gameObject);
                     }
+
                 }
             }
             else
@@ -92,5 +120,9 @@ public class PickigUpItems : MonoBehaviour
                 }
             }
         }
+    }
+    private void HidePress()
+    {
+        showHelpObj.SetActive(false);
     }
 }

@@ -130,7 +130,7 @@ public class BowShot : MonoBehaviour
             {
                 return;
             }
-            if (_playerScript.inventory.FindItemOnInventory(21) <= 0)
+            if (_playerScript.inventory.FindItemOnInventory(new Item(_playerScript.dbVenator.ItemObjects[21])).amount <= 0)
             {
                 showPickedItem.gameObject.SetActive(true);
                 Invoke("ShowAttention", 1f);
@@ -138,7 +138,7 @@ public class BowShot : MonoBehaviour
                 return;
             }
 
-            --_playerScript.inventory.FindItemOnInventory(new Item(_playerScript.dbVenator.ItemObjects[21])).amount;
+            //--_playerScript.inventory.FindItemOnInventory(new Item(_playerScript.dbVenator.ItemObjects[21])).amount;
             _bow = true;
             _rigBow.weight = 1;
             StartCoroutine("RotateToCamera");
@@ -171,6 +171,7 @@ public class BowShot : MonoBehaviour
             {
                 ExitBow();
             }
+            _bowAnimation.Play("MECANIM");
             _bow = false;
             _rigBow.weight = 0;
             _arrowInHand.SetActive(false);
@@ -203,6 +204,8 @@ public class BowShot : MonoBehaviour
 
     private void Shoot()
     {
+        _playerScript.inventory.FindItemOnInventory(new Item(_playerScript.dbVenator.ItemObjects[21])).AddAmount(-1);
+
         GameObject newArrow = Instantiate(_arrowPrefab, _mainCamera.transform.position + _mainCamera.transform.forward * 2, _mainCamera.transform.rotation);
         newArrow.transform.LookAt(_target);
         newArrow.GetComponent<Rigidbody>().velocity = newArrow.transform.forward * 100;

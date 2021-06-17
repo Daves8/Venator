@@ -38,14 +38,17 @@ public class ShowHideUI : MonoBehaviour
     {
        if (Input.GetKeyDown(KeyCode.I))
         {
-            OnIPressed?.Invoke(this, EventArgs.Empty);                                   
+            ShowHideInv();                           
         }
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
         {
                ShowHidePause();                                            
         } 
     }
-
+    public void ShowHideInv()
+    {
+        OnIPressed?.Invoke(this, EventArgs.Empty);
+    }
     private void ShowHideInventory(object sender, EventArgs e)
     {
         UnityEngine.Debug.Log("I Pressed!");

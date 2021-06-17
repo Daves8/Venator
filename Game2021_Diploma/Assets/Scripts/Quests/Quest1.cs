@@ -37,6 +37,7 @@ public class Quest1 : MonoBehaviour
     bool localCoroutQ5;
     bool localCoroutQ8;
     bool locCorQ10;
+    bool helper;
 
     private int _idFish = 9;
     private int _resultQuest;//
@@ -46,6 +47,7 @@ public class Quest1 : MonoBehaviour
     private NavMeshAgent _brNavMesh;
 
     private TargetPoint _targetPoint;
+
 
     public enum Subquest
     {
@@ -78,7 +80,7 @@ public class Quest1 : MonoBehaviour
         subtitles.text = "";
         prompt.text = "";
 
-        subquest = Subquest.subquest1;
+        //subquest = Subquest.subquest1;
         //_questManag.quest = QuestsManagement.Quest.quest1;
 
         groupCamera.enabled = false;
@@ -104,6 +106,18 @@ public class Quest1 : MonoBehaviour
         localCoroutQ5 = false;
         localCoroutQ8 = true;
         locCorQ10 = true;
+        helper = true;
+
+        subtitles.text = "";
+        _startCoroutineSS = false;
+        groupCamera.enabled = false;
+        CharacterMoving.IsReadyToMove = true;
+        player.GetComponent<Battle>().AllowBattle = true;
+        button1.gameObject.SetActive(false);
+        button2.gameObject.SetActive(false);
+        button3.gameObject.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     // Update is called once per frame
@@ -198,6 +212,7 @@ public class Quest1 : MonoBehaviour
             //{
             //    player.GetComponent<Animator>().SetBool("Speak", false);
             //}
+            target.text = "";
             subtitles.text = subt.name + ": ";
             subtitles.text += subt.text;
             yield return new WaitForSeconds(3f);
@@ -261,7 +276,7 @@ public class Quest1 : MonoBehaviour
             return;
         }
         target.text = "Словить еще рыбы и подойти к брату";
-        if (_scriptPlayer.SearchInInventary(_idFish) >= 2)
+        if (/*_scriptPlayer.SearchInInventary(_idFish)*/_scriptPlayer.inventory.FindItemOnInventory(new Item(_scriptPlayer.dbVenator.ItemObjects[_idFish])).amount >= 2)
         {
             subquest = Subquest.subquest6;
             return;
@@ -318,6 +333,12 @@ public class Quest1 : MonoBehaviour
     }
     private void SubQ7() // Рыбалка окончена. Задача: идти с братом в деревню.
     {
+        if (helper)
+        {
+            helper = false;
+            _targetPoint.PointToTarget(brother.transform);
+            _brNavMesh.SetDestination(home.transform.position);
+        }
         if (Vector3.Distance(player.transform.position, father.transform.position) < 10f)
         {
             target.text = "Подойти к отцу";
@@ -327,11 +348,8 @@ public class Quest1 : MonoBehaviour
         else
         {
             target.text = "Идти за братом";
-
-            _targetPoint.PointToTarget(brother.transform);
+            //_targetPoint.PointToTarget(brother.transform);
         }
-        _brNavMesh.SetDestination(home.transform.position);
-
         if (Vector3.Distance(player.transform.position, father.transform.position) < 1.5f)
         {
             subquest = Subquest.subquest8;
@@ -365,18 +383,30 @@ public class Quest1 : MonoBehaviour
             locCorQ10 = false;
             ChangeCompanion(mother);
             groupCamera.enabled = true;
+            if (_scriptPlayer.inventory.FindItemOnInventory(new Item(_scriptPlayer.dbVenator.ItemObjects[_idFish])).amount == 1)
+            {
+                _resultQuest = 1;
+            }
+            else if (_scriptPlayer.inventory.FindItemOnInventory(new Item(_scriptPlayer.dbVenator.ItemObjects[_idFish])).amount == 2)
+            {
+                _resultQuest = 2;
+            }
+            else if (_scriptPlayer.inventory.FindItemOnInventory(new Item(_scriptPlayer.dbVenator.ItemObjects[_idFish])).amount > 2)
+            {
+                _resultQuest = 3;
+            }
             StartCoroutine(ShowSubtitles(_dialogue1.nodes[6 + _resultQuest]));
             // ПРОЛОЖИТЬ В ИНВЕНТАРЬ МНОГО ЕДЫ
-            if (_scriptPlayer.inventory.FindItemOnInventory(9) == 1)
+            if (_scriptPlayer.inventory.FindItemOnInventory(new Item(_scriptPlayer.dbVenator.ItemObjects[_idFish])).amount == 1)
             {
                 _scriptPlayer.inventory.AddItem(new Item(_scriptPlayer.dbVenator.ItemObjects[7]), 7);
             }
-            else if (_scriptPlayer.inventory.FindItemOnInventory(9) == 2)
+            else if (_scriptPlayer.inventory.FindItemOnInventory(new Item(_scriptPlayer.dbVenator.ItemObjects[_idFish])).amount == 2)
             {
                 _scriptPlayer.inventory.AddItem(new Item(_scriptPlayer.dbVenator.ItemObjects[7]), 7);
                 _scriptPlayer.inventory.AddItem(new Item(_scriptPlayer.dbVenator.ItemObjects[15]), 7);
             }
-            else if (_scriptPlayer.inventory.FindItemOnInventory(9) > 2)
+            else if (_scriptPlayer.inventory.FindItemOnInventory(new Item(_scriptPlayer.dbVenator.ItemObjects[_idFish])).amount > 2)
             {
                 _scriptPlayer.inventory.AddItem(new Item(_scriptPlayer.dbVenator.ItemObjects[7]), 7); // сыр
                 _scriptPlayer.inventory.AddItem(new Item(_scriptPlayer.dbVenator.ItemObjects[12]), 7); // жареное мясо
@@ -397,6 +427,7 @@ public class Quest1 : MonoBehaviour
     {
         if (!_startCoroutineSS)
         {
+            _scriptPlayer.SavePlayer();
             ChangeCompanion(hunter1);
             groupCamera.enabled = true;
             StartCoroutine(ShowSubtitles(_dialogue1.nodes[10]));
@@ -410,31 +441,31 @@ public class Quest1 : MonoBehaviour
         target.text = "Отправится на телеге в лес";
         _targetPoint.PointToTarget(cart.transform);
 
-        if (player.GetComponent<PlayerCharacteristics>().place == PlayerCharacteristics.Place.village) // если игрок подошел к телеге, смотрит на нее и нажал на Е
+        if (player.GetComponent<PlayerCharacteristics>().place == PlayerCharacteristics.Place.forest) // если игрок подошел к телеге, смотрит на нее и нажал на Е
         {
             // старт корутины (затухание экрана и перемещение игрока в точку)
             target.text = "";
             _targetPoint.PointToTarget(null);
-            Invoke("NextQuest", 3f); // ПОМЕНЯТЬ ВРЕМЯ
+            Invoke("NextQuest", 8f); // ПОМЕНЯТЬ ВРЕМЯ
         }
     }
 
     private void NextQuest()
     {
-        if (_scriptPlayer.inventory.FindItemOnInventory(9) == 1)
+        if (_scriptPlayer.inventory.FindItemOnInventory(new Item(_scriptPlayer.dbVenator.ItemObjects[_idFish])).amount == 1)
         {
             _resultQuest = 1;
         }
-        else if (_scriptPlayer.inventory.FindItemOnInventory(9) == 2)
+        else if (_scriptPlayer.inventory.FindItemOnInventory(new Item(_scriptPlayer.dbVenator.ItemObjects[_idFish])).amount == 2)
         {
             _resultQuest = 2;
         }
-        else if (_scriptPlayer.inventory.FindItemOnInventory(9) > 2)
+        else if (_scriptPlayer.inventory.FindItemOnInventory(new Item(_scriptPlayer.dbVenator.ItemObjects[_idFish])).amount > 2)
         {
             _resultQuest = 3;
         }
         _questManag.resultQuests[0] = _resultQuest;
-        _questManag.quest = QuestsManagement.Quest.quest2;
+        _questManag.quest = Quest.quest2;
     }
 
     private void SubQ14()

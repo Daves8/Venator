@@ -100,7 +100,7 @@ public class Bear : MonoBehaviour
         if (_agressive)
         {
             _bearAgent.speed = _speedRun;
-            if (!_playerCharact.allAnimals.Contains(gameObject))
+            if (!_playerCharact.allAnimals.Contains(gameObject) && _playerCharact.place == PlayerCharacteristics.Place.forest)
             {
                 _playerCharact.allAnimals.Add(gameObject);
             }

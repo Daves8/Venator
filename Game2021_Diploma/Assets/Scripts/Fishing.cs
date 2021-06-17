@@ -26,18 +26,22 @@ public class Fishing : MonoBehaviour
 
     private int _count = 0;
 
+    public bool startFishing;
+
     private void Start()
     {
         showEnterF.text = "";
         showPickeditem.text = "";
         rod.SetActive(false);
         fish = _player.GetComponent<Player>().dbVenator.ItemObjects[9];
+        startFishing = false;
     }
 
     private void Update()
     {
-        if (_readyToFishing && !NowFishing && Input.GetButtonDown("Action"))
+        if (_readyToFishing && !NowFishing && startFishing)
         {
+            startFishing = false;
             rod.SetActive(true);
             _player.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
             CharacterMoving.IsReadyToMove = false;

@@ -69,8 +69,8 @@ public class Battle : MonoBehaviour
         if (!AllowBattle)
         {
             KnifeOff();
-            SwordOff();
-            BowOff();
+            //SwordOff();
+            //BowOff();
             WeaponEnum._selectedWeapon = Weapon.None;
             return;
         }

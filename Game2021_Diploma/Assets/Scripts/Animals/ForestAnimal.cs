@@ -120,6 +120,12 @@ public class ForestAnimal : MonoBehaviour
             _animator.SetTrigger("Die");
             Invoke("Delete", 300.0f);
             GetComponent<SphereCollider>().enabled = true;
+
+            foreach (var item in GetComponentsInChildren<CapsuleCollider>())
+            {
+                item.enabled = false;
+            }
+
             return;
         }
 
@@ -139,7 +145,7 @@ public class ForestAnimal : MonoBehaviour
         if (_agressive)
         {
             _agent.speed = _speedRun;
-            if (!_playerCharact.allAnimals.Contains(gameObject))
+            if (!_playerCharact.allAnimals.Contains(gameObject) && _playerCharact.place == PlayerCharacteristics.Place.forest)
             {
                 _playerCharact.allAnimals.Add(gameObject);
             }
@@ -180,9 +186,9 @@ public class ForestAnimal : MonoBehaviour
             }
         }
 
-        if (_agressive && hp <= 250 && Vector3.Distance(transform.position, places[places.Length - 1].transform.position) > 7.5f) { RunAway(); }
+        if (_agressive && hp <= 250 && Vector3.Distance(transform.position, places[places.Length - 1].transform.position) > 7.5f) { if (tag != "Boar") { RunAway(); } }
         else if (_agressive) { Attack(); }
-        else { Walking(); }
+        else { if (tag != "Boar") { Walking(); } }
     }
     private IEnumerator CheckState()
     {
