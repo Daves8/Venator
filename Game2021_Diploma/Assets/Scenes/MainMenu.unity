@@ -3759,6 +3759,7 @@ MonoBehaviour:
   transition: {fileID: 636190158}
   loadingScreenImage: {fileID: 636190154}
   player: {fileID: 0}
+  continieButton: {fileID: 1901820462}
 --- !u!4 &712775355
 Transform:
   m_ObjectHideFlags: 0
@@ -10944,6 +10945,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventory: {fileID: 11400000, guid: ba391aef18194db419840aa8245becc2, type: 2}
   equipment: {fileID: 11400000, guid: 43835e75255697f44b8c11400e3fd98a, type: 2}
+  dbVenator: {fileID: 0}
   test: 0
   playerPosition: {fileID: 8530799665893381658}
   transition: {fileID: 636190158}
@@ -10952,6 +10954,9 @@ MonoBehaviour:
   weaponTransform: {fileID: 0}
   offhandWristTransform: {fileID: 4364747696327497978}
   offhandHandTransform: {fileID: 0}
+  equipBow: 0
+  equipSword1: 0
+  equipSword2: 0
 --- !u!1 &4626953696142035484
 GameObject:
   m_ObjectHideFlags: 0

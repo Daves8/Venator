@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
 using System.Linq;
+using System.IO;
 
 public class LevelLoader : MonoBehaviour
 {    
@@ -15,6 +16,7 @@ public class LevelLoader : MonoBehaviour
     public Animator transition;
     public GameObject loadingScreenImage;
     public GameObject player;
+    public GameObject continieButton;
 
     private void Awake()
     {
@@ -24,7 +26,19 @@ public class LevelLoader : MonoBehaviour
             playerOn.enabled = true;
         }
         catch (Exception e){ }
-        
+
+        try
+        {
+            string path = Application.persistentDataPath + "/Saves/";
+
+            if (Directory.GetFiles(path).Length <= 1)
+            {
+                continieButton.SetActive(false);
+            }
+            
+        }
+        catch (Exception e) { }
+
     }
     public void Start()
     {
@@ -38,7 +52,7 @@ public class LevelLoader : MonoBehaviour
     }
 
     public void ContinueGame()
-    {
+    {        
         Dictionary<string, string> saves = ScrollView.GetSaves();
         string first = saves.Values.First();
         DataHolder.savePath = first;
