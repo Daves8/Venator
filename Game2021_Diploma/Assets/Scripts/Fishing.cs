@@ -24,7 +24,7 @@ public class Fishing : MonoBehaviour
 
     private bool _nextDo = false;
 
-    private int _countOfClick = 0;
+    private int _count = 0;
 
     public bool startFishing;
 
@@ -90,36 +90,30 @@ public class Fishing : MonoBehaviour
 
     private void StopGetFishGame()
     {
+        StopCoroutine("GetFishGame");
 
-
-
-
-
-
-
-
-
-        float formula = _countOfClick * Random.Range(70, 85) / 100.0f;
-        if (formula >= 4.5f)
+        float formula = _count * Random.Range(70, 85) / 100.0f;
+        if (formula >= 4.5f) // 5 под вопросом, коэффициент нужно изменить
         {
-            FishCaught();
+            //_text.GetComponent<TextMeshProUGUI>().text = "Вы поймали рыбу!"; // Вы поймали рыбу!
+            showEnterF.gameObject.SetActive(false);
+            showPickeditem.gameObject.SetActive(true);
+            showPickeditem.text = "Вы поймали рыбу!";
+            Item item = new Item(fish);
+            inventory.AddItem(item, 1);
+            _fishingOutCome = true;
+            _animator.SetTrigger("FishingEnd");
         }
         else
         {
-            FishCaught();
+            //_text.GetComponent<TextMeshProUGUI>().text = "Вы упустили рыбу!"; // Вы упустили рыбу!
+            showEnterF.gameObject.SetActive(false);
+            showPickeditem.gameObject.SetActive(true);
+            showPickeditem.text = "Вы упустили рыбу!";
+            _fishingOutCome = false;
+            rod.SetActive(false);
+            _animator.SetTrigger("Idle");
         }
-
-
-
-
-
-
-
-
-
-
-
-
         Invoke("HideText", 5.0f);
 
         // Закончили рыбалку
@@ -130,12 +124,6 @@ public class Fishing : MonoBehaviour
 
         //print("Count: " + _count + ". Формула: " + formula);
     }
-
-    private void FishCaught()
-    {
-        throw new System.NotImplementedException();
-    }
-
     private void NowFishingChg()
     {
         NowFishing = false;
