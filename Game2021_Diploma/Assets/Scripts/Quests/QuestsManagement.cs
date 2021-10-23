@@ -11,6 +11,7 @@ public class QuestsManagement : MonoBehaviour
     public TextAsset dialoguesQ2;
     public TextAsset dialoguesQ3;
     public TextAsset dialoguesQ4;
+    public TextAsset dialoguesQ5;
 
     public Quest quest;
     private Quest _previousQuest;
@@ -53,24 +54,35 @@ public class QuestsManagement : MonoBehaviour
                     GetComponent<Quest2>().enabled = false;
                     GetComponent<Quest3>().enabled = false;
                     GetComponent<Quest4>().enabled = false;
+                    GetComponent<Quest5>().enabled = false;
                     break;
                 case Quest.quest2:
                     GetComponent<Quest1>().enabled = false;
                     GetComponent<Quest2>().enabled = true;
                     GetComponent<Quest3>().enabled = false;
                     GetComponent<Quest4>().enabled = false;
+                    GetComponent<Quest5>().enabled = false;
                     break;
                 case Quest.quest3:
                     GetComponent<Quest1>().enabled = false;
                     GetComponent<Quest2>().enabled = false;
                     GetComponent<Quest3>().enabled = true;
                     GetComponent<Quest4>().enabled = false;
+                    GetComponent<Quest5>().enabled = false;
                     break;
                 case Quest.quest4:
                     GetComponent<Quest1>().enabled = false;
                     GetComponent<Quest2>().enabled = false;
                     GetComponent<Quest3>().enabled = false;
                     GetComponent<Quest4>().enabled = true;
+                    GetComponent<Quest5>().enabled = false;
+                    break;
+                case Quest.quest5:
+                    GetComponent<Quest1>().enabled = false;
+                    GetComponent<Quest2>().enabled = false;
+                    GetComponent<Quest3>().enabled = false;
+                    GetComponent<Quest4>().enabled = false;
+                    GetComponent<Quest5>().enabled = true;
                     break;
                 default:
                     break;
@@ -86,7 +98,8 @@ public enum Quest
     quest1 = 1,
     quest2,
     quest3,
-    quest4
+    quest4,
+    quest5
 }
 
 [System.Serializable]

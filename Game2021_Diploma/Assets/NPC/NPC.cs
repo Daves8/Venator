@@ -144,7 +144,7 @@ public class NPC : MonoBehaviour
                 break;
         }
 
-        if (other.gameObject.tag == "Sword")
+        if (other.gameObject.tag == "Sword" || other.gameObject.tag == "SwordEn")
         {
             _attacked = true;
             if (!_playerCharacteristics.allEnemies.Contains(gameObject))

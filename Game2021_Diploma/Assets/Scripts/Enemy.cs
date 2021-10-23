@@ -20,7 +20,7 @@ public class Enemy : MonoBehaviour
     private bool _coroutStart;
 
     private NavMeshAgent _agent;
-    private GameObject _player;
+    public GameObject _player;
     private PlayerCharacteristics _playerCharacteristics;
     private GameObject[] _buildsForPatrol;
     private ImportantBuildings _importantBuildings;
@@ -34,10 +34,16 @@ public class Enemy : MonoBehaviour
 
     private AudioClip[] _swordSound;
 
+    public bool isSoldier;
+    public bool canWalkInVillage;
+
     private void Start()
     {
         _enemies = GameObject.FindGameObjectWithTag("Enemies").GetComponent<SpawnEnemyes>();
-        ++_enemies.allEnemies["AllySoldier"];
+        if (!isSoldier)
+        {
+            ++_enemies.allEnemies["AllySoldier"];
+        }
 
         _animator = GetComponent<Animator>();
 
@@ -61,6 +67,7 @@ public class Enemy : MonoBehaviour
             _limbs[i].type = EnemyLimbs.TypeEnemy.enemy;
         }
         control = false;
+        canWalkInVillage = true;
         //ragdolls.AddRange(GetComponentsInChildren<Rigidbody>());
         //foreach (Rigidbody rigidbody in ragdolls)
         //{
@@ -87,6 +94,10 @@ public class Enemy : MonoBehaviour
             return;
         }
 
+
+
+
+
         if (_agent.velocity.magnitude > 0f)
         {
             if (_agressive)
@@ -97,7 +108,7 @@ public class Enemy : MonoBehaviour
             }
             else
             {
-                _agent.speed = Random.Range(1.4f, 1.6f);
+                _agent.speed = Random.Range(1.6f, 1.8f);
                 _animator.SetBool("IdleToRun", false);
                 _animator.SetBool("IdleToWalk", true);
             }
@@ -108,9 +119,9 @@ public class Enemy : MonoBehaviour
             _animator.SetBool("IdleToWalk", false);
         }
 
-        if (control)
+        if (control || isSoldier)
         {
-            return;
+            //return;
         }
 
         if (_playerCharacteristics.isBattle && Vector3.Distance(_player.transform.position, transform.position) <= 20f)
@@ -120,32 +131,38 @@ public class Enemy : MonoBehaviour
         }
         else if (Vector3.Distance(_player.transform.position, transform.position) > 20f || _playerCharacteristics._dead)
         {
-            _agressive = false;
-            _attack = false;
-            _canAttack = false;
-            _playerCharacteristics.allEnemies.Remove(gameObject);
-            if (_agrPast != _agressive)
+            if (canWalkInVillage)
             {
-                StartCoroutine(CycleAfterBattle());
+                _agressive = false;
+                _attack = false;
+                _canAttack = false;
+                _playerCharacteristics.allEnemies.Remove(gameObject);
+                if (_agrPast != _agressive)
+                {
+                    StartCoroutine(CycleAfterBattle());
+                }
             }
         }
 
         if (_agressive) { Attack(); }
         else
         {
-            if (Vector3.Distance(_buildsForPatrol[(int)_nextBuild].transform.position, transform.position) < 5f)
+            if (canWalkInVillage)
             {
-                _nextBuild = (BuildEn)Random.Range(0, _buildsForPatrol.Length);
-            }
-            else
-            {
-                _agent.SetDestination(_buildsForPatrol[(int)_nextBuild].transform.position);
+                if (Vector3.Distance(_buildsForPatrol[(int)_nextBuild].transform.position, transform.position) < 5f)
+                {
+                    _nextBuild = (BuildEn)Random.Range(0, _buildsForPatrol.Length);
+                }
+                else
+                {
+                    _agent.SetDestination(_buildsForPatrol[(int)_nextBuild].transform.position);
+                }
             }
         }
         _agrPast = _agressive;
     }
 
-    private void Attack()
+    public void Attack()
     {
         if (_agrPast != _agressive)
         {

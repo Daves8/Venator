@@ -24,7 +24,7 @@ public static class SaveSystem
         }
 
         string path = Application.persistentDataPath + "/Saves/"+DateTime.Now.ToString("yyyy M dd  HH mm ss")+".bin";//1
-        Debug.Log(path);
+        //Debug.Log(path);
         FileStream stream = new FileStream(path, FileMode.Create);
 
         PlayerData data = new PlayerData(player);
@@ -62,7 +62,7 @@ public static class SaveSystem
         
         if(File.Exists(path))
         {
-            Debug.Log(path);
+            //Debug.Log(path);
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = new FileStream(path, FileMode.Open);
 
@@ -72,7 +72,7 @@ public static class SaveSystem
             return data; 
         }else
         {
-            Debug.Log("Save file not found in:" + path);
+            //Debug.Log("Save file not found in:" + path);
             return null;
         }
     }
