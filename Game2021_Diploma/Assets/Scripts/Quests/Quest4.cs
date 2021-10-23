@@ -33,13 +33,17 @@ public class Quest4 : MonoBehaviour
     private Transform _entranceToTavern;
     private Transform tr;
 
+    private ImportantBuildings _importantBuildings;
+
     private bool _coroutSS;
     private bool _startCoroutineSC;
+    private bool _rotate;
     private int _resultButtn;
     private bool _helpTel;
     private bool _helpQue;
     private bool _help3;
     private bool _help6;
+    private bool _nextQuest;
 
     //public GameObject[] titles;
 
@@ -85,9 +89,11 @@ public class Quest4 : MonoBehaviour
         _target.text = "";
         _targetPoint = GetComponent<TargetPoint>();
         _startCoroutineSC = false;
+        _rotate = false;
         _coroutSS = true;
         _resultButtn = 0;
         _playerCharact = _player.GetComponent<PlayerCharacteristics>();
+        _importantBuildings = GameObject.FindGameObjectWithTag("BuildingsImportant").GetComponent<ImportantBuildings>();
 
         CharacterMoving.IsReadyToMove = true;
         _player.GetComponent<Battle>().AllowBattle = true;
@@ -102,6 +108,19 @@ public class Quest4 : MonoBehaviour
         _helpQue = true;
         _help3 = true;
         _help6 = true;
+        _nextQuest = false;
+
+
+        foreach (var item in allySoldiers)
+        {
+            item.GetComponent<Enemy>().control = true;
+            item.GetComponent<NavMeshAgent>().enabled = false;
+            item.transform.position = new Vector3(822f, 0f, 1157f) + new Vector3(Random.Range(-3, 3), 0f, Random.Range(-3, 3));
+            item.transform.rotation = Quaternion.Euler(0f, Random.Range(-190, -210), 0f);
+            item.GetComponent<NavMeshAgent>().enabled = true;
+            item.GetComponent<NavMeshAgent>().SetDestination(item.transform.position);
+        }
+        tr = allySoldiers[0].transform;
     }
 
     void Update()
@@ -148,7 +167,7 @@ public class Quest4 : MonoBehaviour
     }
     IEnumerator RotateToTarget()
     {
-        while (_startCoroutineSC)
+        while (_rotate)
         {
             Vector3 dir = (_targetDialogue.transform.position - _player.transform.position).normalized;
             Quaternion rot = Quaternion.LookRotation(new Vector3(dir.x, 0, dir.z));
@@ -164,6 +183,7 @@ public class Quest4 : MonoBehaviour
     {
         Node nodes = _dialogue4.nodes[node];
         _startCoroutineSC = true;
+        _rotate = true;
         _target.text = "";
         _targetPoint.target = null;
         _groupCamera.enabled = true;
@@ -180,12 +200,17 @@ public class Quest4 : MonoBehaviour
         _subtitles.text = "";
         _target.text = "";
         _startCoroutineSC = false;
+        _rotate = false;
         _groupCamera.enabled = false;
         CharacterMoving.IsReadyToMove = true;
         _player.GetComponent<Battle>().AllowBattle = true;
         if (nextQuest)
         {
-            if (_questManag.resultGame == 1 || _questManag.resultGame == 3)
+            if (_questManag.resultGame == 3)
+            {
+                subquest = (Subquest)5;
+            }
+            else if (_questManag.resultGame == 1) // || _questManag.resultGame == 3)
             {
                 subquest = (Subquest)5;
                 Invoke("EndGame", 20f);
@@ -253,6 +278,7 @@ public class Quest4 : MonoBehaviour
                         item.GetComponent<Enemy>().control = true;
                         item.GetComponent<NavMeshAgent>().enabled = false;
                         item.transform.position = new Vector3(822f, 0f, 1157f) + new Vector3(Random.Range(-3, 3), 0f, Random.Range(-3, 3));
+                        item.transform.rotation = Quaternion.Euler(0f, Random.Range(-190, -210), 0f);
                         item.GetComponent<NavMeshAgent>().enabled = true;
                         item.GetComponent<NavMeshAgent>().SetDestination(item.transform.position);
                     }
@@ -323,15 +349,31 @@ public class Quest4 : MonoBehaviour
             {
                 foreach (var item in enemySoldiers)
                 {
-                    item.GetComponent<NavMeshAgent>().SetDestination(_entranceToTavern.transform.position);
+                    item.GetComponent<NavMeshAgent>().SetDestination(_importantBuildings.LeftGate.transform.position + new Vector3(Random.Range(-3f, 3f), 0f, Random.Range(-3f, 3f))); //_entranceToTavern.transform.position);
                 }
             }
             else
             {
                 foreach (var item in allySoldiers)
                 {
-                    item.GetComponent<NavMeshAgent>().SetDestination(_entranceToTavern.transform.position);
+                    item.GetComponent<NavMeshAgent>().SetDestination(_importantBuildings.RightGate.transform.position + new Vector3(Random.Range(-4f, 4f), 0f, Random.Range(-4f, 4f) - 8f)); //_entranceToTavern.transform.position);
                 }
+            }
+        }
+
+        if (Vector3.Distance(allySoldiers[0].transform.position, _importantBuildings.RightGate.transform.position) <= 3)
+        {
+            _nextQuest = true;
+        }
+        if (Vector3.Distance(_player.transform.position, _importantBuildings.RightGate.transform.position) <= 3)
+        {
+            if (_nextQuest)
+            {
+                _questManag.quest = Quest.quest5;
+            }
+            else
+            {
+                _target.text = "Подождите солдат";
             }
         }
     }

@@ -14,6 +14,8 @@ public class BackgroundMusic : MonoBehaviour
     private GameObject _player;
     private PlayerCharacteristics _playerCharacteristics;
 
+    public bool finalBattle = false;
+
     public enum PlayingMusic
     {
         nothing = -1,
@@ -31,7 +33,7 @@ public class BackgroundMusic : MonoBehaviour
 
     private void Update()
     {
-        if (_playerCharacteristics.isBattle || _playerCharacteristics.isBattleAnimal)
+        if (_playerCharacteristics.isBattle || _playerCharacteristics.isBattleAnimal || finalBattle)
         {
             _playingMusic = PlayingMusic.battle;
             _music = battleMusics;

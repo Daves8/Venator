@@ -12,22 +12,22 @@ public class Soldier : MonoBehaviour
 
     void Start()
     {
-        _animator = GetComponent<Animator>();
-        _agent = GetComponent<NavMeshAgent>();
+        //_animator = GetComponent<Animator>();
+        //_agent = GetComponent<NavMeshAgent>();
         _enemies = GameObject.FindGameObjectWithTag("Enemies").GetComponent<SpawnEnemyes>();
         ++_enemies.allEnemies["EnemySoldier"];
     }
 
     void Update()
     {
-        if (_agent.velocity.normalized.magnitude >= 0.1f)
-        {
-            //StopCoroutine("AnimIdle");
-            _animator.SetBool("Walk", true);
-        }
-        else
-        {
-            _animator.SetBool("Walk", false);
-        }
+        //if (_agent.velocity.normalized.magnitude >= 0.1f)
+        //{
+        //    //StopCoroutine("AnimIdle");
+        //    _animator.SetBool("Walk", true);
+        //}
+        //else
+        //{
+        //    _animator.SetBool("Walk", false);
+        //}
     }
 }

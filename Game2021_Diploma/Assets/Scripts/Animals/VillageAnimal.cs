@@ -158,7 +158,7 @@ public class VillageAnimal : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Knife" || other.tag == "Sword")
+        if (other.tag == "Knife" || other.tag == "Sword" || other.tag == "SwordEn")
         {
             Dying();
         }

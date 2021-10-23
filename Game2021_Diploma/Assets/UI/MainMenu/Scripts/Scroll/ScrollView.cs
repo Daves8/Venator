@@ -89,7 +89,7 @@ public class ScrollView : MonoBehaviour
 
                 foreach(FileInfo file in Files )
                 {
-                    Debug.Log("ПЕРЕД     "+ file.Name);
+                    //Debug.Log("ПЕРЕД     "+ file.Name);
                     if(file.Name == "NewGame.bin") continue;                    
                     savesArray[rows,0] = file.Name;
                     savesArray[rows,1] = Application.persistentDataPath + "/Saves/" + file.Name;
@@ -97,10 +97,10 @@ public class ScrollView : MonoBehaviour
                 }
 
                 
-                Debug.Log("File count " + fileCount);
+                //Debug.Log("File count " + fileCount);
                 for (int i = fileCount - 1; i >= 0; i--)
                 {
-                    Debug.Log("111 - " + savesArray[i,0] + "| 222 - "+ savesArray[i,1]);
+                    //Debug.Log("111 - " + savesArray[i,0] + "| 222 - "+ savesArray[i,1]);
                     saves.Add(savesArray[i,0],savesArray[i,1]);
                     
                 }
@@ -154,7 +154,7 @@ public class ScrollView : MonoBehaviour
             
             
 
-            Debug.Log("КЛЮЧ: " + keyValue.Key + " ЗНАЧЕНИЕ: " + keyValue.Value);
+            //Debug.Log("КЛЮЧ: " + keyValue.Key + " ЗНАЧЕНИЕ: " + keyValue.Value);
                
         }
         loadButton.SetActive(false);

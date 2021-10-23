@@ -52,7 +52,7 @@ public class Player : MonoBehaviour
         if(SceneManager.GetActiveScene().name == "Village")
         {
             string loadPath = DataHolder.savePath;
-            Debug.Log("Сейчас мы загружаем уровень: " + loadPath);
+            //Debug.Log("Сейчас мы загружаем уровень: " + loadPath);
             LoadPlayer(loadPath);
             
         }
@@ -304,8 +304,8 @@ public class Player : MonoBehaviour
             case InterfaceType.Inventory:
                 break;
             case InterfaceType.Equipment:
-                print(string.Concat("Removed ", _slot.ItemObject, " on ", _slot.parent.inventory.type,
-                    ", Allowed Items: ", string.Join(", ", _slot.AllowedItems)));
+                //print(string.Concat("Removed ", _slot.ItemObject, " on ", _slot.parent.inventory.type,
+                    //", Allowed Items: ", string.Join(", ", _slot.AllowedItems)));
 
                 for (int i = 0; i < _slot.item.buffs.Length; i++)
                 {
@@ -354,14 +354,13 @@ public class Player : MonoBehaviour
             return;
         }else
         {
-            Debug.Log(_slot.parent.inventory.type);
+            //Debug.Log(_slot.parent.inventory.type);
             switch (_slot.parent.inventory.type)
             {
                 case InterfaceType.Inventory:
                     break;
                 case InterfaceType.Equipment:
-                    print(
-                        $"Placed {_slot.ItemObject}  on {_slot.parent.inventory.type}, Allowed Items: {string.Join(", ", _slot.AllowedItems)}");
+                    //print($"Placed {_slot.ItemObject}  on {_slot.parent.inventory.type}, Allowed Items: {string.Join(", ", _slot.AllowedItems)}");
 
                     for (int i = 0; i < _slot.item.buffs.Length; i++)
                     {
@@ -371,8 +370,8 @@ public class Player : MonoBehaviour
                                 attributes[j].value.AddModifier(_slot.item.buffs[i]);
                         }
                     }
-                    Debug.Log(_slot.ItemObject.equipmentSetId);
-                        Debug.Log("тут чет есть");
+                    //Debug.Log(_slot.ItemObject.equipmentSetId);
+                        //Debug.Log("тут чет есть");
                         switch (_slot.AllowedItems[0])
                         {
                             case ItemType.Helmet://
