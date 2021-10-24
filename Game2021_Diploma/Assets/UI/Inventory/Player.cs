@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
@@ -15,11 +16,17 @@ public class Player : MonoBehaviour
 
     public Transform playerPosition;
     public Animator transition;
-//PLayerData
-    public string level;    
-//PLayerData
+    public Animation ShowHideText;
+    
+    //PLayerData
+    public string level;
+    //PLayerData
 
     public Attribute[] attributes;
+
+    public Animation VenatorEndImageAnimation;
+    public TextMeshProUGUI[] text;
+    public Canvas EndGameCanvas;
 
     private Transform boots;
     private Transform chest;
@@ -43,24 +50,26 @@ public class Player : MonoBehaviour
     public bool equipSword1;
     public bool equipSword2;
 
+    public GameObject pauseMenu;
+
 
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
         scrollView = new ScrollView();
-        
-        if(SceneManager.GetActiveScene().name == "Village")
+
+        if (SceneManager.GetActiveScene().name == "Village")
         {
             string loadPath = DataHolder.savePath;
             //Debug.Log("Сейчас мы загружаем уровень: " + loadPath);
             LoadPlayer(loadPath);
-            
+
         }
-        
+
     }
 
     private void Start()
-    {    
+    {
         for (int i = 0; i < attributes.Length; i++)
         {
             attributes[i].SetParent(this);
@@ -75,12 +84,13 @@ public class Player : MonoBehaviour
         _initInv = true;
 
         equipBow = false;
-        equipSword1=false;
-        equipSword2=false;
+        equipSword1 = false;
+        equipSword2 = false;
     }
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.M)) { GEnding(); }
         if (_initInv)
         {
             _initInv = false;
@@ -158,6 +168,19 @@ public class Player : MonoBehaviour
         foreach (var item in equipment.Container.Slots)
         {
             item.UpdateSlot(item.item, item.amount);
+        }
+    }
+
+    public void GEnding()
+    {
+        StartBlackScreen();
+
+        EndGameCanvas.gameObject.SetActive(true);//нужен тут другйо канвас, точняк
+        //Time.timeScale = 0;
+        VenatorEndImageAnimation.Play();
+        for (int i = 0; i < 3; i++)
+        {
+            text[i].gameObject.GetComponent<Animation>().Play();
         }
     }
 
