@@ -108,6 +108,40 @@ public class Quest5 : MonoBehaviour
         StartCoroutine(ShowSubtitles(0));
         //yield return new WaitForSeconds(2f);
         _finalBattle.GoToBattlePoints();
+        yield return new WaitForSeconds(20f);
+        for (int i = 0; i < 20; i++)
+        {
+            //_finalBattle.KillSomeEnemy();
+            enemySoldiers[i].GetComponent<Enemy>()._hp = -100;
+            if (i + 1 < 20)
+            {
+                allySoldiers[i].GetComponent<Enemy>()._player = enemySoldiers[i + 1];
+            }
+            if (i % 2 == 0)
+            {
+                allySoldiers[i].GetComponent<Enemy>()._hp = -100;
+            }
+            yield return new WaitForSeconds(Random.Range(0.5f, 2f));
+        }
+
+        _finalBattle.Final();
+        yield return new WaitForSeconds(25f);
+        for (int i = 20; i < 27; i++)
+        {
+            enemySoldiers[i].GetComponent<Enemy>()._hp = -100;
+            yield return new WaitForSeconds(Random.Range(0.5f, 2f));
+        }
+
+        foreach (var item in allySoldiers)
+        {
+            //item.GetComponent<Enemy>().canWalkInVillage = true;
+            item.GetComponent<Enemy>()._agressive = false;
+            item.GetComponent<NavMeshAgent>().SetDestination(_importantBuildings.EntranceToTavern.transform.position + new Vector3(Random.Range(-3f, 3f), 0f, Random.Range(-3f, 3f)));
+        }
+
+        StartCoroutine(ShowSubtitles(1));
+        print("КОНКЕЦ!!!");
+        // конец игры через ...
     }
 
     void Update()

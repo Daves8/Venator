@@ -37,6 +37,9 @@ public class Enemy : MonoBehaviour
     public bool isSoldier;
     public bool canWalkInVillage;
 
+    private bool isHasScriptEnemy;
+    private bool canHit_hp;
+
     private void Start()
     {
         _enemies = GameObject.FindGameObjectWithTag("Enemies").GetComponent<SpawnEnemyes>();
@@ -68,6 +71,10 @@ public class Enemy : MonoBehaviour
         }
         control = false;
         canWalkInVillage = true;
+
+        isHasScriptEnemy = GetComponent<Enemy>();
+        canHit_hp = true;
+
         //ragdolls.AddRange(GetComponentsInChildren<Rigidbody>());
         //foreach (Rigidbody rigidbody in ragdolls)
         //{
@@ -89,7 +96,7 @@ public class Enemy : MonoBehaviour
             _attack = false;
             _agent.enabled = false;
             _animator.SetInteger("Death", Random.Range(0, 2));
-            Invoke("Death", 3.0f);
+            Invoke("Death", 4.0f);
             Invoke("Delete", 300.0f);
             return;
         }
@@ -144,7 +151,12 @@ public class Enemy : MonoBehaviour
             }
         }
 
-        if (_agressive) { Attack(); }
+
+        if (isHasScriptEnemy)
+        {
+            canHit_hp = _player.GetComponent<Enemy>()._hp > 0f;
+        }
+        if (_agressive && canHit_hp) { Attack(); }
         else
         {
             if (canWalkInVillage)
@@ -157,6 +169,10 @@ public class Enemy : MonoBehaviour
                 {
                     _agent.SetDestination(_buildsForPatrol[(int)_nextBuild].transform.position);
                 }
+            }
+            if (!canWalkInVillage)
+            {
+                //_agent.SetDestination(_buildsForPatrol[(int)_nextBuild].transform.position);
             }
         }
         _agrPast = _agressive;
@@ -191,7 +207,7 @@ public class Enemy : MonoBehaviour
         _agent.isStopped = true;
         _coroutStart = true;
         StartCoroutine(RotateToPlayer());
-        while (_attack)
+        while (_attack && canHit_hp)
         {
             _animator.SetTrigger("Attack" + Random.Range(0, 4));
             _audioSource.pitch = Random.Range(0.9f, 1.1f);
@@ -218,7 +234,7 @@ public class Enemy : MonoBehaviour
     }
     IEnumerator RotateToPlayer()
     {
-        while (_attack)
+        while (_attack && _agressive)
         {
             Vector3 direction = (_player.transform.position - transform.position).normalized;
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));

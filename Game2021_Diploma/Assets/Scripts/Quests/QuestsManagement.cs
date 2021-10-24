@@ -55,6 +55,7 @@ public class QuestsManagement : MonoBehaviour
                     GetComponent<Quest3>().enabled = false;
                     GetComponent<Quest4>().enabled = false;
                     GetComponent<Quest5>().enabled = false;
+                    GetComponent<FinalBattle>().enabled = false;
                     break;
                 case Quest.quest2:
                     GetComponent<Quest1>().enabled = false;
@@ -62,6 +63,7 @@ public class QuestsManagement : MonoBehaviour
                     GetComponent<Quest3>().enabled = false;
                     GetComponent<Quest4>().enabled = false;
                     GetComponent<Quest5>().enabled = false;
+                    GetComponent<FinalBattle>().enabled = false;
                     break;
                 case Quest.quest3:
                     GetComponent<Quest1>().enabled = false;
@@ -69,6 +71,7 @@ public class QuestsManagement : MonoBehaviour
                     GetComponent<Quest3>().enabled = true;
                     GetComponent<Quest4>().enabled = false;
                     GetComponent<Quest5>().enabled = false;
+                    GetComponent<FinalBattle>().enabled = false;
                     break;
                 case Quest.quest4:
                     GetComponent<Quest1>().enabled = false;
@@ -76,6 +79,7 @@ public class QuestsManagement : MonoBehaviour
                     GetComponent<Quest3>().enabled = false;
                     GetComponent<Quest4>().enabled = true;
                     GetComponent<Quest5>().enabled = false;
+                    GetComponent<FinalBattle>().enabled = false;
                     break;
                 case Quest.quest5:
                     GetComponent<Quest1>().enabled = false;
@@ -83,6 +87,7 @@ public class QuestsManagement : MonoBehaviour
                     GetComponent<Quest3>().enabled = false;
                     GetComponent<Quest4>().enabled = false;
                     GetComponent<Quest5>().enabled = true;
+                    GetComponent<FinalBattle>().enabled = true;
                     break;
                 default:
                     break;

@@ -14,17 +14,21 @@ public class FinalBattle : MonoBehaviour
     public GameObject firstBattle2;
     public GameObject mainBattle;
 
+    private ImportantBuildings _importantBuildings;
 
     private bool _battle1 = false;
     private bool _battle2 = false;
     private bool _battleFirstMain = false;
 
-
+    private int[] index = { 5, 4, 8, 2, 3, 7, 0, 9, 1, 6 };
+    private int indx = 1;
 
     void Start()
     {
         allySoldiers = GameObject.FindGameObjectsWithTag("Enemy");
         enemySoldiers = GameObject.FindGameObjectsWithTag("EnemySoldier");
+
+        _importantBuildings = GameObject.FindGameObjectWithTag("BuildingsImportant").GetComponent<ImportantBuildings>();
     }
 
     void Update()
@@ -122,6 +126,13 @@ public class FinalBattle : MonoBehaviour
             enemySoldiers[i].GetComponent<NavMeshAgent>().enabled = true;
         }
 
+        for (int i = 20; i < 27; i++) // first main
+        {
+            enemySoldiers[i].GetComponent<NavMeshAgent>().enabled = false;
+            enemySoldiers[i].transform.position = _importantBuildings.EntranceToTavern.transform.position + new Vector3(Random.Range(-3f, 3f), 0f, Random.Range(-3f, 3f));
+            enemySoldiers[i].transform.rotation = Quaternion.Euler(0f, Random.Range(0, 360), 0f);
+            enemySoldiers[i].GetComponent<NavMeshAgent>().enabled = true;
+        }
 
 
 
@@ -159,7 +170,7 @@ public class FinalBattle : MonoBehaviour
 
     public void Battle1()
     {
-        if (Vector3.Distance(allySoldiers[0].transform.position, enemySoldiers[0].transform.position) <= 15f)
+        if (Vector3.Distance(allySoldiers[0].transform.position, enemySoldiers[0].transform.position) <= 25f)
         {
             _battle1 = true;
             for (int i = 0; i < 6; i++) // 1
@@ -175,7 +186,7 @@ public class FinalBattle : MonoBehaviour
 
     public void FirstBattleMain()
     {
-        if (Vector3.Distance(allySoldiers[6].transform.position, enemySoldiers[6].transform.position) <= 15f)
+        if (Vector3.Distance(allySoldiers[6].transform.position, enemySoldiers[6].transform.position) <= 25f)
         {
             _battleFirstMain = true;
             for (int i = 6; i < 14; i++) // firstMain
@@ -191,7 +202,7 @@ public class FinalBattle : MonoBehaviour
 
     public void Battle2()
     {
-        if (Vector3.Distance(allySoldiers[14].transform.position, enemySoldiers[14].transform.position) <= 15f)
+        if (Vector3.Distance(allySoldiers[14].transform.position, enemySoldiers[14].transform.position) <= 25f)
         {
             _battle2 = true;
             for (int i = 14; i < 20; i++) // 2
@@ -207,10 +218,40 @@ public class FinalBattle : MonoBehaviour
 
     public void KillSomeEnemy()
     {
-        int index = Random.Range(0, enemySoldiers.Length);
+        enemySoldiers[indx].GetComponent<Enemy>()._hp = -100;
+        //enemySoldiers[indx] = enemySoldiers[0];
+        if (indx % 2 == 0)
+        {
+            allySoldiers[indx].GetComponent<Enemy>()._hp = -100;
+            //allySoldiers[indx] = allySoldiers[0];
+        }
+        indx++;
     }
     public void KillSomeAlly()
     {
         int index = Random.Range(0, allySoldiers.Length);
+    }
+    public void Final()
+    {
+        int indx = 20;
+        for (int i = 0; i < 20; i++) // 2
+        {
+            if (i % 2 != 0)
+            {
+                if (indx == 27)
+                {
+                    indx = 20;
+                }
+                //allySoldiers[i].GetComponent<NavMeshAgent>().SetDestination(_importantBuildings.EntranceToTavern.transform.position + new Vector3(Random.Range(-3f, 3f), 0f, Random.Range(-3f, 3f)));
+
+                allySoldiers[i].GetComponent<Enemy>()._agressive = true;
+                allySoldiers[i].GetComponent<Enemy>()._player = enemySoldiers[indx];
+
+                enemySoldiers[indx].GetComponent<Enemy>()._agressive = true;
+                enemySoldiers[indx].GetComponent<Enemy>()._player = allySoldiers[i];
+                indx++;
+            }
+        }
+
     }
 }
