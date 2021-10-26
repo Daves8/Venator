@@ -38,7 +38,7 @@ public class Enemy : MonoBehaviour
     public bool canWalkInVillage;
 
     private bool isHasScriptEnemy;
-    private bool canHit_hp;
+    public bool canHit_hp;
 
     private void Start()
     {

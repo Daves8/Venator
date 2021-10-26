@@ -90,7 +90,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.M)) { GEnding(); }
+
         if (_initInv)
         {
             _initInv = false;
@@ -176,12 +176,37 @@ public class Player : MonoBehaviour
         StartBlackScreen();
 
         EndGameCanvas.gameObject.SetActive(true);//нужен тут другйо канвас, точняк
+        //text[0].gameObject.SetActive(false);
+        //text[1].gameObject.SetActive(false);
+        VenatorEndImageAnimation.gameObject.SetActive(false);
         //Time.timeScale = 0;
+        //VenatorEndImageAnimation.Play();
+        StartCoroutine(EndText());
+        //for (int i = 0; i < 3; i++)
+        //{
+        //    text[i].gameObject.GetComponent<Animation>().Play();
+        //}
+    }
+
+    IEnumerator EndText()
+    {
+        yield return new WaitForSeconds(3f);
+        //Time.timeScale = 0;
+        GetComponent<CharacterController>().enabled = false;
+        VenatorEndImageAnimation.gameObject.SetActive(true);
         VenatorEndImageAnimation.Play();
-        for (int i = 0; i < 3; i++)
+        yield return new WaitForSeconds(2f);
+        for (int i = 0; i < text.Length; i++)
         {
+            print(text[i].gameObject.name);
+            text[i].gameObject.SetActive(true);
             text[i].gameObject.GetComponent<Animation>().Play();
+            yield return new WaitForSeconds(2f);
         }
+        yield return new WaitForSeconds(5);
+        text[0].gameObject.SetActive(false);
+        text[1].gameObject.SetActive(false);
+        VenatorEndImageAnimation.gameObject.SetActive(false);
     }
 
     public void StartBlackScreen()

@@ -97,7 +97,7 @@ public class Quest5 : MonoBehaviour
         {
             _subtitles.text = subt.name + ": ";
             _subtitles.text += subt.text;
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(4f);
         }
         _subtitles.text = "";
     }
@@ -108,7 +108,7 @@ public class Quest5 : MonoBehaviour
         StartCoroutine(ShowSubtitles(0));
         //yield return new WaitForSeconds(2f);
         _finalBattle.GoToBattlePoints();
-        yield return new WaitForSeconds(20f);
+        yield return new WaitForSeconds(100f);
         for (int i = 0; i < 20; i++)
         {
             //_finalBattle.KillSomeEnemy();
@@ -142,12 +142,15 @@ public class Quest5 : MonoBehaviour
         StartCoroutine(ShowSubtitles(1));
         print("КОНКЕЦ!!!");
         // конец игры через ...
+        yield return new WaitForSeconds(8);
+        _player.GetComponent<Player>().GEnding();
+        yield return new WaitForSeconds(25f);
+        LevelLoader levelLoader = GameObject.FindGameObjectWithTag("LevelLoader").GetComponent<LevelLoader>();
+        levelLoader.PlayScene("MainMenu");
     }
 
     void Update()
     {
-
-        
 
 
 
